@@ -155,6 +155,7 @@ Tasks:
 - [x] Aligned Stats Editor Fields: Completely resolved schema key mismatch between `content.items` and `content.stats`, added customizable columns aligned layout, alignment options, preset backgrounds, and section descriptions.
 - [x] Infinite Logo Marquee Animation: Configured hardware-accelerated CSS marquee keyframes in `globals.css` with smooth loop sliding and pause-on-hover logic.
 - [x] Reusable Media Library System: Integrated backend uploads listing directory API and frontend client hooks. Injected inline 'Pustaka' selection buttons next to every file upload zone (Logo, Hero Background, About Us, Feature Cards, Gallery, Logo Marquee, Grid 2x2 Images). Created a stunning, premium overlay modal library drawer supporting responsive light/dark aesthetics, allowing instant selection and reuse of previously uploaded assets without redundant requests.
+- [x] Bento Gallery Layout & Lightbox Viewer: Overhauled the Bento layout in `SectionRenderer` to match the exact non-uniform grid layout of the user's mockup image using explicit Tailwind `col-start` & `row-start` mappings. Implemented a beautiful, highly interactive full-screen Lightbox Modal trigger on click for all gallery items on the public page with a dark background dimming backdrop, blur, smooth scale-in animations, and a premium border.
 - [x] Compilation & Build Check: Checked TypeScript checks, Next.js static asset optimization, and verified 100% SUCCESS build with zero compilation warnings or errors.
 
 ## Phase 11: Post-MVP & Optimization

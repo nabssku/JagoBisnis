@@ -6,6 +6,7 @@ import {
   Sparkles, 
   ArrowRight, 
   ChevronRight, 
+  ChevronLeft,
   Package, 
   Phone, 
   MapPin, 
@@ -22,7 +23,8 @@ import {
   HelpCircle, 
   ChevronDown, 
   ChevronUp, 
-  ExternalLink 
+  ExternalLink,
+  X
 } from 'lucide-react';
 import { Section, SiteTheme } from '@/types/site';
 import { Product } from '@/types/product';
@@ -50,6 +52,7 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
   const slug = params?.slug as string;
   const { content } = section;
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
+  const [activeLightboxImage, setActiveLightboxImage] = useState<string | null>(null);
 
   const containerVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
@@ -301,7 +304,8 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
 
     case 'about': {
       const desc = content.description || 'Kami adalah sebuah toko baju yang melayani pada offline store dan online store pada Shopee dan Tokopedia dengan merek Onderstroom.\n\nKami berkomitmen untuk menyediakan pakaian yang nyaman, stylish, dan berkualitas tinggi untuk pelanggan kami.';
-      const paragraphs = desc.split('\n\n');
+      const paragraphs = desc.split('\n').map((p: string) => p.trim()).filter(Boolean);
+      const aboutImage = content.imageUrl || '';
 
       return (
         <section id={section.id} className="py-24 overflow-hidden bg-white dark:bg-zinc-950 transition-colors">
@@ -314,10 +318,10 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
                 variants={containerVariants}
                 className="order-2 md:order-1 space-y-6"
               >
-                <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white tracking-tight">
+                <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
                   {content.title || 'Tentang Kami'}
                 </h2>
-                <div className="rich-text-content text-lg text-muted-foreground leading-relaxed space-y-6">
+                <div className="rich-text-content text-sm md:text-base text-muted-foreground leading-relaxed space-y-4 font-medium">
                   {paragraphs.map((p: string, index: number) => (
                     <p key={index}>{p}</p>
                   ))}
@@ -331,45 +335,35 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
                 className="order-1 md:order-2"
               >
                 <div className="relative aspect-square w-full max-w-md mx-auto">
-                  <div className="w-full h-full bg-gray-50 dark:bg-zinc-900 rounded-xl flex items-center justify-center p-8 shadow-sm border border-gray-100 dark:border-zinc-800/80">
-                    <svg viewBox="0 0 400 400" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      {/* Premium fashion shop SVG illustration design representing 3 characters */}
-                      <circle cx="200" cy="200" r="140" className="fill-gray-200/30 dark:fill-zinc-800/30" />
-                      {/* Organic abstract blob background */}
-                      <path d="M120,150 Q160,110 240,130 T300,220 Q320,290 230,300 T110,230 Q80,180 120,150 Z" className="fill-primary/5 dark:fill-amber-400/5" style={{ fill: `${theme.primaryColor}15` }} />
-                      
-                      {/* Floor shadow line */}
-                      <path d="M80,310 L320,310" className="stroke-gray-200 dark:stroke-zinc-800" strokeWidth="2" strokeLinecap="round" />
-
-                      {/* Character 1 (Left): Chic trench coat model */}
-                      <circle cx="135" cy="130" r="15" className="fill-[#F0D5C6] dark:fill-[#DDA894]" />
-                      <path d="M120,145 L115,280 C115,285 120,290 126,290 L144,290 C150,290 155,285 155,280 L150,145 Z" className="fill-amber-600/80 dark:fill-amber-500/70" />
-                      <line x1="122" y1="205" x2="148" y2="205" className="stroke-amber-900/30 dark:stroke-zinc-900/30" strokeWidth="3" />
-                      <path d="M130,290 L130,310 M140,290 L140,310" className="stroke-zinc-800 dark:stroke-zinc-400" strokeWidth="4.5" strokeLinecap="round" />
-
-                      {/* Character 2 (Center): Tall classic model with brand primary color jacket */}
-                      <circle cx="200" cy="115" r="16" className="fill-[#E6C2AC] dark:fill-[#D2A992]" />
-                      <path d="M185,131 C180,140 180,160 182,180 L218,180 C220,160 220,140 215,131 Z" className="fill-primary dark:fill-amber-400/90" style={{ fill: theme.primaryColor }} />
-                      <path d="M190,131 L200,148 L210,131" className="stroke-white/30 dark:stroke-zinc-950/20" strokeWidth="2" strokeLinecap="round" />
-                      <path d="M188,180 L188,310 M212,180 L212,310" className="stroke-zinc-850 dark:stroke-zinc-300" strokeWidth="5.5" strokeLinecap="round" />
-                      <path d="M182,310 L188,315 M206,310 L212,315" className="stroke-zinc-850 dark:stroke-zinc-300" strokeWidth="4.5" strokeLinecap="round" />
-
-                      {/* Character 3 (Right): turtleneck top & skirt model holding shopper bag */}
-                      <circle cx="265" cy="125" r="15.5" className="fill-[#EAD2C6] dark:fill-[#CFA490]" />
-                      <path d="M250,140 C248,150 248,180 252,215 L278,215 C282,180 282,150 280,140 Z" className="fill-zinc-700 dark:fill-zinc-450" />
-                      <path d="M248,215 L238,285 C238,288 242,290 245,290 L285,290 C288,290 292,288 292,285 L282,215 Z" className="fill-zinc-400/90 dark:fill-zinc-600" />
-                      <path d="M258,290 L258,310 M272,290 L272,310" className="stroke-zinc-800 dark:stroke-zinc-400" strokeWidth="4.5" strokeLinecap="round" />
-                      
-                      {/* Shopping bag attached to right character */}
-                      <path d="M280,165 Q305,185 305,210" className="stroke-[#EAD2C6] dark:stroke-[#CFA490]" strokeWidth="4.5" strokeLinecap="round" />
-                      <rect x="290" y="210" width="30" height="35" rx="3" className="fill-primary/80 dark:fill-amber-400/80" style={{ fill: `${theme.primaryColor}c0` }} />
-                      <path d="M298,210 C298,202 312,202 312,210" className="stroke-primary/50 dark:stroke-amber-400/50" strokeWidth="2.5" style={{ stroke: `${theme.primaryColor}80` }} />
-
-                      {/* Floating sparkle elements */}
-                      <path d="M100,90 L102,94 L106,95 L102,96 L100,100 L98,96 L94,95 L98,94 Z" className="fill-amber-400 dark:fill-amber-300" />
-                      <path d="M305,100 L307,104 L311,105 L307,106 L305,110 L303,106 L299,105 L303,104 Z" className="fill-amber-400 dark:fill-amber-300" />
-                      <path d="M325,270 L327,274 L331,275 L327,276 L325,280 L323,276 L319,275 L323,274 Z" className="fill-amber-400 dark:fill-amber-300" />
-                    </svg>
+                  <div className="w-full h-full bg-gray-50 dark:bg-zinc-900 rounded-2xl flex items-center justify-center p-4 shadow-sm border border-gray-150 dark:border-zinc-800/80 overflow-hidden">
+                    {aboutImage ? (
+                      <img src={aboutImage} alt={content.title || 'Tentang Kami'} className="w-full h-full object-cover rounded-xl" />
+                    ) : (
+                      <svg viewBox="0 0 400 400" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="200" cy="200" r="140" className="fill-gray-200/30 dark:fill-zinc-800/30" />
+                        <path d="M120,150 Q160,110 240,130 T300,220 Q320,290 230,300 T110,230 Q80,180 120,150 Z" className="fill-primary/5 dark:fill-amber-400/5" style={{ fill: `${theme.primaryColor}15` }} />
+                        <path d="M80,310 L320,310" className="stroke-gray-200 dark:stroke-zinc-800" strokeWidth="2" strokeLinecap="round" />
+                        <circle cx="135" cy="130" r="15" className="fill-[#F0D5C6] dark:fill-[#DDA894]" />
+                        <path d="M120,145 L115,280 C115,285 120,290 126,290 L144,290 C150,290 155,285 155,280 L150,145 Z" className="fill-amber-600/80 dark:fill-amber-500/70" />
+                        <line x1="122" y1="205" x2="148" y2="205" className="stroke-amber-900/30 dark:stroke-zinc-900/30" strokeWidth="3" />
+                        <path d="M130,290 L130,310 M140,290 L140,310" className="stroke-zinc-800 dark:stroke-zinc-400" strokeWidth="4.5" strokeLinecap="round" />
+                        <circle cx="200" cy="115" r="16" className="fill-[#E6C2AC] dark:fill-[#D2A992]" />
+                        <path d="M185,131 C180,140 180,160 182,180 L218,180 C220,160 220,140 215,131 Z" className="fill-primary dark:fill-amber-400/90" style={{ fill: theme.primaryColor }} />
+                        <path d="M190,131 L200,148 L210,131" className="stroke-white/30 dark:stroke-zinc-950/20" strokeWidth="2" strokeLinecap="round" />
+                        <path d="M188,180 L188,310 M212,180 L212,310" className="stroke-zinc-850 dark:stroke-zinc-300" strokeWidth="5.5" strokeLinecap="round" />
+                        <path d="M182,310 L188,315 M206,310 L212,315" className="stroke-zinc-850 dark:stroke-zinc-300" strokeWidth="4.5" strokeLinecap="round" />
+                        <circle cx="265" cy="125" r="15.5" className="fill-[#EAD2C6] dark:fill-[#CFA490]" />
+                        <path d="M250,140 C248,150 248,180 252,215 L278,215 C282,180 282,150 280,140 Z" className="fill-zinc-700 dark:fill-zinc-450" />
+                        <path d="M248,215 L238,285 C238,288 242,290 245,290 L285,290 C288,290 292,288 292,285 L282,215 Z" className="fill-zinc-400/90 dark:fill-zinc-600" />
+                        <path d="M258,290 L258,310 M272,290 L272,310" className="stroke-zinc-800 dark:stroke-zinc-400" strokeWidth="4.5" strokeLinecap="round" />
+                        <path d="M280,165 Q305,185 305,210" className="stroke-[#EAD2C6] dark:stroke-[#CFA490]" strokeWidth="4.5" strokeLinecap="round" />
+                        <rect x="290" y="210" width="30" height="35" rx="3" className="fill-primary/80 dark:fill-amber-400/80" style={{ fill: `${theme.primaryColor}c0` }} />
+                        <path d="M298,210 C298,202 312,202 312,210" className="stroke-primary/50 dark:stroke-amber-400/50" strokeWidth="2.5" style={{ stroke: `${theme.primaryColor}80` }} />
+                        <path d="M100,90 L102,94 L106,95 L102,96 L100,100 L98,96 L94,95 L98,94 Z" className="fill-amber-400 dark:fill-amber-300" />
+                        <path d="M305,100 L307,104 L311,105 L307,106 L305,110 L303,106 L299,105 L303,104 Z" className="fill-amber-400 dark:fill-amber-300" />
+                        <path d="M325,270 L327,274 L331,275 L327,276 L325,280 L323,276 L319,275 L323,274 Z" className="fill-amber-400 dark:fill-amber-300" />
+                      </svg>
+                    )}
                   </div>
                 </div>
               </motion.div>
@@ -379,32 +373,90 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
       );
     }
 
-    case 'gallery':
-      const galleryImages = content.images || [];
+    case 'gallery': {
+      const galleryImages = (content.images || []).slice(0, 8);
+      const galleryLayout = content.layoutStyle || 'grid';
+
       return (
-        <section id={section.id} className="py-16 px-6 lg:py-24 bg-white dark:bg-[#0B0F19] transition-colors">
-          <div className="max-w-6xl mx-auto text-center space-y-12">
+        <section id={section.id} className="py-16 px-6 lg:py-24 bg-white dark:bg-[#0B0F19] transition-colors relative overflow-hidden">
+          <div className="absolute inset-0 opacity-[0.01] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, black 1px, transparent 0)', backgroundSize: '40px 40px' }} />
+          
+          <div className="max-w-6xl mx-auto text-center space-y-12 relative z-10">
             <div className="space-y-3">
               <h2 className="text-2xl lg:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
                 {content.title || 'Galeri Bisnis'}
               </h2>
-              <p className="text-sm font-medium text-muted-foreground max-w-xl mx-auto">
-                {content.subtitle || 'Dokumentasi visual portofolio, suasana outlet, dan kegiatan bisnis kami.'}
-              </p>
+              {content.subtitle && (
+                <p className="text-sm font-medium text-muted-foreground max-w-xl mx-auto">
+                  {content.subtitle}
+                </p>
+              )}
             </div>
 
             {galleryImages.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {galleryImages.map((imgUrl: string, idx: number) => (
-                  <motion.div 
-                    key={idx} 
-                    whileHover={{ scale: 1.02 }}
-                    className="aspect-square bg-muted dark:bg-zinc-900 rounded-xl overflow-hidden shadow-sm border border-border/40"
-                  >
-                    <img src={imgUrl} alt={`Galeri ${idx + 1}`} className="w-full h-full object-cover" />
-                  </motion.div>
-                ))}
-              </div>
+              galleryLayout === 'carousel' ? (
+                <div className="relative group">
+                  <div className="flex gap-5 overflow-x-auto pb-6 pt-2 snap-x snap-mandatory scrollbar-none scroll-smooth">
+                    {galleryImages.map((imgUrl: string, idx: number) => (
+                      <motion.div 
+                        key={idx} 
+                        whileHover={{ scale: 1.02 }}
+                        onClick={() => setActiveLightboxImage(imgUrl)}
+                        className="w-[80vw] sm:w-[320px] shrink-0 aspect-[4/3] rounded-2xl overflow-hidden bg-muted dark:bg-zinc-900 border border-border/30 shadow-sm snap-center cursor-pointer"
+                      >
+                        <img src={imgUrl} alt={`Galeri ${idx + 1}`} className="w-full h-full object-cover" />
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              ) : galleryLayout === 'bento' ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                  {galleryImages.map((imgUrl: string, idx: number) => {
+                    let gridClass = "aspect-square";
+                    if (idx === 0) {
+                      gridClass = "md:col-start-1 md:row-start-1 md:col-span-2 md:row-span-2 aspect-[1.4/1] md:h-full";
+                    } else if (idx === 1) {
+                      gridClass = "md:col-start-1 md:row-start-3 md:col-span-1 md:row-span-1 aspect-[4/3]";
+                    } else if (idx === 2) {
+                      gridClass = "md:col-start-2 md:row-start-3 md:col-span-1 md:row-span-1 aspect-[4/3]";
+                    } else if (idx === 3) {
+                      gridClass = "md:col-start-3 md:row-start-1 md:col-span-1 md:row-span-1 aspect-[4/3]";
+                    } else if (idx === 4) {
+                      gridClass = "md:col-start-4 md:row-start-1 md:col-span-1 md:row-span-1 aspect-[4/3]";
+                    } else if (idx === 5) {
+                      gridClass = "md:col-start-3 md:row-start-2 md:col-span-2 md:row-span-1 aspect-[3/1] md:h-full";
+                    } else if (idx === 6) {
+                      gridClass = "md:col-start-1 md:row-start-4 md:col-span-1 md:row-span-1 aspect-[4/3]";
+                    } else if (idx === 7) {
+                      gridClass = "md:col-start-2 md:row-start-4 md:col-span-1 md:row-span-1 aspect-[4/3]";
+                    }
+                    
+                    return (
+                      <motion.div 
+                        key={idx} 
+                        whileHover={{ scale: 1.02 }}
+                        onClick={() => setActiveLightboxImage(imgUrl)}
+                        className={cn("bg-muted dark:bg-zinc-900 rounded-2xl overflow-hidden shadow-sm border border-border/20 group relative cursor-pointer", gridClass)}
+                      >
+                        <img src={imgUrl} alt={`Galeri ${idx + 1}`} className="w-full h-full object-cover" />
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {galleryImages.map((imgUrl: string, idx: number) => (
+                    <motion.div 
+                      key={idx} 
+                      whileHover={{ scale: 1.02 }}
+                      onClick={() => setActiveLightboxImage(imgUrl)}
+                      className="aspect-square bg-muted dark:bg-zinc-900 rounded-xl overflow-hidden shadow-sm border border-border/40 cursor-pointer"
+                    >
+                      <img src={imgUrl} alt={`Galeri ${idx + 1}`} className="w-full h-full object-cover" />
+                    </motion.div>
+                  ))}
+                </div>
+              )
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 opacity-50">
                 {[1, 2, 3, 4].map((i) => (
@@ -415,110 +467,294 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
               </div>
             )}
           </div>
+
+          {/* Lightbox Modal */}
+          <AnimatePresence>
+            {activeLightboxImage && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setActiveLightboxImage(null)}
+                className="fixed inset-0 bg-black/90 z-[99999] flex items-center justify-center p-4 backdrop-blur-md cursor-zoom-out"
+              >
+                <button 
+                  onClick={() => setActiveLightboxImage(null)}
+                  className="absolute top-6 right-6 h-12 w-12 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all cursor-pointer border border-white/5"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+                <motion.img 
+                  initial={{ scale: 0.95 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0.95 }}
+                  src={activeLightboxImage} 
+                  alt="Tampilan penuh galeri" 
+                  className="max-w-full max-h-[85vh] rounded-2xl shadow-2xl object-contain border border-white/10"
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </section>
       );
+    }
 
-    case 'logos':
+    case 'logos': {
+      const logoImages = content.images || [];
       const logoItems = content.items || ['Maju Bersama', 'Kemitraan UMKM', 'Kualitas Ekspor', 'Jago Kuliner'];
+      const isMarquee = content.marquee !== false;
+
       return (
-        <section id={section.id} className="py-10 px-6 bg-gray-50/60 dark:bg-zinc-900/30 border-y border-gray-100 dark:border-zinc-850">
-          <div className="max-w-5xl mx-auto flex flex-wrap items-center justify-around gap-6 opacity-60 dark:opacity-85 text-xs font-bold uppercase tracking-[0.2em] text-gray-600 dark:text-zinc-400">
-            {logoItems.map((logo: string, idx: number) => (
-              <div key={idx} className="flex items-center gap-2 hover:scale-[1.02] transition-transform">
-                <Award className="h-4 w-4" style={textPrimaryStyle} />
-                <span>{logo}</span>
+        <section id={section.id} className="py-10 px-6 bg-gray-50/60 dark:bg-zinc-900/30 border-y border-gray-100 dark:border-zinc-850 overflow-hidden">
+          <div className="max-w-6xl mx-auto">
+            {isMarquee ? (
+              <div className="relative w-full overflow-hidden flex flex-col gap-2">
+                <div className="flex w-max gap-12 py-3 animate-marquee whitespace-nowrap">
+                  {logoImages.length > 0 ? (
+                    [...logoImages, ...logoImages].map((imgUrl: string, idx: number) => (
+                      <div 
+                        key={idx} 
+                        className="inline-flex items-center justify-center h-12 w-28 shrink-0 bg-white dark:bg-zinc-900 px-4 py-2 rounded-xl border border-border/40 shadow-xs"
+                      >
+                        <img src={imgUrl} alt="Logo" className="max-h-full max-w-full object-contain" />
+                      </div>
+                    ))
+                  ) : (
+                    [...logoItems, ...logoItems].map((logo: string, idx: number) => (
+                      <div 
+                        key={idx} 
+                        className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-gray-500 dark:text-zinc-400 select-none bg-white dark:bg-zinc-900 px-5 py-2.5 rounded-xl border border-border/40 shadow-xs"
+                      >
+                        <Sparkles className="h-3 w-3 text-amber-500 shrink-0" />
+                        {logo}
+                      </div>
+                    ))
+                  )}
+                </div>
               </div>
-            ))}
+            ) : (
+              <div className="flex flex-wrap items-center justify-center gap-6 opacity-75 dark:opacity-90">
+                {logoImages.length > 0 ? (
+                  logoImages.map((imgUrl: string, idx: number) => (
+                    <div 
+                      key={idx} 
+                      className="flex items-center justify-center h-12 w-28 bg-white dark:bg-zinc-900 px-4 py-2 rounded-xl border border-border/40 shadow-xs"
+                    >
+                      <img src={imgUrl} alt="Logo" className="max-h-full max-w-full object-contain" />
+                    </div>
+                  ))
+                ) : (
+                  logoItems.map((logo: string, idx: number) => (
+                    <div 
+                      key={idx} 
+                      className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-gray-600 dark:text-zinc-400 bg-white dark:bg-zinc-900 px-5 py-2.5 rounded-xl border border-border/40 shadow-xs"
+                    >
+                      <Sparkles className="h-3 w-3 text-amber-500 shrink-0" />
+                      {logo}
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
           </div>
         </section>
       );
+    }
 
-    case 'stats':
-      const statList = content.stats || [
+    case 'stats': {
+      const statsList = content.stats || [
         { value: '500+', label: 'Pelanggan Setia' },
         { value: '100%', label: 'Bahan Pilihan' },
         { value: '5★', label: 'Rating Rata-Rata' }
       ];
+      
+      const cols = content.cols || 3;
+      const align = content.align || 'center';
+      const themeBg = content.themeBg || 'muted';
+      const title = content.title || '';
+      const description = content.description || '';
+
+      let bgStyleClass = "bg-gray-50/50 dark:bg-zinc-900/20";
+      let textTitleClass = "text-gray-900 dark:text-white";
+      let textDescClass = "text-muted-foreground";
+      let statValStyle: React.CSSProperties = textPrimaryStyle;
+      let statLblClass = "text-muted-foreground";
+      let sectionStyle: React.CSSProperties = {};
+
+      if (themeBg === 'white') {
+        bgStyleClass = "bg-white dark:bg-zinc-950";
+      } else if (themeBg === 'primary') {
+        sectionStyle = {
+          background: `linear-gradient(135deg, ${theme.primaryColor || '#2563eb'}dd, ${theme.primaryColor || '#2563eb'})`
+        };
+        textTitleClass = "text-white";
+        textDescClass = "text-white/80";
+        statValStyle = { color: '#ffffff' };
+        statLblClass = "text-white/70";
+      } else if (themeBg === 'dark') {
+        bgStyleClass = "bg-zinc-950 text-white";
+        textTitleClass = "text-white";
+        textDescClass = "text-zinc-400";
+        statValStyle = { color: theme.primaryColor || '#2563eb' };
+        statLblClass = "text-zinc-400";
+      }
+
+      let colClass = "grid-cols-3";
+      if (cols === 2) colClass = "grid-cols-2";
+      else if (cols === 4) colClass = "grid-cols-2 md:grid-cols-4";
+
+      let alignClass = "text-center";
+      if (align === 'left') alignClass = "text-left";
+      else if (align === 'right') alignClass = "text-right";
+
       return (
-        <section id={section.id} className="py-14 px-6 bg-white dark:bg-[#0B0F19] text-center" style={{ backgroundColor: `${theme.primaryColor}05` }}>
-          <div className="max-w-4xl mx-auto grid grid-cols-3 gap-6">
-            {statList.map((stat: any, idx: number) => (
-              <div key={idx} className="space-y-1">
-                <p className="text-2xl md:text-3xl font-black tracking-tight" style={textPrimaryStyle}>
-                  {stat.value}
-                </p>
-                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest leading-normal">
-                  {stat.label}
-                </p>
+        <section id={section.id} className={cn("py-16 px-6 relative overflow-hidden transition-colors", bgStyleClass, alignClass)} style={sectionStyle}>
+          <div className="max-w-5xl mx-auto space-y-10">
+            {(title || description) && (
+              <div className="space-y-3">
+                {title && (
+                  <h2 className={cn("text-2xl lg:text-3xl font-extrabold tracking-tight", textTitleClass)}>
+                    {title}
+                  </h2>
+                )}
+                {description && (
+                  <p className={cn("text-sm max-w-xl mx-auto leading-relaxed font-medium", textDescClass)}>
+                    {description}
+                  </p>
+                )}
               </div>
-            ))}
-          </div>
-        </section>
-      );
+            )}
 
-    case 'features-grid':
-      const gridFeatures = content.features || [
-        { title: 'Bahan Premium', desc: 'Kami hanya menggunakan kualitas bahan terbaik pilihan.' },
-        { title: 'Layanan Kilat', desc: 'Respon dan pengiriman super cepat ke seluruh penjuru.' },
-        { title: '100% Higienis', desc: 'Proses pembuatan bersih, aman, dan berstandar dinas.' },
-        { title: 'Harga Bersaing', desc: 'Kualitas bintang lima dengan penawaran harga kaki lima.' }
-      ];
-      return (
-        <section id={section.id} className="py-16 px-6 lg:py-24 bg-gray-50/20 dark:bg-zinc-950/10">
-          <div className="max-w-5xl mx-auto space-y-12">
-            <div className="text-center space-y-3 max-w-xl mx-auto">
-              <h2 className="text-2xl lg:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
-                {content.title || 'Mengapa Memilih Kami?'}
-              </h2>
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
-                Keunggulan utama layanan bisnis kami
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {gridFeatures.map((feat: any, idx: number) => (
-                <div key={idx} className="bg-white dark:bg-zinc-900 border border-border/40 p-6 rounded-2xl flex gap-4 hover:shadow-md transition-shadow">
-                  <div className="h-10 w-10 shrink-0 rounded-xl flex items-center justify-center text-white" style={buttonStyle}>
-                    <Check className="h-5 w-5" />
-                  </div>
-                  <div className="space-y-1.5 text-left">
-                    <h3 className="font-bold text-sm text-gray-900 dark:text-white uppercase tracking-tight">{feat.title}</h3>
-                    <p className="text-xs text-muted-foreground leading-relaxed font-medium">{feat.desc}</p>
-                  </div>
+            <div className={cn("grid gap-8 items-center", colClass)}>
+              {statsList.map((stat: any, idx: number) => (
+                <div key={idx} className="space-y-1.5 p-4 rounded-xl bg-white/5 backdrop-blur-xs border border-white/5 shadow-xs transition-transform hover:scale-[1.02]">
+                  <p className="text-3xl md:text-4xl font-black tracking-tight" style={statValStyle}>
+                    {stat.value || '0'}
+                  </p>
+                  <p className={cn("text-xs font-bold uppercase tracking-widest leading-normal", statLblClass)}>
+                    {stat.label || ''}
+                  </p>
                 </div>
               ))}
             </div>
           </div>
         </section>
       );
+    }
 
-    case 'features-cards':
+    case 'features-grid': {
+      const rtTitle = content.rtTitle || 'Bahan Premium Pilihan';
+      const rtDesc = content.rtDesc || 'Kami hanya menggunakan kualitas bahan terbaik pilihan dari pemasok terpercaya untuk menjamin keawetan dan kenyamanan maksimal.';
+      const rtImage = content.rtImage || '';
+
+      const rbTitle = content.rbTitle || 'Layanan Pengiriman Kilat';
+      const rbDesc = content.rbDesc || 'Pengemasan rapi dan ekspedisi super cepat siap mengantarkan produk pesanan Anda dengan aman ke seluruh pelosok Indonesia.';
+      const rbImage = content.rbImage || '';
+
+      return (
+        <section id={section.id} className="py-16 px-6 lg:py-24 bg-white dark:bg-[#0B0F19] transition-colors relative overflow-hidden">
+          <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, black 1px, transparent 0)', backgroundSize: '30px 30px' }} />
+          
+          <div className="max-w-5xl mx-auto space-y-16">
+            {content.title && (
+              <div className="text-center space-y-3 max-w-xl mx-auto">
+                <h2 className="text-2xl lg:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+                  {content.title}
+                </h2>
+              </div>
+            )}
+
+            <div className="flex flex-col gap-12 md:gap-20">
+              <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+                <div className="space-y-4 text-left">
+                  <div className="inline-flex h-9 w-9 items-center justify-center rounded-xl text-white font-extrabold text-sm" style={buttonStyle}>
+                    1
+                  </div>
+                  <h3 className="text-xl md:text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+                    {rtTitle}
+                  </h3>
+                  <p className="text-xs md:text-sm text-muted-foreground leading-relaxed font-medium">
+                    {rtDesc}
+                  </p>
+                </div>
+                <div className="relative aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden bg-muted dark:bg-zinc-900 border border-border/40 shadow-md">
+                  {rtImage ? (
+                    <img src={rtImage} alt={rtTitle} className="w-full h-full object-cover transition-transform hover:scale-105 duration-555" />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center p-8 bg-gray-50 dark:bg-zinc-900 text-center gap-2">
+                      <Package className="h-10 w-10 text-muted-foreground/30 animate-pulse" />
+                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Gambar Kanan Atas</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+                <div className="space-y-4 text-left">
+                  <div className="inline-flex h-9 w-9 items-center justify-center rounded-xl text-white font-extrabold text-sm" style={buttonStyle}>
+                    2
+                  </div>
+                  <h3 className="text-xl md:text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+                    {rbTitle}
+                  </h3>
+                  <p className="text-xs md:text-sm text-muted-foreground leading-relaxed font-medium">
+                    {rbDesc}
+                  </p>
+                </div>
+                <div className="relative aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden bg-muted dark:bg-zinc-900 border border-border/40 shadow-md">
+                  {rbImage ? (
+                    <img src={rbImage} alt={rbTitle} className="w-full h-full object-cover transition-transform hover:scale-105 duration-555" />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center p-8 bg-gray-50 dark:bg-zinc-900 text-center gap-2">
+                      <Package className="h-10 w-10 text-muted-foreground/30 animate-pulse" />
+                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Gambar Kanan Bawah</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    case 'features-cards': {
       const cardFeatures = content.cards || [
         { title: 'Paket Pemula', desc: 'Pilihan hemat untuk memulai kebutuhan esensial Anda.' },
         { title: 'Paket Bisnis', desc: 'Penawaran paling populer lengkap dengan dukungan ekstra.' },
         { title: 'Paket Premium', desc: 'Solusi lengkap tanpa batas untuk bisnis profesional.' }
       ];
       return (
-        <section id={section.id} className="py-16 px-6 lg:py-24 bg-white dark:bg-[#0B0F19]">
+        <section id={section.id} className="py-16 px-6 lg:py-24 bg-white dark:bg-[#0B0F19] transition-colors">
           <div className="max-w-6xl mx-auto space-y-12 text-center">
             <div className="space-y-3">
               <h2 className="text-2xl lg:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
                 {content.title || 'Layanan Unggulan Kami'}
               </h2>
-              <p className="text-sm text-muted-foreground max-w-lg mx-auto">
-                {content.subtitle || 'Jelajahi paket layanan yang kami rancang khusus untuk menumbuhkan performa bisnis Anda.'}
-              </p>
+              {content.subtitle && (
+                <p className="text-sm text-muted-foreground max-w-lg mx-auto font-medium">
+                  {content.subtitle}
+                </p>
+              )}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {cardFeatures.map((card: any, idx: number) => (
-                <div key={idx} className="bg-gray-50/50 dark:bg-zinc-900/40 p-8 rounded-2xl border border-border/40 text-center space-y-4 hover:-translate-y-1 transition-all duration-300 group">
-                  <div className="h-12 w-12 rounded-2xl mx-auto flex items-center justify-center bg-white dark:bg-zinc-800 shadow-sm group-hover:scale-110 transition-transform">
-                    <Award className="h-6 w-6" style={textPrimaryStyle} />
-                  </div>
-                  <div className="space-y-2">
-                    <h3 className="font-bold text-base text-gray-900 dark:text-white">{card.title}</h3>
-                    <p className="text-xs text-muted-foreground leading-relaxed font-medium">{card.desc}</p>
+                <div key={idx} className="bg-gray-50/50 dark:bg-zinc-900/40 p-6 rounded-2xl border border-border/40 text-left space-y-4 hover:-translate-y-1 hover:shadow-md transition-all duration-300 group flex flex-col justify-between">
+                  <div className="space-y-4">
+                    {card.imageUrl ? (
+                      <div className="w-full aspect-video rounded-xl overflow-hidden bg-muted dark:bg-zinc-900 border border-border/30 relative">
+                        <img src={card.imageUrl} alt={card.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      </div>
+                    ) : (
+                      <div className="h-12 w-12 rounded-xl flex items-center justify-center bg-white dark:bg-zinc-800 shadow-xs group-hover:scale-110 transition-transform">
+                        <Award className="h-6 w-6" style={textPrimaryStyle} />
+                      </div>
+                    )}
+                    <div className="space-y-2">
+                      <h3 className="font-extrabold text-base text-gray-900 dark:text-white tracking-tight">{card.title}</h3>
+                      <p className="text-xs text-muted-foreground leading-relaxed font-medium">{card.desc}</p>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -526,29 +762,69 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
           </div>
         </section>
       );
+    }
 
-    case 'cta':
+    case 'cta': {
       const ctaUrl = content.buttonUrl || '#';
       const ctaBtnText = content.buttonText || 'Mulai Sekarang';
+      const ctaTitle = content.title || 'Siap Meningkatkan Bisnis Anda?';
+      const ctaDesc = content.description || 'Bergabunglah sekarang dan rasakan kemudahan mengelola platform penjualan digital.';
+      
+      const themeBg = content.themeBg || 'primary';
+      const buttonAction = content.buttonAction || 'whatsapp';
+      
+      let bgStyleClass = "bg-primary";
+      let textTitleClass = "text-white";
+      let textDescClass = "text-white/80";
+      let btnStyle: React.CSSProperties = { backgroundColor: '#ffffff', color: theme.primaryColor || '#2563eb' };
+      let sectionStyle: React.CSSProperties = {};
+
+      if (themeBg === 'primary') {
+        sectionStyle = {
+          background: `linear-gradient(135deg, ${theme.primaryColor || '#2563eb'}dd, ${theme.primaryColor || '#2563eb'})`
+        };
+        btnStyle = { backgroundColor: '#ffffff', color: theme.primaryColor || '#2563eb' };
+      } else if (themeBg === 'dark') {
+        bgStyleClass = "bg-zinc-950 text-white";
+        btnStyle = buttonStyle; 
+      } else if (themeBg === 'amber') {
+        bgStyleClass = "bg-gradient-to-tr from-amber-600 to-amber-500 text-white";
+        btnStyle = { backgroundColor: '#ffffff', color: '#b45309' };
+      } else if (themeBg === 'muted') {
+        bgStyleClass = "bg-gray-50 dark:bg-zinc-900 border-y border-border/40 text-gray-900 dark:text-white";
+        textTitleClass = "text-gray-900 dark:text-white";
+        textDescClass = "text-muted-foreground";
+        btnStyle = buttonStyle; 
+      }
+
+      let resolvedUrl = ctaUrl;
+      if (buttonAction === 'whatsapp') {
+        resolvedUrl = `https://wa.me/?text=${encodeURIComponent('Halo! Saya tertarik dengan penawaran Anda.')}`;
+      } else if (buttonAction === 'catalog') {
+        resolvedUrl = '#catalog';
+      }
+
       return (
-        <section id={section.id} className="py-16 px-6 bg-gray-950 text-white relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-tr from-black/40 to-transparent pointer-events-none" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-[100px] opacity-15" style={{ backgroundColor: theme.primaryColor }} />
+        <section id={section.id} className={cn("py-16 px-6 relative overflow-hidden transition-colors", bgStyleClass)} style={sectionStyle}>
+          <div className="absolute inset-0 bg-gradient-to-tr from-black/10 to-transparent pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-[100px] opacity-10 bg-white" />
           
           <div className="max-w-4xl mx-auto space-y-6 relative z-10 text-center">
-            <h2 className="text-2xl md:text-4xl font-extrabold tracking-tight leading-tight">
-              {content.title || 'Siap Meningkatkan Bisnis Anda?'}
+            <h2 className={cn("text-2xl md:text-3xl font-extrabold tracking-tight leading-tight", textTitleClass)}>
+              {ctaTitle}
             </h2>
-            <p className="text-xs md:text-sm text-gray-400 max-w-md mx-auto leading-relaxed">
-              {content.subtitle || 'Bergabunglah sekarang dan rasakan kemudahan mengelola platform penjualan digital.'}
-            </p>
+            {ctaDesc && (
+              <p className={cn("text-xs md:text-sm max-w-md mx-auto leading-relaxed font-medium", textDescClass)}>
+                {ctaDesc}
+              </p>
+            )}
             <div className="pt-4">
               <Button 
                 asChild
-                className="h-11 px-8 rounded-xl font-bold text-sm shadow-md transition-all hover:scale-105 active:scale-95 text-white border-none"
-                style={buttonStyle}
+                className="h-11 px-8 rounded-xl font-bold text-sm shadow-md transition-all hover:scale-105 active:scale-95 border-none"
+                style={btnStyle}
               >
-                <a href={ctaUrl}>
+                <a href={resolvedUrl}>
                   {ctaBtnText}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </a>
@@ -557,6 +833,7 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
           </div>
         </section>
       );
+    }
 
     case 'faq':
       const faqList = content.faqs || [
@@ -617,82 +894,103 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
         </section>
       );
 
-    case 'contact':
+    case 'contact': {
       const waLinkContact = `https://wa.me/${content.phone?.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(content.whatsappText || 'Halo! Saya ingin menghubungi Anda.')}`;
+      const mapUrl = content.mapUrl || '';
       
       return (
         <section id={section.id} className="py-16 px-6 lg:py-24 bg-white dark:bg-[#0B0F19] relative overflow-hidden transition-colors">
           {/* Background Pattern */}
           <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, black 1px, transparent 0)', backgroundSize: '40px 40px' }} />
           
-          <motion.div 
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={containerVariants}
-            className="max-w-5xl mx-auto rounded-2xl p-8 lg:p-12 text-white shadow-xl relative overflow-hidden" 
-            style={buttonStyle}
-          >
-            {/* Glossy Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent pointer-events-none" />
-            <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-white/10 blur-3xl" />
-            
-            <div className="relative z-10 grid lg:grid-cols-2 gap-10 items-center">
-              <div className="space-y-6">
-                <div className="space-y-3">
-                  <h2 className="text-2xl lg:text-3xl font-extrabold tracking-tight leading-none">
-                    {content.title || 'Hubungi Kami'}
-                  </h2>
-                  <p className="text-sm lg:text-base font-medium opacity-80 leading-relaxed max-w-md">Kami siap melayani Anda. Hubungi kami kapan saja melalui saluran berikut.</p>
-                </div>
-
+          <div className="max-w-5xl mx-auto space-y-10">
+            <motion.div 
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={containerVariants}
+              className="rounded-2xl p-8 lg:p-12 text-white shadow-xl relative overflow-hidden" 
+              style={buttonStyle}
+            >
+              {/* Glossy Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent pointer-events-none" />
+              <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-white/10 blur-3xl" />
+              
+              <div className="relative z-10 grid lg:grid-cols-2 gap-10 items-center">
                 <div className="space-y-6">
-                  {content.phone && (
-                    <div className="flex items-center gap-4 group">
-                      <div className="h-12 w-12 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-md transition-all group-hover:scale-105">
-                        <Phone className="h-5 w-5 text-white" />
-                      </div>
-                      <div className="space-y-0.5">
-                        <p className="text-[9px] uppercase font-bold tracking-widest opacity-60">Hubungi Langsung</p>
-                        <p className="text-lg lg:text-xl font-bold tracking-tight">{content.phone}</p>
-                      </div>
-                    </div>
-                  )}
-                  {content.address && (
-                    <div className="flex items-center gap-4 group">
-                      <div className="h-12 w-12 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-md transition-all group-hover:scale-105">
-                        <MapPin className="h-5 w-5 text-white" />
-                      </div>
-                      <div className="space-y-0.5">
-                        <p className="text-[9px] uppercase font-bold tracking-widest opacity-60">Lokasi Kantor</p>
-                        <p className="text-sm lg:text-base font-bold leading-tight">{content.address}</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
+                  <div className="space-y-3">
+                    <h2 className="text-2xl lg:text-3xl font-extrabold tracking-tight leading-none">
+                      {content.title || 'Hubungi Kami'}
+                    </h2>
+                    <p className="text-sm lg:text-base font-medium opacity-80 leading-relaxed max-w-md">Kami siap melayani Anda. Hubungi kami kapan saja melalui saluran berikut.</p>
+                  </div>
 
-              <div className="bg-white/10 backdrop-blur-2xl rounded-xl p-6 lg:p-8 border border-white/20 shadow-lg flex flex-col items-center text-center gap-6 max-w-sm mx-auto w-full">
-                <div className="h-14 w-14 rounded-full bg-white flex items-center justify-center shadow-inner">
-                  <MessageSquare className="h-6 w-6" style={textPrimaryStyle} />
+                  <div className="space-y-6">
+                    {content.phone && (
+                      <div className="flex items-center gap-4 group">
+                        <div className="h-12 w-12 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-md transition-all group-hover:scale-105">
+                          <Phone className="h-5 w-5 text-white" />
+                        </div>
+                        <div className="space-y-0.5">
+                          <p className="text-[9px] uppercase font-bold tracking-widest opacity-60">Hubungi Langsung</p>
+                          <p className="text-lg lg:text-xl font-bold tracking-tight">{content.phone}</p>
+                        </div>
+                      </div>
+                    )}
+                    {content.address && (
+                      <div className="flex items-center gap-4 group">
+                        <div className="h-12 w-12 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-md transition-all group-hover:scale-105">
+                          <MapPin className="h-5 w-5 text-white" />
+                        </div>
+                        <div className="space-y-0.5">
+                          <p className="text-[9px] uppercase font-bold tracking-widest opacity-60">Lokasi Kantor</p>
+                          <p className="text-sm lg:text-base font-bold leading-tight">{content.address}</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <h3 className="text-lg font-bold tracking-tight">Kirim Pesan</h3>
-                  <p className="text-xs opacity-75 leading-relaxed">Respon cepat melalui asisten WhatsApp kami yang tersedia 24/7.</p>
+
+                <div className="bg-white/10 backdrop-blur-2xl rounded-xl p-6 lg:p-8 border border-white/20 shadow-lg flex flex-col items-center text-center gap-6 max-w-sm mx-auto w-full">
+                  <div className="h-14 w-14 rounded-full bg-white flex items-center justify-center shadow-inner">
+                    <MessageSquare className="h-6 w-6" style={textPrimaryStyle} />
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-bold tracking-tight">Kirim Pesan</h3>
+                    <p className="text-xs opacity-75 leading-relaxed">Respon cepat melalui asisten WhatsApp kami yang tersedia 24/7.</p>
+                  </div>
+                  <Button 
+                    asChild
+                    className="w-full h-10 rounded-xl bg-white text-gray-900 font-bold text-xs hover:bg-gray-100 transition-all hover:scale-[1.01] shadow-md border-none"
+                  >
+                    <a href={waLinkContact} target="_blank" rel="noopener noreferrer">
+                      Buka WhatsApp
+                    </a>
+                  </Button>
                 </div>
-                <Button 
-                  asChild
-                  className="w-full h-10 rounded-xl bg-white text-gray-900 font-bold text-xs hover:bg-gray-100 transition-all hover:scale-[1.01] shadow-md border-none"
-                >
-                  <a href={waLinkContact} target="_blank" rel="noopener noreferrer">
-                    Buka WhatsApp
-                  </a>
-                </Button>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+
+            {mapUrl && (
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="w-full aspect-video md:aspect-[21/9] rounded-2xl overflow-hidden border border-border/40 bg-muted dark:bg-zinc-900 shadow-md relative"
+              >
+                <iframe 
+                  src={mapUrl} 
+                  className="absolute inset-0 w-full h-full border-none"
+                  allowFullScreen={false} 
+                  loading="lazy" 
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </motion.div>
+            )}
+          </div>
         </section>
       );
+    }
 
     case 'footer':
       const copyright = content.copyright || `© 2026 Semua Hak Dilindungi. ${siteTitle || 'UMKM JagoBisnis'}.`;
