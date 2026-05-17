@@ -69,7 +69,7 @@ export const WebsitePreview: React.FC<WebsitePreviewProps> = ({ site, products =
         </div>
         
         <div className="hidden md:flex gap-6 text-xs font-bold tracking-wider uppercase">
-          {[...sections].sort((a, b) => a.order - b.order).map(s => {
+          {[...sections].sort((a, b) => a.order - b.order).filter(s => s.type !== 'footer').map(s => {
             const getSectionLabel = (type: string) => {
               switch (type) {
                 case 'hero': return 'Beranda';
@@ -119,15 +119,17 @@ export const WebsitePreview: React.FC<WebsitePreviewProps> = ({ site, products =
         ))}
       </div>
 
-      {/* Footer */}
-      <footer className="py-12 px-6 border-t border-gray-100 dark:border-zinc-900 bg-gray-50/30 dark:bg-zinc-950/20 text-center">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="space-y-1.5 text-left">
-            <h2 className="text-base font-black tracking-tight">{site.title}</h2>
-            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">© 2024 Semua Hak Dilindungi. UMKM JagoBisnis.</p>
+      {/* Fallback Static Footer if no dynamic footer block is present */}
+      {!sections.some(s => s.type === 'footer') && (
+        <footer className="py-12 px-6 border-t border-gray-100 dark:border-zinc-900 bg-gray-50/30 dark:bg-zinc-950/20 text-center">
+          <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="space-y-1.5 text-left">
+              <h2 className="text-base font-black tracking-tight">{site.title}</h2>
+              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">© 2024 Semua Hak Dilindungi. UMKM JagoBisnis.</p>
+            </div>
           </div>
-        </div>
-      </footer>
+        </footer>
+      )}
     </div>
   );
 };

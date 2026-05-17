@@ -171,6 +171,18 @@ const AVAILABLE_BLOCKS = [
       address: '', 
       whatsappText: 'Halo! Saya ingin menghubungi Anda.' 
     } 
+  },
+  { 
+    type: 'footer', 
+    name: 'Footer Kustom', 
+    description: 'Hak cipta, deskripsi brand, & ikon media sosial kustom', 
+    defaultContent: { 
+      copyright: '© 2026 Semua Hak Dilindungi. UMKM JagoBisnis.', 
+      description: 'Partner UMKM terbaik untuk kemudahan bisnis digital Anda.', 
+      instagram: '', 
+      facebook: '', 
+      twitter: '' 
+    } 
   }
 ];
 
@@ -253,6 +265,12 @@ export default function WebsiteBuilderPage() {
                 type: 'products',
                 order: 2,
                 content: { ...AVAILABLE_BLOCKS[1].defaultContent }
+              },
+              {
+                id: 'footer-default',
+                type: 'footer',
+                order: 3,
+                content: { ...AVAILABLE_BLOCKS.find(b => b.type === 'footer')?.defaultContent }
               }
             ]
           };
@@ -1684,6 +1702,66 @@ export default function WebsiteBuilderPage() {
                                     value={activeSection.content.whatsappText || ''}
                                     onChange={(e) => updateActiveSectionContent('whatsappText', e.target.value)}
                                   />
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Footer Custom Fields */}
+                            {activeSection.type === 'footer' && (
+                              <div className="space-y-4 pt-2">
+                                <div className="space-y-1">
+                                  <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider block">Teks Hak Cipta (Copyright)</label>
+                                  <input
+                                    type="text"
+                                    className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs font-bold text-gray-900 dark:text-white"
+                                    value={activeSection.content.copyright || ''}
+                                    onChange={(e) => updateActiveSectionContent('copyright', e.target.value)}
+                                    placeholder="Contoh: © 2026 Semua Hak Dilindungi."
+                                  />
+                                </div>
+                                <div className="space-y-1">
+                                  <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider block">Deskripsi Singkat Brand</label>
+                                  <textarea
+                                    className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs font-medium text-gray-900 dark:text-white min-h-[60px]"
+                                    value={activeSection.content.description || ''}
+                                    onChange={(e) => updateActiveSectionContent('description', e.target.value)}
+                                    placeholder="Partner UMKM terbaik untuk kemudahan bisnis digital Anda."
+                                  />
+                                </div>
+                                <div className="space-y-3 pt-2 border-t border-border dark:border-zinc-850">
+                                  <label className="text-[9px] font-black text-gray-900 dark:text-white uppercase tracking-wider block">Tautan Media Sosial</label>
+                                  <div className="space-y-2">
+                                    <div className="space-y-1">
+                                      <label className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest block">Instagram URL</label>
+                                      <input
+                                        type="text"
+                                        className="w-full rounded-lg border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs text-gray-900 dark:text-white font-medium"
+                                        value={activeSection.content.instagram || ''}
+                                        onChange={(e) => updateActiveSectionContent('instagram', e.target.value)}
+                                        placeholder="https://instagram.com/akun-anda"
+                                      />
+                                    </div>
+                                    <div className="space-y-1">
+                                      <label className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest block">Facebook URL</label>
+                                      <input
+                                        type="text"
+                                        className="w-full rounded-lg border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs text-gray-900 dark:text-white font-medium"
+                                        value={activeSection.content.facebook || ''}
+                                        onChange={(e) => updateActiveSectionContent('facebook', e.target.value)}
+                                        placeholder="https://facebook.com/halaman-anda"
+                                      />
+                                    </div>
+                                    <div className="space-y-1">
+                                      <label className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest block">Twitter/X URL</label>
+                                      <input
+                                        type="text"
+                                        className="w-full rounded-lg border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs text-gray-900 dark:text-white font-medium"
+                                        value={activeSection.content.twitter || ''}
+                                        onChange={(e) => updateActiveSectionContent('twitter', e.target.value)}
+                                        placeholder="https://twitter.com/akun-anda"
+                                      />
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                             )}

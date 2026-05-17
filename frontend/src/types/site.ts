@@ -18,7 +18,8 @@ export type SectionType =
   | 'features-cards' 
   | 'cta' 
   | 'faq'
-  | 'contact';
+  | 'contact'
+  | 'footer';
 
 export interface Section {
   id: string;

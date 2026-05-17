@@ -694,6 +694,51 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
         </section>
       );
 
+    case 'footer':
+      const copyright = content.copyright || `© 2026 Semua Hak Dilindungi. ${siteTitle || 'UMKM JagoBisnis'}.`;
+      const desc = content.description || 'Partner UMKM terbaik untuk kemudahan bisnis digital Anda.';
+      const hasSocials = !!(content.instagram || content.facebook || content.twitter);
+      
+      return (
+        <footer id={section.id} className="py-12 px-6 border-t border-border/40 dark:border-zinc-900 bg-gray-50/30 dark:bg-zinc-950/20 text-center">
+          <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="space-y-2 text-left">
+              <h2 className="text-base font-black tracking-tight text-gray-900 dark:text-white">{siteTitle || 'UMKM JagoBisnis'}</h2>
+              <p className="text-xs text-muted-foreground leading-relaxed max-w-sm font-medium">{desc}</p>
+              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest leading-none pt-1">{copyright}</p>
+            </div>
+            
+            {hasSocials && (
+              <div className="flex items-center gap-4">
+                {content.instagram && (
+                  <a href={content.instagram} target="_blank" rel="noopener noreferrer" className="h-9 w-9 rounded-xl bg-white dark:bg-zinc-900 border border-border/50 flex items-center justify-center text-muted-foreground hover:text-gray-900 dark:hover:text-white transition-colors hover:scale-105 active:scale-95 shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4.5 w-4.5">
+                      <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+                    </svg>
+                  </a>
+                )}
+                {content.facebook && (
+                  <a href={content.facebook} target="_blank" rel="noopener noreferrer" className="h-9 w-9 rounded-xl bg-white dark:bg-zinc-900 border border-border/50 flex items-center justify-center text-muted-foreground hover:text-gray-900 dark:hover:text-white transition-colors hover:scale-105 active:scale-95 shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4.5 w-4.5">
+                      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                    </svg>
+                  </a>
+                )}
+                {content.twitter && (
+                  <a href={content.twitter} target="_blank" rel="noopener noreferrer" className="h-9 w-9 rounded-xl bg-white dark:bg-zinc-900 border border-border/50 flex items-center justify-center text-muted-foreground hover:text-gray-900 dark:hover:text-white transition-colors hover:scale-105 active:scale-95 shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4.5 w-4.5">
+                      <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>
+                    </svg>
+                  </a>
+                )}
+              </div>
+            )}
+          </div>
+        </footer>
+      );
+
     default:
       return null;
   }

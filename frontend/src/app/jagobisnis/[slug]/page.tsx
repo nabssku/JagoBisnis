@@ -148,7 +148,7 @@ export default function PublicWebsitePage() {
         </div>
         
         <div className="hidden md:flex gap-6 text-xs font-bold tracking-wider uppercase">
-          {[...sections].sort((a, b) => a.order - b.order).map(s => {
+          {[...sections].sort((a, b) => a.order - b.order).filter(s => s.type !== 'footer').map(s => {
             const getSectionLabel = (type: string) => {
               switch (type) {
                 case 'hero': return 'Beranda';
@@ -198,22 +198,24 @@ export default function PublicWebsitePage() {
         ))}
       </main>
 
-      {/* Footer */}
-      <footer className="py-12 px-6 border-t border-gray-100 dark:border-zinc-900 bg-gray-50/30 dark:bg-zinc-950/20 text-center">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="space-y-1.5 text-left">
-            <h2 className="text-base font-black tracking-tight">{site.title}</h2>
-            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">© 2024 Semua Hak Dilindungi. UMKM JagoBisnis.</p>
-          </div>
-          <div className="flex flex-col items-center md:items-end gap-1">
-            <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-1 opacity-70">Platform Digital</p>
-            <div className="flex items-center gap-2">
-              <div className="h-5 w-5 rounded bg-primary flex items-center justify-center text-white text-[8px] font-black" style={{ backgroundColor: theme.primaryColor }}>JB</div>
-              <span className="font-extrabold text-sm tracking-tight text-blue-600 dark:text-blue-400">JagoBisnis</span>
+      {/* Fallback Static Footer if no dynamic footer block is present */}
+      {!sections.some(s => s.type === 'footer') && (
+        <footer className="py-12 px-6 border-t border-gray-100 dark:border-zinc-900 bg-gray-50/30 dark:bg-zinc-950/20 text-center">
+          <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="space-y-1.5 text-left">
+              <h2 className="text-base font-black tracking-tight">{site.title}</h2>
+              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">© 2024 Semua Hak Dilindungi. UMKM JagoBisnis.</p>
+            </div>
+            <div className="flex flex-col items-center md:items-end gap-1">
+              <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-1 opacity-70">Platform Digital</p>
+              <div className="flex items-center gap-2">
+                <div className="h-5 w-5 rounded bg-primary flex items-center justify-center text-white text-[8px] font-black" style={{ backgroundColor: theme.primaryColor }}>JB</div>
+                <span className="font-extrabold text-sm tracking-tight text-blue-600 dark:text-blue-400">JagoBisnis</span>
+              </div>
             </div>
           </div>
-        </div>
-      </footer>
+        </footer>
+      )}
     </div>
   );
 }
