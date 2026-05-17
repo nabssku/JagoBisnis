@@ -40,7 +40,7 @@ export class AuthService {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...result } = user;
-    const accessToken = this.generateToken(user.id, user.email);
+    const accessToken = this.generateToken(user.id, user.email, user.role);
 
     return {
       user: result,
@@ -65,7 +65,7 @@ export class AuthService {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...result } = user;
-    const accessToken = this.generateToken(user.id, user.email);
+    const accessToken = this.generateToken(user.id, user.email, user.role);
 
     return {
       user: result,
@@ -205,7 +205,7 @@ export class AuthService {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...result } = user;
-    const accessToken = this.generateToken(user.id, user.email);
+    const accessToken = this.generateToken(user.id, user.email, user.role);
 
     return {
       user: result,
@@ -213,7 +213,7 @@ export class AuthService {
     };
   }
 
-  private generateToken(userId: string, email: string) {
-    return this.jwtService.sign({ userId, email });
+  private generateToken(userId: string, email: string, role: string) {
+    return this.jwtService.sign({ userId, email, role });
   }
 }

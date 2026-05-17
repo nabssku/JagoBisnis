@@ -54,6 +54,13 @@ export default function DashboardPage() {
           businessService.getAll()
         ]);
         setUser(userData);
+        
+        // If SuperAdmin, redirect to SuperAdmin workspace immediately
+        if (userData.role === 'SUPERADMIN') {
+          router.push('/dashboard/superadmin');
+          return;
+        }
+
         setBusinesses(businessData);
         if (businessData.length === 0) {
           router.push('/onboarding');

@@ -64,6 +64,12 @@ export default function OnboardingPage() {
         
         setUser(me);
         
+        // If SuperAdmin, redirect to SuperAdmin dashboard directly
+        if (me.role === 'SUPERADMIN') {
+          router.push('/dashboard/superadmin');
+          return;
+        }
+        
         // If user already has a business profile, redirect to dashboard immediately (Strict 1 Business Profile limit)
         if (businesses.length > 0) {
           toast.info('Anda sudah memiliki profil bisnis aktif.');

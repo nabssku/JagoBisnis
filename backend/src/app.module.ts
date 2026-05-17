@@ -13,6 +13,7 @@ import { SocialPublishingModule } from './social-publishing/social-publishing.mo
 import { OrderModule } from './order/order.module';
 import { PaymentModule } from './payment/payment.module';
 import { MediaModule } from './media/media.module';
+import { SuperAdminModule } from './superadmin/superadmin.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { MediaModule } from './media/media.module';
     OrderModule,
     PaymentModule,
     MediaModule,
+    SuperAdminModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

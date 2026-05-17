@@ -240,7 +240,26 @@ Tasks:
 - [x] Designed custom, beautiful public pages for Syarat & Ketentuan (`/terms`) and Kebijakan Privasi (`/privacy`).
 - [x] Successfully verified Next.js and NestJS compilation builds with 100% completion (0 errors).
 
-## Phase 15: Post-MVP & Optimization
+## Phase 15: SuperAdmin Dashboard & Platform Statistics
+Status: Completed
+
+Tasks:
+- [x] Added global user authorization `role` model field (`USER`/`SUPERADMIN`) in `schema.prisma`.
+- [x] Rebuilt database client model synchronizations safely with PostgreSQL using db push.
+- [x] Created automatic, encrypted SuperAdmin seeding system on NestJS application startup (using bcrypt and default credentials).
+- [x] Engineered a secure `SuperAdminGuard` validating active roles and preventing unauthorized access.
+- [x] Built NestJS SuperAdmin Module containing secure endpoints: `GET /stats`, `GET /users`, `PUT /users/:id/role`, `GET /businesses`, and `DELETE /businesses/:id`.
+- [x] Implemented global Gross Transaction Value (GTV) aggregation and administrative cascading moderation deletions.
+- [x] Created frontend API client `superadmin.service.ts` managing all platform administration queries.
+- [x] Updated standard dashboard and onboarding page mounts to automatically route logged-in SuperAdmin users directly to their console.
+- [x] Designed a custom SuperAdmin Layout with a completely customized admin sidebar navigation (Overview, Users, Businesses, System).
+- [x] Created the Main Console Overview Page displaying summary cards and recent platform registration/business timelines.
+- [x] Created the User Directory Page with search bars, linked business store tags, and role change controls (with safety locks on core admin accounts).
+- [x] Created the Business Management Page with search filters, live preview links, and moderation purge buttons.
+- [x] Created the System Telemetry Page featuring animated live-updating SVG progress circles, latencies, and node specification charts.
+- [x] Verified a 100% successful Next.js static build compilation and NestJS production build with zero errors.
+
+## Phase 16: Post-MVP & Optimization
 Status: In Planning
 
 Tasks:
