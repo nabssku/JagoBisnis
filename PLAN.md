@@ -132,7 +132,7 @@ Tasks:
 Status: Completed
 
 Tasks:
-- [x] Create modular 3-column workspace design (Left: Available blocks, Middle: Visual canvas stack, Right: Site | Block dynamic configuration panel)
+- [x] Build modular 3-column workspace design (Left: Available blocks, Middle: Visual canvas stack, Right: Site | Block dynamic configuration panel)
 - [x] Support 11 dynamic block types (Hero, Katalog, Tentang Kami, Galeri, Deretan Logo, Statistik, Fitur Grid 2x2, Fitur Kartu, CTA, Pertanyaan Umum, Kontak)
 - [x] Implement smooth block reordering (Move Up/Down), addition, and instant canvas deletion
 - [x] Build comprehensive Site settings tab: Custom Logo upload, Lucide Preset Icons selector, HSL tailored Color Schemes, and live preview Typography choices
@@ -140,6 +140,10 @@ Tasks:
 - [x] Synchronize editor changes securely with NestJS backend database via Prisma
 - [x] Standardize sticky navigation bar across Live Preview, Public Landing Page, and Product Details to display custom logo image/icons
 - [x] Validate zero-warning TypeScript compilation across the entire project
+- [x] Middle Canvas Layout Overhaul: High-fidelity visual mockup slice previews for all 11 block types (matching target mockup layouts)
+- [x] Middle Canvas Layout Overhaul: Floating side action vertical bars overlapping left border of active block (Up arrow, Drag handle dots, Down arrow)
+- [x] Middle Canvas Layout Overhaul: Labeled top block ribbons showing lock state symbol (`🔒`) for HERO and trash action icons for deletable sections
+- [x] Middle Canvas Layout Overhaul: Warm golden/yellow active highlight border enclosing the selected canvas section container
 
 ## Phase 11: Post-MVP & Optimization
 Status: In Planning
