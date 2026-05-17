@@ -106,7 +106,7 @@ export default function RegisterPage() {
           .then((res) => {
             localStorage.setItem('accessToken', res.accessToken);
             toast.success('Pendaftaran menggunakan Google berhasil!');
-            router.push('/dashboard');
+            router.push('/onboarding');
           })
           .catch((err: any) => {
             const errorMsg = err.response?.data?.message || 'Gagal mendaftar menggunakan Google.';
@@ -132,7 +132,7 @@ export default function RegisterPage() {
       });
       localStorage.setItem('accessToken', response.accessToken);
       toast.success('Registrasi berhasil! Selamat datang.');
-      router.push('/dashboard');
+      router.push('/onboarding');
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message || 'Registrasi gagal. Silakan coba lagi.');
@@ -157,7 +157,7 @@ export default function RegisterPage() {
           .then((res) => {
             localStorage.setItem('accessToken', res.accessToken);
             toast.success('Berhasil mendaftar dengan Demo Google Account!');
-            router.push('/dashboard');
+            router.push('/onboarding');
           })
           .catch((err: any) => {
             const errorMsg = err.response?.data?.message || 'Demo Google Gagal.';

@@ -55,6 +55,10 @@ export default function DashboardPage() {
         ]);
         setUser(userData);
         setBusinesses(businessData);
+        if (businessData.length === 0) {
+          router.push('/onboarding');
+          return;
+        }
       } catch (err) {
         console.error('Failed to fetch dashboard data', err);
       } finally {

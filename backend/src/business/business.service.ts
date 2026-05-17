@@ -14,6 +14,14 @@ export class BusinessService {
   constructor(private prisma: PrismaService) {}
 
   async create(userId: string, dto: CreateBusinessDto) {
+    const userBusinessesCount = await this.prisma.businessUser.count({
+      where: { userId },
+    });
+
+    if (userBusinessesCount >= 1) {
+      throw new ConflictException('Maksimal 1 akun hanya boleh memiliki 1 profil bisnis.');
+    }
+
     const slug = dto.slug || this.generateSlug(dto.name);
 
     const existingBusiness = await this.prisma.business.findUnique({

@@ -76,7 +76,7 @@ async function bootstrap() {
         },
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
         credentials: true,
-        allowedHeaders: 'Content-Type,Accept,Authorization,X-Requested-With',
+        allowedHeaders: 'Content-Type,Accept,Authorization,X-Requested-With,bypass-tunnel-reminder,Bypass-Tunnel-Reminder',
     });
     app.useGlobalPipes(new common_1.ValidationPipe({
         whitelist: true,

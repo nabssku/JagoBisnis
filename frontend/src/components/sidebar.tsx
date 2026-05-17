@@ -60,7 +60,7 @@ export function Sidebar({ businessId }: SidebarProps) {
 
   const routes = [
     { label: 'Ringkasan', icon: LayoutDashboard, href: '/dashboard', active: pathname === '/dashboard' },
-    { label: 'Profil Usaha', icon: User, href: businessId ? `/dashboard/business/${businessId}/settings` : '#', active: pathname.includes('/settings') },
+    { label: 'Kelola Bisnis', icon: Store, href: businessId ? `/dashboard/business/${businessId}/settings` : '#', active: pathname.includes('/settings') },
     { label: 'Konten', icon: FileText, href: businessId ? `/dashboard/business/${businessId}/posts` : '#', active: pathname.includes('/posts') },
     { label: 'Inbox', icon: Mail, href: '#', active: false },
     { label: 'Sosial Media', icon: Send, href: businessId ? `/dashboard/business/${businessId}/social-posts` : '#', active: pathname.includes('/social-posts') },

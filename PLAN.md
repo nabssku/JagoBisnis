@@ -163,7 +163,7 @@ Tasks:
 - [x] Bento Gallery Layout & Lightbox Viewer: Overhauled the Bento layout in `SectionRenderer` to match the exact non-uniform grid layout of the user's mockup image using explicit Tailwind `col-start` & `row-start` mappings. Implemented a beautiful, highly interactive full-screen Lightbox Modal trigger on click for all gallery items on the public page with a dark background dimming backdrop, blur, smooth scale-in animations, and a premium border.
 - [x] Live Editor Dark Mode Polish: Fully aligned tab select active/inactive states, preview mode switchers high contrast hovers, disabled side action chevrons, rich-text formatting toolbar icons, theme preset swatches, and upload dropzones (About Us, Logo List, Gallery) for visually seamless Dark Mode support.
 - [x] Compilation & Build Check: Checked TypeScript checks, Next.js static asset optimization, and verified 100% SUCCESS build with zero compilation warnings or errors.
-- [x] Robust & Dynamic Backend CORS Config: Migrated hardcoded localhost origin to support dynamic `FRONTEND_URL` environment lists (with explicit support for Vercel `https://jagobisnis.vercel.app`, custom domain `https://www.jago-bisnis.my.id` / `https://jago-bisnis.my.id`, and localhost combined), resolved surrounding quotes/whitespaces parsing bugs in redirects, and configured support for custom headers/methods.
+- [x] Robust & Dynamic Backend CORS Config: Migrated hardcoded localhost origin to support dynamic `FRONTEND_URL` environment lists (with explicit support for Vercel `https://jagobisnis.vercel.app`, custom domain `https://www.jago-bisnis.my.id` / `https://jago-bisnis.my.id`, and localhost combined), resolved surrounding quotes/whitespaces parsing bugs in redirects, whitelisted custom `bypass-tunnel-reminder` preflight headers, and configured support for custom headers/methods.
 - [x] Interactive Dashboard Profile Dropdown: Overhauled the profile header shell element to toggle a premium, beautiful floating dropdown matching the user's design screenshot, with custom gear settings actions, color-coordinated logout controls, clean light/dark support, and automatic close-on-click-outside listener.
 - [x] Global User Account Settings Page: Created a dedicated personal account settings page at `/dashboard/settings` containing profile photo preset picker/URL custom input, display name, phone number, email address, and old/new password update forms. Integrated database models, RESTful API endpoints, Zod schema validations, and state handling.
 - [x] Backend Blog/Post Module: Engineered PostgreSQL schema models, NestJS controller routing `/api/v1/posts`, data transfer objects, Pino logging, and secure JWT-guarded mutations.
@@ -225,7 +225,22 @@ Tasks:
 - [x] Automatically logged product catalog image uploads in the database `Media` library by integrating a hook inside the backend `ProductController.uploadFile()` and `ProductService.createMedia()`.
 - [x] Confirmed 100% successful frontend static export compile and NestJS backend build with zero TypeScript warnings or compilation errors.
 
-## Phase 14: Post-MVP & Optimization
+## Phase 14: Pendaftaran -> Onboarding Flow & Premium Landing Page
+Status: Completed
+
+Tasks:
+- [x] Backend restriction: Enforced strict limit of exactly "Maks 1 Akun 1 Bisnis Profile" inside backend `BusinessService.create()`.
+- [x] Redirected successful standard registration, Google OAuth, and Google developer mock pendaftaran flows to `/onboarding`.
+- [x] Created premium, high-fidelity Onboarding page `/onboarding` guiding new users to create their first single allowed business profile with auto slug generation, live link preview, and warm `#e8aa20` theme.
+- [x] Automated dashboard page mount check to redirect any user without a business profile to the `/onboarding` page.
+- [x] Aligned sidebar navigation by renaming "Profil Usaha" to "Kelola Bisnis" and using the `Store` icon to fit the business manager concept.
+- [x] Overhauled the main root landing page (`/`) to build a visually gorgeous, extremely premium SaaS/UMKM showcase matching the HSL warm amber `#e8aa20` palette.
+- [x] Integrated an interactive, fully responsive live mockup preview on the hero section allowing real-time category filtering.
+- [x] Designed visual mockups for Website Builder blocks drag-and-drop and an interactive checkout step-by-step slider simulation.
+- [x] Designed custom, beautiful public pages for Syarat & Ketentuan (`/terms`) and Kebijakan Privasi (`/privacy`).
+- [x] Successfully verified Next.js and NestJS compilation builds with 100% completion (0 errors).
+
+## Phase 15: Post-MVP & Optimization
 Status: In Planning
 
 Tasks:

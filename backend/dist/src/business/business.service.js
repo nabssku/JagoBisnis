@@ -19,6 +19,12 @@ let BusinessService = class BusinessService {
         this.prisma = prisma;
     }
     async create(userId, dto) {
+        const userBusinessesCount = await this.prisma.businessUser.count({
+            where: { userId },
+        });
+        if (userBusinessesCount >= 1) {
+            throw new common_1.ConflictException('Maksimal 1 akun hanya boleh memiliki 1 profil bisnis.');
+        }
         const slug = dto.slug || this.generateSlug(dto.name);
         const existingBusiness = await this.prisma.business.findUnique({
             where: { slug },
