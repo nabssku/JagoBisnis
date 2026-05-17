@@ -161,17 +161,17 @@ export default function PublicProductDetailPage() {
       <motion.nav 
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="p-6 flex justify-between items-center bg-white/70 dark:bg-zinc-950/70 border-b border-gray-100 dark:border-zinc-900 sticky top-0 z-50 backdrop-blur-xl transition-colors duration-200"
+        className="py-3 px-6 flex justify-between items-center bg-white/70 dark:bg-zinc-950/70 border-b border-gray-100 dark:border-zinc-900 sticky top-0 z-50 backdrop-blur-xl transition-colors duration-200"
       >
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push(`/jagobisnis/${slug}`)}>
           <div className="h-8 w-8 rounded-lg flex items-center justify-center text-white" style={{ backgroundColor: theme.primaryColor }}>
-            <Globe className="h-5 w-5" />
+            <Globe className="h-4 w-4" />
           </div>
-          <span className="text-2xl font-black tracking-tighter" style={{ color: theme.textColor }}>
+          <span className="text-lg font-black tracking-tight" style={{ color: theme.textColor }}>
             {site.title}
           </span>
         </div>
-        <div className="hidden md:flex gap-10 text-[10px] font-black uppercase tracking-[0.2em]">
+        <div className="hidden md:flex gap-6 text-xs font-semibold tracking-wider">
           {site.sections.map(s => {
             const getSectionLabel = (type: string) => {
               switch (type) {
@@ -186,7 +186,7 @@ export default function PublicProductDetailPage() {
               <Link 
                 key={s.id} 
                 href={`/jagobisnis/${slug}#${s.id}`} 
-                className="hover:opacity-50 transition-all relative group" 
+                className="hover:opacity-60 transition-all relative group" 
                 style={{ color: theme.textColor }}
               >
                 {getSectionLabel(s.type)}
@@ -198,7 +198,7 @@ export default function PublicProductDetailPage() {
         <Button 
           onClick={() => window.open(waUrl, '_blank')}
           size="sm" 
-          className="rounded-full px-6 font-bold text-white" 
+          className="rounded-xl px-5 h-9 font-bold text-white text-xs border-none shadow-sm hover:scale-[1.01] transition-transform" 
           style={{ backgroundColor: theme.primaryColor }}
         >
           Hubungi
@@ -206,8 +206,9 @@ export default function PublicProductDetailPage() {
       </motion.nav>
 
 
+
       {/* Main Content Container */}
-      <main className="max-w-7xl mx-auto px-6 py-12 space-y-12">
+      <main className="max-w-5xl mx-auto px-6 py-8 space-y-8">
         
         {/* Breadcrumbs & Navigation Back */}
         <div className="flex flex-wrap items-center justify-between gap-4">
@@ -222,13 +223,13 @@ export default function PublicProductDetailPage() {
           <div className="flex items-center gap-2">
             <button 
               onClick={handleShare}
-              className="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-900 transition-all"
+              className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-200 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-900 transition-all"
             >
-              {copied ? <CheckCircle className="h-4 w-4 text-green-500" /> : <Share2 className="h-4 w-4" />}
+              {copied ? <CheckCircle className="h-4 w-4 text-green-500" /> : <Share2 className="h-3.5 w-3.5" />}
             </button>
             <button 
               onClick={() => router.push(`/jagobisnis/${slug}#products`)}
-              className="flex h-10 px-4 items-center justify-center rounded-xl border border-gray-200 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-900 transition-all text-xs font-bold gap-2"
+              className="flex h-9 px-3 items-center justify-center rounded-xl border border-gray-200 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-900 transition-all text-xs font-bold gap-1.5"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
               Kembali
@@ -237,22 +238,22 @@ export default function PublicProductDetailPage() {
         </div>
 
         {/* Double-Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
           {/* LEFT COLUMN: Gallery & Main Image View */}
-          <div className="lg:col-span-7 flex flex-col md:flex-row gap-6">
+          <div className="lg:col-span-7 flex flex-col md:flex-row gap-4">
             
             {/* Thumbnail Strip */}
             {imagesList.length > 1 && (
-              <div className="flex md:flex-col flex-row gap-3 order-2 md:order-1 overflow-x-auto md:overflow-y-auto max-h-[500px] scrollbar-hide py-1">
+              <div className="flex md:flex-col flex-row gap-2 order-2 md:order-1 overflow-x-auto md:overflow-y-auto max-h-[400px] scrollbar-hide py-1">
                 {imagesList.map((img, idx) => (
                   <button
                     key={idx}
                     onClick={() => setActiveImage(img)}
                     className={cn(
-                      "relative h-20 w-20 rounded-xl overflow-hidden border-2 transition-all flex-shrink-0",
+                      "relative h-14 w-14 rounded-lg overflow-hidden border-2 transition-all flex-shrink-0",
                       activeImage === img 
-                        ? "border-primary shadow-md scale-95" 
+                        ? "border-primary shadow-sm scale-95" 
                         : "border-gray-200 dark:border-zinc-800 opacity-60 hover:opacity-100"
                     )}
                     style={{ borderColor: activeImage === img ? theme.primaryColor : undefined }}
@@ -265,14 +266,14 @@ export default function PublicProductDetailPage() {
             )}
 
             {/* Main Preview Frame */}
-            <div className="flex-1 order-1 md:order-2 relative aspect-[4/3] rounded-[2.5rem] bg-gray-50 dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800/80 overflow-hidden shadow-sm group flex items-center justify-center">
+            <div className="flex-1 order-1 md:order-2 relative aspect-[4/3] rounded-2xl bg-gray-50 dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800/80 overflow-hidden shadow-sm group flex items-center justify-center">
               {activeImage ? (
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img src={activeImage} alt={product.name} className="h-full w-full object-cover transition-transform duration-700 hover:scale-105" />
               ) : (
                 <div className="h-full w-full flex flex-col items-center justify-center opacity-20">
-                  <Package className="h-20 w-20 mb-3" />
-                  <span className="text-xs font-bold uppercase tracking-wider">No Image Available</span>
+                  <Package className="h-12 w-12 mb-2" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider">No Image Available</span>
                 </div>
               )}
 
@@ -281,15 +282,15 @@ export default function PublicProductDetailPage() {
                 <>
                   <button 
                     onClick={handlePrevImage}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/80 dark:bg-zinc-800/80 backdrop-blur-md flex items-center justify-center shadow-md hover:bg-white dark:hover:bg-zinc-700 transition-all"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-white/80 dark:bg-zinc-800/80 backdrop-blur-md flex items-center justify-center shadow-md hover:bg-white dark:hover:bg-zinc-700 transition-all"
                   >
-                    <ChevronLeft className="h-5 w-5 text-gray-900 dark:text-white" />
+                    <ChevronLeft className="h-4 w-4 text-gray-900 dark:text-white" />
                   </button>
                   <button 
                     onClick={handleNextImage}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/80 dark:bg-zinc-800/80 backdrop-blur-md flex items-center justify-center shadow-md hover:bg-white dark:hover:bg-zinc-700 transition-all"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-white/80 dark:bg-zinc-800/80 backdrop-blur-md flex items-center justify-center shadow-md hover:bg-white dark:hover:bg-zinc-700 transition-all"
                   >
-                    <ChevronRight className="h-5 w-5 text-gray-900 dark:text-white" />
+                    <ChevronRight className="h-4 w-4 text-gray-900 dark:text-white" />
                   </button>
                 </>
               )}
@@ -298,24 +299,24 @@ export default function PublicProductDetailPage() {
           </div>
 
           {/* RIGHT COLUMN: Info, Price, Actions & Description Tabs */}
-          <div className="lg:col-span-5 space-y-8 flex flex-col justify-start">
+          <div className="lg:col-span-5 space-y-6 flex flex-col justify-start">
             
-            <div className="space-y-4">
+            <div className="space-y-3">
               <span 
-                className="inline-block rounded-full px-4 py-1.5 text-[10px] font-black uppercase tracking-widest"
+                className="inline-block rounded-full px-3 py-1 text-[9px] font-bold uppercase tracking-wider"
                 style={{ color: theme.primaryColor, backgroundColor: `${theme.primaryColor}15` }}
               >
                 {product.category || 'Makanan & Minuman'}
               </span>
-              <h1 className="text-4xl lg:text-5xl font-black tracking-tight leading-tight text-gray-900 dark:text-white">
+              <h1 className="text-2xl lg:text-3xl font-extrabold tracking-tight leading-tight text-gray-900 dark:text-white">
                 {product.name}
               </h1>
             </div>
 
             {/* Price Box */}
-            <div className="border-t border-b border-gray-100 dark:border-zinc-900 py-6 space-y-1.5">
-              <span className="text-[10px] font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-widest block">HARGA</span>
-              <div className="text-3xl font-black tracking-tighter" style={{ color: theme.primaryColor }}>
+            <div className="border-t border-b border-gray-100 dark:border-zinc-900/60 py-4 space-y-0.5">
+              <span className="text-[9px] font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-wider block">HARGA</span>
+              <div className="text-xl lg:text-2xl font-bold tracking-tight" style={{ color: theme.primaryColor }}>
                 Rp{product.price.toLocaleString('id-ID')}
               </div>
             </div>
@@ -323,22 +324,22 @@ export default function PublicProductDetailPage() {
             {/* Checkout Button */}
             <Button 
               onClick={() => window.open(waUrl, '_blank')}
-              className="w-full h-14 rounded-2xl font-black text-base shadow-xl text-white transition-all hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2.5 bg-emerald-500 hover:bg-emerald-600 border-none shadow-emerald-200 dark:shadow-none"
+              className="w-full h-10 rounded-xl font-bold text-xs shadow-md text-white transition-all hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 border-none"
             >
-              <MessageSquare className="h-5 w-5 fill-current" />
+              <MessageSquare className="h-4 w-4 fill-current" />
               Beli Sekarang
-              <ExternalLink className="h-4 w-4 opacity-80" />
+              <ExternalLink className="h-3 w-3 opacity-80" />
             </Button>
 
             {/* Product description / specs TABS */}
-            <div className="space-y-4 pt-4">
+            <div className="space-y-3 pt-2">
               <div className="flex border-b border-gray-100 dark:border-zinc-900">
                 <button
                   onClick={() => setActiveTab('deskripsi')}
                   className={cn(
-                    "pb-3 text-xs font-black uppercase tracking-widest transition-all relative px-1 mr-8",
+                    "pb-2 text-xs font-semibold tracking-wider transition-all relative px-1 mr-6",
                     activeTab === 'deskripsi' 
-                      ? "text-gray-900 dark:text-white" 
+                      ? "text-gray-900 dark:text-white font-bold" 
                       : "text-gray-400 dark:text-zinc-500 hover:text-gray-600"
                   )}
                 >
@@ -354,9 +355,9 @@ export default function PublicProductDetailPage() {
                 <button
                   onClick={() => setActiveTab('spesifikasi')}
                   className={cn(
-                    "pb-3 text-xs font-black uppercase tracking-widest transition-all relative px-1",
+                    "pb-2 text-xs font-semibold tracking-wider transition-all relative px-1",
                     activeTab === 'spesifikasi' 
-                      ? "text-gray-900 dark:text-white" 
+                      ? "text-gray-900 dark:text-white font-bold" 
                       : "text-gray-400 dark:text-zinc-500 hover:text-gray-600"
                   )}
                 >
@@ -371,24 +372,24 @@ export default function PublicProductDetailPage() {
                 </button>
               </div>
 
-              <div className="text-sm leading-relaxed text-gray-600 dark:text-zinc-300 font-medium whitespace-pre-line min-h-[100px]">
+              <div className="text-xs leading-relaxed text-gray-600 dark:text-zinc-300 font-medium whitespace-pre-line min-h-[80px]">
                 {activeTab === 'deskripsi' ? (
                   product.description || 'Tidak ada deskripsi untuk produk ini.'
                 ) : (
-                  <div className="space-y-3 font-semibold">
-                    <div className="flex justify-between py-1.5 border-b border-gray-50 dark:border-zinc-900/50">
+                  <div className="space-y-2 font-medium text-xs">
+                    <div className="flex justify-between py-1 border-b border-gray-50 dark:border-zinc-900/50">
                       <span className="text-gray-400">Kategori</span>
-                      <span>{product.category || '-'}</span>
+                      <span className="text-gray-900 dark:text-zinc-200 font-semibold">{product.category || '-'}</span>
                     </div>
-                    <div className="flex justify-between py-1.5 border-b border-gray-50 dark:border-zinc-900/50">
+                    <div className="flex justify-between py-1 border-b border-gray-50 dark:border-zinc-900/50">
                       <span className="text-gray-400">Status Stok</span>
-                      <span className={cn(product.stock > 0 ? "text-green-500" : "text-amber-500")}>
+                      <span className={cn("font-semibold", product.stock > 0 ? "text-green-500" : "text-amber-500")}>
                         {product.stock > 0 ? `Tersedia (${product.stock})` : 'Hubungi Penjual'}
                       </span>
                     </div>
-                    <div className="flex justify-between py-1.5">
+                    <div className="flex justify-between py-1">
                       <span className="text-gray-400">Metode Pemesanan</span>
-                      <span className="text-emerald-500 flex items-center gap-1.5">WhatsApp Checkout <CheckCircle className="h-3.5 w-3.5" /></span>
+                      <span className="text-emerald-500 flex items-center gap-1 font-semibold">WhatsApp Checkout <CheckCircle className="h-3 w-3" /></span>
                     </div>
                   </div>
                 )}
@@ -399,37 +400,38 @@ export default function PublicProductDetailPage() {
 
         </div>
 
+
         {/* OTHER PRODUCTS SECTION ("Produk Lainnya") */}
         {otherProducts.length > 0 && (
-          <div className="pt-16 border-t border-gray-100 dark:border-zinc-900 space-y-10">
-            <div className="flex flex-col gap-2">
-              <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground" style={{ color: theme.primaryColor }}>Rekomendasi</span>
-              <h2 className="text-3xl font-black tracking-tight">Produk Lainnya</h2>
+          <div className="pt-10 border-t border-gray-100 dark:border-zinc-900/60 space-y-6">
+            <div className="flex flex-col gap-1">
+              <span className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground" style={{ color: theme.primaryColor }}>Rekomendasi</span>
+              <h2 className="text-lg font-bold tracking-tight">Produk Lainnya</h2>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {otherProducts.map((p) => (
                 <div 
                   key={p.id}
                   onClick={() => router.push(`/jagobisnis/${slug}/product/${p.id}`)}
-                  className="group cursor-pointer rounded-3xl bg-gray-50/50 dark:bg-zinc-900/30 border border-gray-100 dark:border-zinc-800 p-4 hover:border-gray-200 dark:hover:border-zinc-700 hover:shadow-lg transition-all"
+                  className="group cursor-pointer rounded-2xl bg-gray-50/20 dark:bg-zinc-900/10 border border-gray-100 dark:border-zinc-900 p-3 hover:border-gray-200 dark:hover:border-zinc-800 hover:shadow-md transition-all"
                 >
-                  <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-muted mb-4 relative">
+                  <div className="aspect-[4/3] rounded-xl overflow-hidden bg-muted mb-3 relative">
                     {p.imageUrl ? (
                       /* eslint-disable-next-line @next/next/no-img-element */
                       <img src={p.imageUrl} alt={p.name} className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     ) : (
                       <div className="h-full w-full flex items-center justify-center opacity-20">
-                        <Package className="h-8 w-8" />
+                        <Package className="h-6 w-6" />
                       </div>
                     )}
                   </div>
-                  <div className="space-y-1.5 px-1">
-                    <span className="text-[9px] font-black uppercase tracking-widest text-gray-400 dark:text-zinc-500">{p.category}</span>
-                    <h3 className="font-bold text-sm truncate text-gray-900 dark:text-white group-hover:text-primary transition-colors" style={{ '--primary': theme.primaryColor } as any}>
+                  <div className="space-y-1 px-1">
+                    <span className="text-[9px] font-semibold uppercase tracking-wider text-gray-400 dark:text-zinc-500">{p.category}</span>
+                    <h3 className="font-semibold text-xs truncate text-gray-900 dark:text-zinc-100 group-hover:text-primary transition-colors" style={{ '--primary': theme.primaryColor } as any}>
                       {p.name}
                     </h3>
-                    <div className="text-xs font-black tracking-tight" style={{ color: theme.primaryColor }}>
+                    <div className="text-xs font-bold tracking-tight" style={{ color: theme.primaryColor }}>
                       Rp{p.price.toLocaleString('id-ID')}
                     </div>
                   </div>
@@ -442,17 +444,17 @@ export default function PublicProductDetailPage() {
       </main>
 
       {/* Footer */}
-      <footer className="py-24 px-6 border-t border-gray-100 dark:border-zinc-900 bg-gray-50/30 dark:bg-zinc-950/20">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
-          <div className="space-y-4">
-            <h2 className="text-2xl font-black tracking-tighter">{site.title}</h2>
-            <p className="text-xs font-bold text-muted-foreground uppercase tracking-[0.2em]">© 2024 Semua Hak Dilindungi.</p>
+      <footer className="py-10 px-6 border-t border-gray-100 dark:border-zinc-900 bg-gray-50/30 dark:bg-zinc-950/20">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
+          <div className="space-y-2">
+            <h2 className="text-lg font-bold tracking-tight">{site.title}</h2>
+            <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-widest">© 2024 Semua Hak Dilindungi.</p>
           </div>
-          <div className="flex flex-col items-center md:items-end gap-2">
-            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">Platform Web Oleh</p>
+          <div className="flex flex-col items-center md:items-end gap-1">
+            <p className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Platform Web Oleh</p>
             <div className="flex items-center gap-2">
-              <div className="h-6 w-6 rounded bg-primary flex items-center justify-center text-white text-[10px] font-black">JB</div>
-              <span className="font-black text-lg tracking-tighter text-blue-600">JagoBisnis</span>
+              <div className="h-5 w-5 rounded bg-primary flex items-center justify-center text-white text-[8px] font-black">JB</div>
+              <span className="font-bold text-sm tracking-tighter text-blue-600">JagoBisnis</span>
             </div>
           </div>
         </div>

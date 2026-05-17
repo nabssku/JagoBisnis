@@ -125,6 +125,7 @@ Tasks:
 - [x] Establish "Produk Lainnya" cross-selling grid recommendations
 - [x] Integrate standard back navigation, sharing url clipboard-copy action, and breadcrumbs
 - [x] Link public catalog cards inside `SectionRenderer` to details route
+- [x] Harmonize header navigation and footer scaling (compact logo, links, pads) across Live Preview, Public Landing Page, and Product Detail
 - [x] Verify flawless compilation on both Next.js and NestJS applications (0 errors)
 
 ## Phase 10: Post-MVP & Optimization
