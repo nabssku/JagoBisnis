@@ -1,11 +1,12 @@
 'use client';
 
-import React from 'react';
-import { Store, LogOut, ChevronDown } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Store, LogOut, ChevronDown, Settings } from 'lucide-react';
 import { Button } from './ui/button';
 import { useRouter, usePathname } from 'next/navigation';
 import { authService } from '@/services/auth.service';
 import { Sidebar } from './sidebar';
+import { cn } from '@/lib/utils';
 
 interface DashboardShellProps {
   children: React.ReactNode;
@@ -16,6 +17,20 @@ interface DashboardShellProps {
 export function DashboardShell({ children, businessId, user }: DashboardShellProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleLogout = () => {
     authService.logout();
@@ -48,17 +63,58 @@ export function DashboardShell({ children, businessId, user }: DashboardShellPro
               </div>
             </div>
             
-            {/* Profile Dropdown Placeholder */}
-            <div className="flex items-center gap-4 group cursor-pointer" onClick={handleLogout}>
-              <div className="flex flex-col items-end">
-                <span className="text-xs font-black text-gray-900 dark:text-white group-hover:text-amber-500 transition-colors">{user?.name}</span>
-                <span className="text-[10px] font-medium text-gray-400 dark:text-zinc-500">{user?.email}</span>
-              </div>
-              <div className="h-10 w-10 rounded-full border-2 border-white dark:border-zinc-900 bg-gray-100 dark:bg-zinc-800 shadow-sm flex items-center justify-center overflow-hidden transition-all group-hover:scale-105 group-hover:border-amber-100">
-                <div className="h-full w-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center text-white font-black text-sm">
-                  {user?.name?.charAt(0) || 'U'}
+            {/* Profile Dropdown Container */}
+            <div className="relative" ref={dropdownRef}>
+              <div 
+                className="flex items-center gap-4 group cursor-pointer select-none" 
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              >
+                <div className="flex flex-col items-end">
+                  <span className="text-xs font-black text-gray-900 dark:text-white group-hover:text-amber-500 dark:group-hover:text-amber-400 transition-colors">{user?.name}</span>
+                  <span className="text-[10px] font-medium text-gray-400 dark:text-zinc-500">{user?.email}</span>
+                </div>
+                <div className={cn(
+                  "h-10 w-10 rounded-full border-2 bg-gray-100 dark:bg-zinc-800 shadow-sm flex items-center justify-center overflow-hidden transition-all group-hover:scale-105",
+                  isDropdownOpen 
+                    ? "border-amber-400 dark:border-amber-400" 
+                    : "border-white dark:border-zinc-900 group-hover:border-amber-100 dark:group-hover:border-zinc-800"
+                )}>
+                  <div className="h-full w-full bg-gradient-to-br from-[#1F2937] to-gray-900 flex items-center justify-center text-white font-black text-sm">
+                    {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                  </div>
                 </div>
               </div>
+
+              {/* Dropdown Menu Box */}
+              {isDropdownOpen && (
+                <div className="absolute right-0 mt-3 w-56 origin-top-right rounded-2xl border border-gray-100 dark:border-zinc-800/80 bg-white dark:bg-[#18181B] p-2 shadow-xl shadow-gray-200/50 dark:shadow-none animate-in fade-in slide-in-from-top-2 duration-150 z-30">
+                  <button
+                    onClick={() => {
+                      setIsDropdownOpen(false);
+                      if (businessId) {
+                        router.push(`/dashboard/business/${businessId}/settings`);
+                      } else {
+                        router.push('/dashboard');
+                      }
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3 text-xs font-bold text-gray-700 dark:text-zinc-300 hover:text-gray-900 dark:hover:text-white rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800/60 transition-all text-left"
+                  >
+                    <Settings className="h-4 w-4 text-gray-500 dark:text-zinc-400" />
+                    <span>Pengaturan Akun</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setIsDropdownOpen(false);
+                      handleLogout();
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3 text-xs font-bold text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 rounded-xl hover:bg-red-50/50 dark:hover:bg-red-950/20 transition-all text-left"
+                  >
+                    <LogOut className="h-4 w-4 text-red-500 dark:text-red-400" />
+                    <span>Keluar</span>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </header>
