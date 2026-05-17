@@ -127,6 +127,13 @@ export const WebsitePreview: React.FC<WebsitePreviewProps> = ({ site, products =
               <h2 className="text-base font-black tracking-tight">{site.title}</h2>
               <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">© 2024 Semua Hak Dilindungi. UMKM JagoBisnis.</p>
             </div>
+            <div className="flex flex-col items-center md:items-end gap-1">
+              <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-1 opacity-70">Platform Digital</p>
+              <div className="flex items-center gap-2">
+                <div className="h-5 w-5 rounded bg-primary flex items-center justify-center text-white text-[8px] font-black" style={{ backgroundColor: theme.primaryColor }}>JB</div>
+                <span className="font-extrabold text-sm tracking-tight text-blue-600 dark:text-blue-400">JagoBisnis</span>
+              </div>
+            </div>
           </div>
         </footer>
       )}
