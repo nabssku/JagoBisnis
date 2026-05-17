@@ -477,6 +477,254 @@ export default function WebsiteBuilderPage() {
 
   const activeSection = site.sections.find(s => s.id === activeSectionId);
 
+  const renderCanvasMockup = (section: Section) => {
+    switch (section.type) {
+      case 'hero': {
+        const headline = section.content.headline || 'Onderstroom - Toko Baju Online dan Offline';
+        const subheadline = section.content.subheadline || 'Kami menyediakan berbagai pilihan baju untuk pria dan wanita dengan kualitas terbaik';
+        const bgImg = section.content.backgroundImage || '';
+        return (
+          <div 
+            className="w-full h-40 rounded-xl relative overflow-hidden bg-cover bg-center flex flex-col justify-end p-5 text-white shadow-inner bg-zinc-800"
+            style={bgImg ? { backgroundImage: `url(${bgImg})` } : {}}
+          >
+            {/* Dark gradient overlay for extreme readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+            
+            {/* Simple Grid pattern placeholder if no background image is set */}
+            {!bgImg && (
+              <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:14px_24px]" />
+            )}
+
+            <div className="relative z-10 space-y-1 text-left">
+              <h4 className="text-xs md:text-sm font-black tracking-tight leading-snug drop-shadow-md">
+                {headline}
+              </h4>
+              <p className="text-[9px] text-zinc-350 font-medium leading-relaxed max-w-sm line-clamp-2 drop-shadow">
+                {subheadline}
+              </p>
+            </div>
+          </div>
+        );
+      }
+      
+      case 'features-cards': {
+        // This is "Pembaruan" or news/cards block as seen in user's request screenshot!
+        const title = section.content.title || 'Pembaruan & Berita';
+        const cards = section.content.cards || [
+          { title: 'Item 1', desc: 'Description 1' },
+          { title: 'Item 2', desc: 'Description 2' },
+          { title: 'Item 3', desc: 'Description 3' }
+        ];
+        return (
+          <div className="w-full bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-xl p-4 text-left space-y-3 shadow-sm">
+            <h4 className="text-xs font-black text-gray-800 dark:text-zinc-200 tracking-tight">{title}</h4>
+            <div className="grid grid-cols-3 gap-2.5">
+              {Array.from({ length: Math.min(cards.length, 3) }).map((_, i) => (
+                <div key={i} className="border border-gray-100 dark:border-zinc-800/80 rounded-xl p-2 bg-gray-50/50 dark:bg-zinc-950/20 space-y-2 flex flex-col shadow-sm">
+                  {/* Gray skeleton image block */}
+                  <div className="w-full aspect-[4/3] rounded-lg bg-gray-200/60 dark:bg-zinc-800 flex items-center justify-center shrink-0">
+                    <ImageIcon className="h-3.5 w-3.5 text-gray-400 dark:text-zinc-550" />
+                  </div>
+                  {/* Two grey skeleton text lines */}
+                  <div className="space-y-1.5 pt-0.5">
+                    <div className="h-2 w-16 bg-gray-200 dark:bg-zinc-800 rounded-full" />
+                    <div className="h-1.5 w-12 bg-gray-150 dark:bg-zinc-850 rounded-full" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      }
+
+      case 'products': {
+        const title = section.content.title || 'Produk & Layanan';
+        return (
+          <div className="w-full bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-xl p-4 text-left space-y-2.5 shadow-sm">
+            <div className="flex justify-between items-center">
+              <h4 className="text-xs font-black text-gray-800 dark:text-zinc-200 tracking-tight">{title}</h4>
+              <span className="text-[8px] font-black text-muted-foreground uppercase tracking-widest bg-gray-100 dark:bg-zinc-850 px-2 py-0.5 rounded">GRID</span>
+            </div>
+            <div className="grid grid-cols-4 gap-2">
+              {products.length > 0 ? (
+                products.slice(0, 4).map((p) => (
+                  <div key={p.id} className="border border-gray-100 dark:border-zinc-800 rounded-lg p-1.5 bg-gray-50/50 dark:bg-zinc-950/20 space-y-1.5">
+                    <div className="w-full aspect-square rounded bg-cover bg-center shrink-0 bg-zinc-150" style={{ backgroundImage: `url(${p.imageUrl || ''})` }} />
+                    <div className="space-y-0.5">
+                      <p className="text-[8px] font-black truncate text-gray-800 dark:text-zinc-200">{p.name}</p>
+                      <p className="text-[7.5px] text-blue-600 dark:text-blue-400 font-extrabold">Rp {p.price.toLocaleString('id-ID')}</p>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="border border-gray-150 dark:border-zinc-800 rounded-lg p-1.5 bg-gray-50/50 dark:bg-zinc-950/20 space-y-1.5">
+                    <div className="w-full aspect-square rounded bg-gray-200 dark:bg-zinc-800" />
+                    <div className="space-y-1">
+                      <div className="h-2 w-10 bg-gray-200 dark:bg-zinc-800 rounded-full" />
+                      <div className="h-1.5 w-6 bg-gray-150 dark:bg-zinc-850 rounded-full" />
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        );
+      }
+
+      case 'about': {
+        const title = section.content.title || 'Tentang Kami';
+        const desc = section.content.description || 'Kami adalah perusahaan berdedikasi tinggi.';
+        return (
+          <div className="w-full bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-xl p-4 text-left space-y-2 shadow-sm">
+            <h4 className="text-xs font-black text-gray-800 dark:text-zinc-200 tracking-tight">{title}</h4>
+            <p className="text-[10px] text-muted-foreground font-medium leading-relaxed line-clamp-2">
+              {desc}
+            </p>
+          </div>
+        );
+      }
+
+      case 'gallery': {
+        const title = section.content.title || 'Galeri Bisnis';
+        const images = section.content.images || [];
+        return (
+          <div className="w-full bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-xl p-4 text-left space-y-2.5 shadow-sm">
+            <h4 className="text-xs font-black text-gray-800 dark:text-zinc-200 tracking-tight">{title}</h4>
+            <div className="grid grid-cols-6 gap-1.5">
+              {images.length > 0 ? (
+                (images as string[]).slice(0, 6).map((img: string, i: number) => (
+                  <div key={i} className="aspect-square rounded-lg bg-cover bg-center border dark:border-zinc-800" style={{ backgroundImage: `url(${img})` }} />
+                ))
+              ) : (
+                Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="aspect-square rounded-lg bg-gray-200 dark:bg-zinc-800 flex items-center justify-center border dark:border-zinc-800">
+                    <ImageIcon className="h-3 w-3 text-gray-400" />
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        );
+      }
+
+      case 'logos': {
+        const items = section.content.items || [];
+        return (
+          <div className="w-full bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-xl p-3.5 flex justify-center items-center gap-3 shadow-sm overflow-hidden">
+            {items.map((item: string, i: number) => (
+              <span key={i} className="px-2.5 py-0.5 rounded-full bg-gray-50 dark:bg-zinc-800 text-[8px] font-bold text-muted-foreground border dark:border-zinc-800 whitespace-nowrap">
+                {item}
+              </span>
+            ))}
+          </div>
+        );
+      }
+
+      case 'stats': {
+        const stats = section.content.stats || [];
+        return (
+          <div className="w-full bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-xl p-3.5 grid grid-cols-3 gap-3 text-center shadow-sm">
+            {stats.map((s: any, i: number) => (
+              <div key={i} className="space-y-0.5 border-r last:border-none border-gray-100 dark:border-zinc-800">
+                <p className="text-xs font-black text-blue-600 dark:text-blue-455">{s.value}</p>
+                <p className="text-[7.5px] text-muted-foreground font-semibold uppercase tracking-wider">{s.label}</p>
+              </div>
+            ))}
+          </div>
+        );
+      }
+
+      case 'features-grid': {
+        const title = section.content.title || 'Mengapa Memilih Kami?';
+        const features = section.content.features || [];
+        return (
+          <div className="w-full bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-xl p-4 text-left space-y-2 shadow-sm">
+            <h4 className="text-xs font-black text-gray-800 dark:text-zinc-200 tracking-tight">{title}</h4>
+            <div className="grid grid-cols-2 gap-2.5">
+              {features.slice(0, 4).map((f: any, i: number) => (
+                <div key={i} className="flex gap-1.5 items-start">
+                  <div className="h-4 w-4 rounded bg-blue-50 dark:bg-zinc-850 flex items-center justify-center shrink-0">
+                    <Check className="h-2.5 w-2.5 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <div className="space-y-0.5">
+                    <p className="text-[8.5px] font-bold text-gray-800 dark:text-zinc-200 truncate">{f.title}</p>
+                    <p className="text-[7.5px] text-muted-foreground font-medium leading-normal line-clamp-1">{f.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      }
+
+      case 'cta': {
+        const title = section.content.title || 'Siap Meningkatkan Bisnis Anda?';
+        const buttonText = section.content.buttonText || 'Mulai Sekarang';
+        return (
+          <div className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-zinc-800 dark:to-zinc-900 rounded-xl p-4 text-center text-white space-y-2 shadow-md">
+            <h4 className="text-[10px] font-black tracking-tight leading-tight">{title}</h4>
+            <span className="inline-block px-3 py-0.5 rounded-lg bg-white/20 text-[8px] font-black uppercase tracking-widest">
+              {buttonText}
+            </span>
+          </div>
+        );
+      }
+
+      case 'faq': {
+        const title = section.content.title || 'Pertanyaan Umum';
+        const faqs = section.content.faqs || [];
+        return (
+          <div className="w-full bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-xl p-4 text-left space-y-2 shadow-sm">
+            <h4 className="text-xs font-black text-gray-800 dark:text-zinc-200 tracking-tight">{title}</h4>
+            <div className="space-y-1">
+              {faqs.slice(0, 2).map((faq: any, i: number) => (
+                <div key={i} className="p-1.5 rounded-lg bg-gray-50/50 dark:bg-zinc-950/20 border border-gray-100 dark:border-zinc-850 flex justify-between items-center">
+                  <p className="text-[8px] font-bold text-gray-700 dark:text-zinc-300 truncate">{faq.q}</p>
+                  <ChevronDown className="h-3 w-3 text-gray-400" />
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      }
+
+      case 'contact': {
+        const title = section.content.title || 'Hubungi Kami';
+        return (
+          <div className="w-full bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-xl p-4 text-left space-y-2 shadow-sm">
+            <h4 className="text-xs font-black text-gray-800 dark:text-zinc-200 tracking-tight">{title}</h4>
+            <div className="grid grid-cols-2 gap-3 items-center">
+              <div className="space-y-1.5">
+                <div className="flex items-center gap-1 text-[7.5px] font-bold text-muted-foreground">
+                  <Phone className="h-2.5 w-2.5 text-blue-600 shrink-0" />
+                  <span>Call Center</span>
+                </div>
+                <div className="flex items-center gap-1 text-[7.5px] font-bold text-muted-foreground">
+                  <MapPin className="h-2.5 w-2.5 text-blue-600 shrink-0" />
+                  <span className="truncate">Lokasi UMKM</span>
+                </div>
+              </div>
+              <div className="h-10 rounded bg-gray-150 dark:bg-zinc-800 flex items-center justify-center border dark:border-zinc-850 overflow-hidden relative shadow-inner">
+                <MapPin className="h-3 w-3 text-blue-500/80 absolute" />
+                <div className="w-full h-full opacity-10 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:8px_8px]" />
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      default: {
+        return (
+          <div className="w-full bg-white dark:bg-zinc-900 border border-dashed rounded-xl p-4 text-center text-[10px] text-muted-foreground">
+            Slices Preview {section.type}
+          </div>
+        );
+      }
+    }
+  };
+
   return (
     <div className="h-screen flex flex-col bg-[#F8F9FB] dark:bg-zinc-950 overflow-hidden transition-colors duration-200">
       {/* Top Bar */}
@@ -567,25 +815,25 @@ export default function WebsiteBuilderPage() {
           </div>
         </aside>
 
-        {/* COLUMN 2 (MIDDLE): The Canvas (stacked visual block slices) */}
+        {/* COLUMN 2 (MIDDLE): The Canvas (visual high-fidelity mockups stack) */}
         <main className={cn(
-          "flex-1 bg-[#F0F2F5] dark:bg-zinc-950 p-6 overflow-y-auto flex flex-col items-center gap-5 transition-all duration-300",
+          "flex-1 bg-[#F5F5F7] dark:bg-zinc-950 p-8 overflow-y-auto flex flex-col items-center gap-6 transition-all duration-300",
           isLivePreviewOpen ? "hidden lg:flex" : "flex"
         )}>
           {/* Canvas Mode Indicator */}
-          <div className="w-full max-w-xl flex items-center justify-between pb-2">
+          <div className="w-full max-w-xl flex items-center justify-between pb-1 border-b dark:border-zinc-900">
             <div className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-amber-500" />
+              <Sparkles className="h-4 w-4 text-amber-500 animate-pulse" />
               <span className="text-xs font-black text-foreground dark:text-white uppercase tracking-widest">Kanvas Struktur</span>
             </div>
-            <span className="text-[10px] text-muted-foreground font-bold">Pilih & Atur Susunan Blok</span>
+            <span className="text-[10px] text-muted-foreground font-bold">Susun potongan blok secara visual</span>
           </div>
 
           {/* Visual Canvas Stack */}
-          <div className="w-full max-w-xl flex flex-col gap-3">
+          <div className="w-full max-w-xl flex flex-col gap-6 pt-2 pb-16">
             {site.sections.length === 0 ? (
               <div className="py-24 text-center bg-white dark:bg-zinc-900 border border-dashed border-border dark:border-zinc-800 rounded-3xl p-8 flex flex-col items-center justify-center gap-4">
-                <Layout className="h-12 w-12 text-muted-foreground/30" />
+                <Layout className="h-12 w-12 text-muted-foreground/30 animate-bounce" />
                 <div className="space-y-1">
                   <p className="font-bold text-sm text-gray-900 dark:text-white">Kanvas Kosong</p>
                   <p className="text-xs text-muted-foreground max-w-xs mx-auto">Tambahkan blok dari menu sebelah kiri untuk menyusun desain landing page bisnis Anda.</p>
@@ -593,86 +841,80 @@ export default function WebsiteBuilderPage() {
               </div>
             ) : (
               site.sections.sort((a, b) => a.order - b.order).map((section, idx) => {
-                const Icon = getSectionIcon(section.type);
                 const isActive = activeSectionId === section.id;
                 return (
-                  <div
-                    key={section.id}
-                    onClick={() => {
-                      setActiveSectionId(section.id);
-                      setActiveTab('block');
-                    }}
-                    className={cn(
-                      "w-full rounded-2xl border transition-all cursor-pointer relative overflow-hidden group select-none shadow-sm",
-                      isActive 
-                        ? "border-primary dark:border-amber-400 ring-2 ring-primary/10 dark:ring-amber-400/10 bg-white dark:bg-zinc-900" 
-                        : "border-border dark:border-zinc-850 hover:border-gray-300 dark:hover:border-zinc-700 bg-white/60 dark:bg-zinc-900/60"
-                    )}
-                  >
-                    <div className="p-4 flex items-center justify-between gap-4">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div className="h-10 w-10 rounded-xl bg-gray-50 dark:bg-zinc-850 flex items-center justify-center border border-border/50 dark:border-zinc-800 shadow-inner">
-                          <Icon className="h-5 w-5 text-primary dark:text-amber-400" />
-                        </div>
-                        <div className="space-y-0.5 min-w-0">
-                          <span className="text-[9px] uppercase font-bold text-muted-foreground tracking-widest">Blok {idx + 1}</span>
-                          <p className="text-sm font-bold text-gray-900 dark:text-white capitalize truncate">
-                            {section.type.replace('-', ' ')}
-                          </p>
-                        </div>
-                      </div>
-                      
-                      {/* Section Quick Actions */}
-                      <div className="flex items-center gap-1 opacity-90 group-hover:opacity-100 transition-opacity">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 rounded-lg"
+                  <div key={section.id} className="relative w-full group">
+                    {/* Floating Side Action Controls on Hover/Active */}
+                    {isActive && (
+                      <div className="absolute left-[-48px] top-1/2 -translate-y-1/2 flex flex-col bg-zinc-900 dark:bg-zinc-800 text-white rounded-xl shadow-xl border border-zinc-800 dark:border-zinc-700 p-1 gap-1.5 z-20 animate-in fade-in slide-in-from-left-2 duration-200">
+                        <button
                           onClick={(e) => { e.stopPropagation(); moveUp(idx); }}
                           disabled={idx === 0}
+                          className="p-1.5 hover:bg-zinc-800 dark:hover:bg-zinc-700 rounded-lg disabled:opacity-20 transition-all text-white"
+                          title="Pindahkan ke Atas"
                         >
                           <ChevronUp className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 rounded-lg"
+                        </button>
+                        
+                        {/* 6-dots drag-handle dots */}
+                        <div className="p-1 flex items-center justify-center text-zinc-500 hover:text-zinc-300">
+                          <svg width="12" height="18" viewBox="0 0 12 18" fill="none" stroke="currentColor" strokeWidth="2.5" className="opacity-60">
+                            <circle cx="3" cy="3" r="1.2" fill="currentColor"/>
+                            <circle cx="9" cy="3" r="1.2" fill="currentColor"/>
+                            <circle cx="3" cy="9" r="1.2" fill="currentColor"/>
+                            <circle cx="9" cy="9" r="1.2" fill="currentColor"/>
+                            <circle cx="3" cy="15" r="1.2" fill="currentColor"/>
+                            <circle cx="9" cy="15" r="1.2" fill="currentColor"/>
+                          </svg>
+                        </div>
+                        
+                        <button
                           onClick={(e) => { e.stopPropagation(); moveDown(idx); }}
                           disabled={idx === site.sections.length - 1}
+                          className="p-1.5 hover:bg-zinc-800 dark:hover:bg-zinc-700 rounded-lg disabled:opacity-20 transition-all text-white"
+                          title="Pindahkan ke Bawah"
                         >
                           <ChevronDown className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 rounded-lg hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-950/20"
-                          onClick={(e) => { e.stopPropagation(); handleDeleteSection(section.id); }}
-                        >
-                          <Trash2 className="h-4 w-4 text-red-400" />
-                        </Button>
+                        </button>
                       </div>
-                    </div>
-                    
-                    {/* Tiny snippet description of content */}
-                    <div className="px-4 pb-4 border-t border-gray-50 dark:border-zinc-850 bg-gray-50/20 dark:bg-zinc-950/10 py-3 text-xs text-muted-foreground font-medium flex flex-col gap-1">
-                      {section.type === 'hero' && (
-                        <p className="line-clamp-1 italic">"{section.content.headline || 'Headline belum diatur...'}"</p>
+                    )}
+
+                    {/* Block Slice Frame */}
+                    <div
+                      onClick={() => {
+                        setActiveSectionId(section.id);
+                        setActiveTab('block');
+                      }}
+                      className={cn(
+                        "w-full rounded-2xl border transition-all cursor-pointer relative select-none p-1.5",
+                        isActive 
+                          ? "border-amber-500 dark:border-amber-400 ring-4 ring-amber-500/10 dark:ring-amber-400/10 shadow-lg bg-amber-50/20 dark:bg-amber-950/5" 
+                          : "border-transparent bg-transparent hover:border-gray-200 dark:hover:border-zinc-800/60"
                       )}
-                      {section.type === 'about' && (
-                        <p className="line-clamp-1 italic">"{section.content.title || 'Judul Tentang Kami belum diatur...'}"</p>
-                      )}
-                      {section.type === 'products' && (
-                        <p className="flex items-center gap-1"><Package className="h-3.5 w-3.5 text-primary" /> Menampilkan katalog produk aktif terhubung</p>
-                      )}
-                      {section.type === 'gallery' && (
-                        <p className="line-clamp-1">Koleksi gambar aktif: {section.content.images?.length || 0} foto</p>
-                      )}
-                      {section.type === 'features-cards' && (
-                        <p className="line-clamp-1">Kartu kustomisasi: {section.content.cards?.length || 0} buah</p>
-                      )}
-                      {!['hero', 'about', 'products', 'gallery', 'features-cards'].includes(section.type) && (
-                        <p className="text-[10px] text-muted-foreground italic">Klik untuk mengatur isi konten dan tombol-tombol aksi.</p>
-                      )}
+                    >
+                      {/* Labeled Top Ribbon */}
+                      <div className="flex items-center justify-between pb-1.5 px-2">
+                        <span className="text-[10px] font-black text-muted-foreground/80 dark:text-zinc-500 uppercase tracking-widest flex items-center gap-1.5">
+                          {section.type.replace('-', ' ')}
+                          {section.type === 'hero' && <span className="text-xs">🔒</span>}
+                        </span>
+                        {section.type !== 'hero' && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6 rounded-lg text-muted-foreground/60 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20"
+                            onClick={(e) => { e.stopPropagation(); handleDeleteSection(section.id); }}
+                            title="Hapus Blok"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </Button>
+                        )}
+                      </div>
+
+                      {/* Mockup Frame Content */}
+                      <div className="w-full bg-white dark:bg-zinc-900 rounded-xl overflow-hidden shadow-sm border border-border dark:border-zinc-850">
+                        {renderCanvasMockup(section)}
+                      </div>
                     </div>
                   </div>
                 );
