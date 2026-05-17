@@ -8,6 +8,7 @@ import { Site, SiteTheme, Section, SectionType } from '@/types/site';
 import { Product } from '@/types/product';
 import { Button } from '@/components/ui/button';
 import { WebsitePreview } from '@/components/builder/website-preview';
+import { BlogSectionEditor } from '@/components/builder/blog-section-editor';
 import { 
   ChevronLeft, 
   Save, 
@@ -42,7 +43,8 @@ import {
   PlusCircle, 
   Smile,
   Star,
-  X
+  X,
+  FileText
 } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
@@ -783,6 +785,7 @@ export default function WebsiteBuilderPage() {
       case 'cta': return Star;
       case 'faq': return HelpCircle;
       case 'contact': return Phone;
+      case 'blog': return FileText;
       default: return Layout;
     }
   };
@@ -1079,6 +1082,85 @@ export default function WebsiteBuilderPage() {
                 <div className="w-full h-full opacity-10 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:8px_8px]" />
               </div>
             </div>
+          </div>
+        );
+      }
+
+      case 'blog': {
+        const title = section.content.title || 'Artikel & Kegiatan Terbaru';
+        const subtitle = section.content.subtitle || 'Ikuti pembaruan terkini, pengumuman, dan artikel edukatif dari kami.';
+        const layout = section.content.layout || 'grid';
+        const maxPosts = section.content.maxPosts || 3;
+        
+        return (
+          <div className="w-full bg-white dark:bg-zinc-900 border border-zinc-150 dark:border-zinc-800/80 rounded-none p-6 text-left space-y-4 shadow-sm">
+            <div className="space-y-1">
+              <h4 className="text-sm font-black text-gray-800 dark:text-zinc-100 tracking-tight">{title}</h4>
+              <p className="text-[9px] text-muted-foreground font-medium leading-relaxed max-w-lg">{subtitle}</p>
+            </div>
+            
+            {layout === 'grid' && (
+              <div className="grid grid-cols-3 gap-4">
+                {Array.from({ length: Math.min(3, maxPosts) }).map((_, i) => (
+                  <div key={i} className="border border-gray-150 dark:border-zinc-800/80 rounded-xl p-3 bg-white dark:bg-zinc-950/20 space-y-2 flex flex-col shadow-sm">
+                    <div className="w-full aspect-[4/3] rounded-lg bg-gray-100 dark:bg-zinc-800 flex items-center justify-center shrink-0">
+                      <FileText className="h-4 w-4 text-gray-400 dark:text-zinc-550" />
+                    </div>
+                    <div className="space-y-1.5 pt-0.5">
+                      <span className="text-[7px] font-black text-amber-500 uppercase tracking-widest block">Tips & Bisnis</span>
+                      <div className="h-2.5 w-11/12 bg-gray-200 dark:bg-zinc-800 rounded-full" />
+                      <div className="h-2 w-3/4 bg-gray-150 dark:bg-zinc-900 rounded-full" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {layout === 'bento' && (
+              <div className="grid grid-cols-3 gap-3">
+                <div className="col-span-2 border border-gray-150 dark:border-zinc-800/80 rounded-xl p-3.5 bg-white dark:bg-zinc-950/20 flex flex-col justify-between shadow-sm min-h-[140px]">
+                  <div className="w-full h-20 rounded-lg bg-gray-100 dark:bg-zinc-800 flex items-center justify-center mb-2">
+                    <FileText className="h-5 w-5 text-gray-400 dark:text-zinc-550" />
+                  </div>
+                  <div className="space-y-1.5">
+                    <span className="text-[7px] font-black text-amber-500 uppercase tracking-widest block">Promo Spesial</span>
+                    <div className="h-3 w-10/12 bg-gray-200 dark:bg-zinc-800 rounded-full" />
+                    <div className="h-2 w-7/12 bg-gray-150 dark:bg-zinc-900 rounded-full" />
+                  </div>
+                </div>
+                <div className="col-span-1 flex flex-col gap-3 justify-between">
+                  <div className="border border-gray-150 dark:border-zinc-800/80 rounded-xl p-2.5 bg-white dark:bg-zinc-950/20 flex flex-col justify-center shadow-sm flex-1">
+                    <span className="text-[6px] font-black text-amber-500 uppercase tracking-widest block mb-1">Edukasi</span>
+                    <div className="h-2 w-11/12 bg-gray-200 dark:bg-zinc-800 rounded-full mb-1" />
+                    <div className="h-1.5 w-8/12 bg-gray-150 dark:bg-zinc-900 rounded-full" />
+                  </div>
+                  <div className="border border-gray-150 dark:border-zinc-800/80 rounded-xl p-2.5 bg-white dark:bg-zinc-950/20 flex flex-col justify-center shadow-sm flex-1">
+                    <span className="text-[6px] font-black text-amber-500 uppercase tracking-widest block mb-1">Berita</span>
+                    <div className="h-2 w-10/12 bg-gray-200 dark:bg-zinc-800 rounded-full mb-1" />
+                    <div className="h-1.5 w-6/12 bg-gray-150 dark:bg-zinc-900 rounded-full" />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {layout === 'table' && (
+              <div className="space-y-2">
+                {Array.from({ length: Math.min(3, maxPosts) }).map((_, i) => (
+                  <div key={i} className="border border-gray-100 dark:border-zinc-850 rounded-xl p-2.5 bg-white dark:bg-zinc-950/20 flex items-center justify-between shadow-sm">
+                    <div className="flex items-center gap-3">
+                      <div className="h-8 w-8 rounded-lg bg-gray-100 dark:bg-zinc-800 flex items-center justify-center shrink-0">
+                        <FileText className="h-3.5 w-3.5 text-gray-400 dark:text-zinc-550" />
+                      </div>
+                      <div className="space-y-1">
+                        <div className="h-2.5 w-36 bg-gray-200 dark:bg-zinc-800 rounded-full" />
+                        <div className="h-1.5 w-20 bg-gray-150 dark:bg-zinc-900 rounded-full" />
+                      </div>
+                    </div>
+                    <span className="text-[7px] font-bold text-muted-foreground">17 Mei 2026</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         );
       }
@@ -2753,6 +2835,26 @@ export default function WebsiteBuilderPage() {
                               </div>
                             </div>
                           </div>
+                        )}
+
+                        {/* BLOG DYNAMIC FIELDS */}
+                        {activeSection.type === 'blog' && (
+                          <BlogSectionEditor 
+                            content={activeSection.content as any} 
+                            onChange={(updatedContent) => {
+                              if (!site || !activeSectionId) return;
+                              const newSections = site.sections.map(s => {
+                                if (s.id === activeSectionId) {
+                                  return {
+                                    ...s,
+                                    content: updatedContent
+                                  };
+                                }
+                                return s;
+                              });
+                              setSite({ ...site, sections: newSections });
+                            }} 
+                          />
                         )}
                       </div>
                     )}

@@ -172,6 +172,7 @@ Tasks:
 - [x] Customization Block integration: Added the 'Blog' block template into the 3-column builder workspace, supporting direct grid/table canvas mockups and custom dynamic item layouts.
 - [x] Public Article Dedicated Detail Page & Lightbox zoom: Overhauled the sliding overlay drawer to a dedicated `/jagobisnis/[slug]/posts/[postSlug]` detail page route featuring a gorgeous double-column layout, tag collections, related cross-selling product CTA cards, and full-screen lightbox zoom.
 - [x] Bento Grid Layout for Blog Block: Added beautiful, asymmetric Bento Grid layout option to the dynamic Blog block inside the Live Editor (`blog-section-editor.tsx`) and the Unified Section Renderer (`section-renderer.tsx`). Handles 1, 2, 3 or more articles gracefully with a massive highlighted hero post featuring gradient background text overlays, metadata badges, hover zoom animations, and a full-height secondary text block next to standard minimal cards. Fully synchronized in both builder workspace preview and public `/jagobisnis/[slug]` landing pages.
+- [x] Blog Live Editor Panel Integration: Resolved empty blog settings block in the builder sidebar by importing and integrating the `BlogSectionEditor` configuration panel in website page.tsx. Mapped the canvas section previews to dynamically render Bento, Grid, and Table layouts as responsive styled skeletons.
 
 
 
