@@ -3,11 +3,26 @@ export interface SiteTheme {
   font: string;
   backgroundColor: string;
   textColor: string;
+  logoUrl?: string;
+  logoIcon?: string;
 }
+
+export type SectionType = 
+  | 'hero' 
+  | 'products' 
+  | 'about' 
+  | 'gallery' 
+  | 'logos' 
+  | 'stats' 
+  | 'features-grid' 
+  | 'features-cards' 
+  | 'cta' 
+  | 'faq'
+  | 'contact';
 
 export interface Section {
   id: string;
-  type: 'hero' | 'about' | 'products' | 'contact';
+  type: SectionType;
   order: number;
   content: any;
 }
@@ -31,4 +46,3 @@ export interface Site {
     Product?: any[];
   };
 }
-

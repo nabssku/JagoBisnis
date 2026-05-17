@@ -15,7 +15,15 @@ import {
   ArrowLeft,
   Share2,
   CheckCircle,
-  ExternalLink
+  ExternalLink,
+  Store,
+  Coffee,
+  ShoppingBag,
+  Laptop,
+  Heart,
+  Sparkles,
+  Award,
+  Smile
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -159,34 +167,56 @@ export default function PublicProductDetailPage() {
     >
       {/* Header */}
       <motion.nav 
-        initial={{ y: -100, opacity: 0 }}
+        initial={{ y: -60, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="py-3 px-6 flex justify-between items-center bg-white/70 dark:bg-zinc-950/70 border-b border-gray-100 dark:border-zinc-900 sticky top-0 z-50 backdrop-blur-xl transition-colors duration-200"
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="py-3.5 px-6 flex justify-between items-center bg-white/80 dark:bg-zinc-950/80 border-b border-gray-100 dark:border-zinc-900 sticky top-0 z-50 backdrop-blur-xl transition-colors duration-200"
       >
-        <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push(`/jagobisnis/${slug}`)}>
-          <div className="h-8 w-8 rounded-lg flex items-center justify-center text-white" style={{ backgroundColor: theme.primaryColor }}>
-            <Globe className="h-4 w-4" />
-          </div>
-          <span className="text-lg font-black tracking-tight" style={{ color: theme.textColor }}>
+        <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => router.push(`/jagobisnis/${slug}`)}>
+          {(() => {
+            if (theme.logoUrl) {
+              return <img src={theme.logoUrl} alt={site.title} className="h-8 max-w-[140px] object-contain rounded" />;
+            }
+            const iconMap: Record<string, React.ComponentType<any>> = {
+              globe: Globe,
+              store: Store,
+              coffee: Coffee,
+              'shopping-bag': ShoppingBag,
+              laptop: Laptop,
+              heart: Heart,
+              sparkles: Sparkles,
+              award: Award,
+              smile: Smile
+            };
+            const SelectedIcon = theme.logoIcon && iconMap[theme.logoIcon] ? iconMap[theme.logoIcon] : Globe;
+            return (
+              <div className="h-8 w-8 rounded-lg flex items-center justify-center text-white shrink-0 shadow-sm" style={{ backgroundColor: theme.primaryColor }}>
+                <SelectedIcon className="h-4 w-4" />
+              </div>
+            );
+          })()}
+          <span className="text-base font-black tracking-tight" style={{ color: theme.textColor }}>
             {site.title}
           </span>
         </div>
-        <div className="hidden md:flex gap-6 text-xs font-semibold tracking-wider">
-          {site.sections.map(s => {
+        <div className="hidden md:flex gap-6 text-xs font-bold tracking-wider uppercase">
+          {site.sections.sort((a, b) => a.order - b.order).map(s => {
             const getSectionLabel = (type: string) => {
               switch (type) {
                 case 'hero': return 'Beranda';
                 case 'about': return 'Tentang Kami';
-                case 'products': return 'Layanan & Produk';
-                case 'contact': return 'Hubungi';
-                default: return type;
+                case 'products': return 'Katalog';
+                case 'gallery': return 'Galeri';
+                case 'faq': return 'FAQ';
+                case 'contact': return 'Kontak';
+                default: return type.replace('-', ' ');
               }
             };
             return (
               <Link 
                 key={s.id} 
                 href={`/jagobisnis/${slug}#${s.id}`} 
-                className="hover:opacity-60 transition-all relative group" 
+                className="hover:opacity-75 transition-all relative group" 
                 style={{ color: theme.textColor }}
               >
                 {getSectionLabel(s.type)}
@@ -198,10 +228,10 @@ export default function PublicProductDetailPage() {
         <Button 
           onClick={() => window.open(waUrl, '_blank')}
           size="sm" 
-          className="rounded-xl px-5 h-9 font-bold text-white text-xs border-none shadow-sm hover:scale-[1.01] transition-transform" 
+          className="rounded-xl px-5 h-9 font-bold text-white text-xs border-none shadow-sm hover:scale-[1.01] transition-transform active:scale-95" 
           style={{ backgroundColor: theme.primaryColor }}
         >
-          Hubungi
+          Hubungi Kami
         </Button>
       </motion.nav>
 
