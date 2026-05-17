@@ -856,7 +856,7 @@ export default function WebsiteBuilderPage() {
             <div className="grid grid-cols-4 gap-3">
               {products.length > 0 ? (
                 products.slice(0, 4).map((p) => (
-                  <div key={p.id} className="border border-gray-100 dark:border-zinc-800 rounded-lg p-2 bg-gray-55/50 dark:bg-zinc-950/20 space-y-2">
+                  <div key={p.id} className="border border-gray-100 dark:border-zinc-800 rounded-lg p-2 bg-gray-50/50 dark:bg-zinc-950/20 space-y-2">
                     <div className="w-full aspect-square rounded bg-cover bg-center shrink-0 bg-zinc-150" style={{ backgroundImage: `url(${p.imageUrl || ''})` }} />
                     <div className="space-y-1">
                       <p className="text-[9px] font-black truncate text-gray-800 dark:text-zinc-200">{p.name}</p>
@@ -866,7 +866,7 @@ export default function WebsiteBuilderPage() {
                 ))
               ) : (
                 Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="border border-gray-150 dark:border-zinc-800 rounded-lg p-2 bg-gray-55/50 dark:bg-zinc-950/20 space-y-2">
+                  <div key={i} className="border border-gray-150 dark:border-zinc-800 rounded-lg p-2 bg-gray-50/50 dark:bg-zinc-950/20 space-y-2">
                     <div className="w-full aspect-square rounded bg-gray-200 dark:bg-zinc-800" />
                     <div className="space-y-1">
                       <div className="h-2 w-12 bg-gray-200 dark:bg-zinc-800 rounded-full" />
@@ -1036,7 +1036,7 @@ export default function WebsiteBuilderPage() {
             <h4 className="text-sm font-black text-gray-800 dark:text-zinc-100 tracking-tight">{title}</h4>
             <div className="space-y-2">
               {faqs.slice(0, 2).map((faq: any, i: number) => (
-                <div key={i} className="p-2 rounded-lg bg-gray-55/50 dark:bg-zinc-950/20 border border-gray-100 dark:border-zinc-850 flex justify-between items-center">
+                <div key={i} className="p-2 rounded-lg bg-gray-50/50 dark:bg-zinc-950/20 border border-gray-100 dark:border-zinc-850 flex justify-between items-center">
                   <p className="text-[9px] font-bold text-gray-700 dark:text-zinc-300 truncate">{faq.q}</p>
                   <ChevronDown className="h-3.5 w-3.5 text-gray-400" />
                 </div>
@@ -1234,7 +1234,7 @@ export default function WebsiteBuilderPage() {
                         <button
                           onClick={(e) => { e.stopPropagation(); moveUp(idx); }}
                           disabled={idx === 0}
-                          className="h-8.5 w-8.5 bg-white hover:bg-gray-50 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-xl flex items-center justify-center shadow-md disabled:opacity-30 disabled:hover:bg-white disabled:hover:scale-100 border border-border/80 dark:border-zinc-800 transition-all hover:scale-105 active:scale-95"
+                          className="h-8.5 w-8.5 bg-white hover:bg-gray-50 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-xl flex items-center justify-center shadow-md disabled:opacity-30 disabled:hover:bg-white dark:disabled:hover:bg-zinc-900 disabled:hover:scale-100 border border-border/80 dark:border-zinc-800 transition-all hover:scale-105 active:scale-95"
                           title="Pindahkan ke Atas"
                         >
                           <ChevronUp className="h-4.5 w-4.5 stroke-[2.5]" />
@@ -1264,7 +1264,7 @@ export default function WebsiteBuilderPage() {
                         <button
                           onClick={(e) => { e.stopPropagation(); moveDown(idx); }}
                           disabled={idx === site.sections.length - 1}
-                          className="h-8.5 w-8.5 bg-white hover:bg-gray-50 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-xl flex items-center justify-center shadow-md disabled:opacity-30 disabled:hover:bg-white disabled:hover:scale-100 border border-border/80 dark:border-zinc-800 transition-all hover:scale-105 active:scale-95"
+                          className="h-8.5 w-8.5 bg-white hover:bg-gray-50 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-xl flex items-center justify-center shadow-md disabled:opacity-30 disabled:hover:bg-white dark:disabled:hover:bg-zinc-900 disabled:hover:scale-100 border border-border/80 dark:border-zinc-800 transition-all hover:scale-105 active:scale-95"
                           title="Pindahkan ke Bawah"
                         >
                           <ChevronDown className="h-4.5 w-4.5 stroke-[2.5]" />
@@ -1329,19 +1329,19 @@ export default function WebsiteBuilderPage() {
               <div className="flex items-center bg-muted/50 dark:bg-zinc-850 rounded-xl p-1 border dark:border-zinc-800">
                 <button 
                   onClick={() => setPreviewMode('desktop')}
-                  className={cn("p-1.5 rounded-lg transition-all", previewMode === 'desktop' ? "bg-white dark:bg-zinc-700 shadow-sm text-primary dark:text-white" : "text-muted-foreground dark:text-zinc-500 hover:text-foreground")}
+                  className={cn("p-1.5 rounded-lg transition-all", previewMode === 'desktop' ? "bg-white dark:bg-zinc-700 shadow-sm text-primary dark:text-white" : "text-muted-foreground dark:text-zinc-400 hover:text-foreground dark:hover:text-white")}
                 >
                   <Monitor className="h-3.5 w-3.5" />
                 </button>
                 <button 
                   onClick={() => setPreviewMode('tablet')}
-                  className={cn("p-1.5 rounded-lg transition-all", previewMode === 'tablet' ? "bg-white dark:bg-zinc-700 shadow-sm text-primary dark:text-white" : "text-muted-foreground dark:text-zinc-500 hover:text-foreground")}
+                  className={cn("p-1.5 rounded-lg transition-all", previewMode === 'tablet' ? "bg-white dark:bg-zinc-700 shadow-sm text-primary dark:text-white" : "text-muted-foreground dark:text-zinc-400 hover:text-foreground dark:hover:text-white")}
                 >
                   <Laptop className="h-3.5 w-3.5" />
                 </button>
                 <button 
                   onClick={() => setPreviewMode('mobile')}
-                  className={cn("p-1.5 rounded-lg transition-all", previewMode === 'mobile' ? "bg-white dark:bg-zinc-700 shadow-sm text-primary dark:text-white" : "text-muted-foreground dark:text-zinc-500 hover:text-foreground")}
+                  className={cn("p-1.5 rounded-lg transition-all", previewMode === 'mobile' ? "bg-white dark:bg-zinc-700 shadow-sm text-primary dark:text-white" : "text-muted-foreground dark:text-zinc-400 hover:text-foreground dark:hover:text-white")}
                 >
                   <Smartphone className="h-3.5 w-3.5" />
                 </button>
@@ -1369,7 +1369,7 @@ export default function WebsiteBuilderPage() {
               onClick={() => setActiveTab('site')}
               className={cn(
                 "flex-1 flex items-center justify-center py-2 rounded-lg gap-2 transition-all font-bold text-[10px] uppercase tracking-wider",
-                activeTab === 'site' ? "bg-white dark:bg-zinc-800 shadow-sm text-primary dark:text-white border dark:border-zinc-750" : "text-muted-foreground dark:text-zinc-500 hover:bg-muted dark:hover:bg-zinc-800/50"
+                activeTab === 'site' ? "bg-white dark:bg-zinc-800 shadow-sm text-primary dark:text-white border dark:border-zinc-750" : "text-muted-foreground dark:text-zinc-400 hover:bg-muted dark:hover:bg-zinc-800/50 dark:hover:text-white"
               )}
             >
               <Settings className="h-4 w-4" />
@@ -1379,7 +1379,7 @@ export default function WebsiteBuilderPage() {
               onClick={() => setActiveTab('block')}
               className={cn(
                 "flex-1 flex items-center justify-center py-2 rounded-lg gap-2 transition-all font-bold text-[10px] uppercase tracking-wider",
-                activeTab === 'block' ? "bg-white dark:bg-zinc-800 shadow-sm text-primary dark:text-white border dark:border-zinc-750" : "text-muted-foreground dark:text-zinc-500 hover:bg-muted dark:hover:bg-zinc-800/50"
+                activeTab === 'block' ? "bg-white dark:bg-zinc-800 shadow-sm text-primary dark:text-white border dark:border-zinc-750" : "text-muted-foreground dark:text-zinc-400 hover:bg-muted dark:hover:bg-zinc-800/50 dark:hover:text-white"
               )}
             >
               <Layout className="h-4 w-4" />
@@ -1519,7 +1519,7 @@ export default function WebsiteBuilderPage() {
                                 "p-2.5 rounded-xl border text-left transition-all flex flex-col gap-1.5",
                                 isSelected 
                                   ? "border-primary dark:border-amber-400 bg-white dark:bg-zinc-900 ring-2 ring-primary/10" 
-                                  : "border-border dark:border-zinc-850 bg-gray-50/30 hover:bg-white dark:hover:bg-zinc-900"
+                                  : "border-border dark:border-zinc-850 bg-gray-50/30 dark:bg-zinc-900/30 hover:bg-white dark:hover:bg-zinc-900"
                               )}
                             >
                               <div className="flex items-center gap-1.5">
@@ -1873,7 +1873,7 @@ export default function WebsiteBuilderPage() {
                               />
                               <div 
                                 onClick={() => document.getElementById('about-img-upload-input')?.click()}
-                                className="border-2 border-dashed border-border dark:border-zinc-800 rounded-xl p-4 text-center cursor-pointer hover:border-primary bg-gray-50/20 dark:bg-zinc-950/20 hover:bg-gray-50 transition-all flex flex-col items-center justify-center gap-1 group"
+                                className="border-2 border-dashed border-border dark:border-zinc-800 rounded-xl p-4 text-center cursor-pointer hover:border-primary dark:hover:border-amber-400 bg-gray-50/20 dark:bg-zinc-950/20 hover:bg-gray-50 dark:hover:bg-zinc-900 transition-all flex flex-col items-center justify-center gap-1 group"
                               >
                                 {activeSection.content.imageUrl ? (
                                   <div className="space-y-2 w-full">
@@ -1906,7 +1906,7 @@ export default function WebsiteBuilderPage() {
                               
                               {/* Rich editor look matching Image 4 */}
                               <div className="rounded-xl border border-border dark:border-zinc-800 overflow-hidden bg-muted/20 dark:bg-zinc-950">
-                                <div className="flex items-center gap-1.5 px-3 py-1.5 border-b border-border/80 bg-gray-50/30 dark:bg-zinc-900/30 text-[10px] font-bold text-gray-550 dark:text-zinc-400">
+                                <div className="flex items-center gap-1.5 px-3 py-1.5 border-b border-border/80 bg-gray-50/30 dark:bg-zinc-900/30 text-[10px] font-bold text-gray-500 dark:text-zinc-400">
                                   <span className="cursor-pointer hover:text-primary">B</span>
                                   <span className="italic cursor-pointer hover:text-primary">I</span>
                                   <span className="underline cursor-pointer hover:text-primary">U</span>
@@ -2015,7 +2015,7 @@ export default function WebsiteBuilderPage() {
                                   "border-2 border-dashed rounded-xl p-5 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-1 group",
                                   (activeSection.content.images || []).length >= 8 
                                     ? "border-gray-250 bg-gray-100/50 dark:bg-zinc-900/10 cursor-not-allowed opacity-50"
-                                    : "border-border dark:border-zinc-800 hover:border-primary bg-gray-50/20 dark:bg-zinc-950/20 hover:bg-gray-50"
+                                    : "border-border dark:border-zinc-800 hover:border-primary dark:hover:border-amber-400 bg-gray-50/20 dark:bg-zinc-950/20 hover:bg-gray-50 dark:hover:bg-zinc-900"
                                 )}
                               >
                                 <input 
@@ -2560,7 +2560,7 @@ export default function WebsiteBuilderPage() {
                               />
                               <div 
                                 onClick={() => document.getElementById('logos-upload-input')?.click()}
-                                className="border-2 border-dashed border-border dark:border-zinc-800 rounded-xl p-4 text-center cursor-pointer hover:border-primary bg-gray-50/20 dark:bg-zinc-950/20 hover:bg-gray-50 transition-all flex flex-col items-center justify-center gap-1 group"
+                                className="border-2 border-dashed border-border dark:border-zinc-800 rounded-xl p-4 text-center cursor-pointer hover:border-primary dark:hover:border-amber-400 bg-gray-50/20 dark:bg-zinc-950/20 hover:bg-gray-50 dark:hover:bg-zinc-900 transition-all flex flex-col items-center justify-center gap-1 group"
                               >
                                 <Upload className="h-4.5 w-4.5 text-muted-foreground group-hover:text-primary transition-colors" />
                                 <p className="text-[11px] font-bold text-gray-700 dark:text-zinc-300">Pilih & Tambah Logo</p>
