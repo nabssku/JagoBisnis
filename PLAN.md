@@ -165,7 +165,7 @@ Tasks:
 - [x] Minimalist Blog Dashboard CRUD Page: Created `/dashboard/business/[id]/posts` featuring quick search, status categorization (Draft, Publik, Arsip), cover thumbnails, dynamic list layout, and a smooth creation entry flow.
 - [x] Premium PostFormModal with Live SEO Quality: Built double-column editing panels featuring cover image select, 8 support gallery items, a full rich-text Markdown editor, metadata descriptors (keywords, title, description), and live-updating SEO score metrics with actionable checklists.
 - [x] Customization Block integration: Added the 'Blog' block template into the 3-column builder workspace, supporting direct grid/table canvas mockups and custom dynamic item layouts.
-- [x] Public Article Sliding Drawer & Lightbox zoom: Rendered high-fidelity blog sections on `/jagobisnis/[slug]`, opening comprehensive overlay slider sheets displaying full text, supporting gallery lightboxes, and linked cross-selling related product card CTA items.
+- [x] Public Article Dedicated Detail Page & Lightbox zoom: Overhauled the sliding overlay drawer to a dedicated `/jagobisnis/[slug]/posts/[postSlug]` detail page route featuring a gorgeous double-column layout, tag collections, related cross-selling product CTA cards, and full-screen lightbox zoom.
 
 
 

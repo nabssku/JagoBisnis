@@ -34,7 +34,7 @@ import { Section, SiteTheme } from '@/types/site';
 import { Product } from '@/types/product';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { postService } from '@/services/post.service';
 import { Post } from '@/types/post';
@@ -55,6 +55,7 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
   siteTitle 
 }) => {
   const params = useParams();
+  const router = useRouter();
   const slug = params?.slug as string;
   const { content } = section;
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
@@ -63,8 +64,6 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
   // Blog / Post states
   const [blogPosts, setBlogPosts] = useState<Post[]>([]);
   const [blogLoading, setBlogLoading] = useState(false);
-  const [activePostDetail, setActivePostDetail] = useState<Post | null>(null);
-  const [detailLightboxImage, setDetailLightboxImage] = useState<string | null>(null);
 
   useEffect(() => {
     if (section.type === 'blog') {
@@ -1128,10 +1127,9 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
                     key={post.id}
                     whileHover={{ y: -6 }}
                     onClick={() => {
-                      // Dynamically increment view on click
-                      postService.getPublicPostBySlug(params?.slug as string || 'site', post.slug)
-                        .catch(console.error); // Silently trigger view counts
-                      setActivePostDetail(post);
+                      if (slug) {
+                        router.push(`/jagobisnis/${slug}/posts/${post.slug}`);
+                      }
                     }}
                     className="group border border-border/40 hover:border-amber-400 dark:hover:border-amber-400 bg-white dark:bg-zinc-900/50 hover:bg-white dark:hover:bg-zinc-900 shadow-sm hover:shadow-xl rounded-2xl overflow-hidden transition-all duration-300 flex flex-col h-full cursor-pointer relative"
                   >
@@ -1207,9 +1205,9 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
                   <div
                     key={post.id}
                     onClick={() => {
-                      postService.getPublicPostBySlug(params?.slug as string || 'site', post.slug)
-                        .catch(console.error);
-                      setActivePostDetail(post);
+                      if (slug) {
+                        router.push(`/jagobisnis/${slug}/posts/${post.slug}`);
+                      }
                     }}
                     className="flex items-center gap-4 p-4 rounded-2xl border border-border/40 hover:border-amber-400 bg-white dark:bg-zinc-900/40 hover:bg-white dark:hover:bg-zinc-900 transition-all shadow-sm hover:shadow-md cursor-pointer group"
                   >
@@ -1254,212 +1252,7 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
             )}
           </div>
 
-          {/* High-Fidelity Sliding Detail Modal */}
-          <AnimatePresence>
-            {activePostDetail && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setActivePostDetail(null)}
-                className="fixed inset-0 bg-black/70 backdrop-blur-md z-[99999] flex items-center justify-center p-4 overflow-y-auto cursor-zoom-out"
-              >
-                <motion.div
-                  initial={{ scale: 0.95, y: 15 }}
-                  animate={{ scale: 1, y: 0 }}
-                  exit={{ scale: 0.95, y: 15 }}
-                  onClick={(e) => e.stopPropagation()}
-                  className="bg-white dark:bg-zinc-950 w-full max-w-3xl rounded-[2rem] overflow-hidden shadow-2xl relative border border-gray-150 dark:border-zinc-800 flex flex-col max-h-[90vh] cursor-default animate-in fade-in zoom-in-95 duration-200"
-                >
-                  {/* Close button */}
-                  <button
-                    onClick={() => setActivePostDetail(null)}
-                    className="absolute top-4 right-4 z-20 h-10 w-10 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center transition-all cursor-pointer border border-white/10"
-                  >
-                    <X className="h-5 w-5" />
-                  </button>
 
-                  <div className="overflow-y-auto w-full flex-grow scrollbar-none">
-                    {/* Header cover photo */}
-                    <div className="w-full aspect-[16/7] bg-zinc-900 relative">
-                      {activePostDetail.coverImage ? (
-                        <img 
-                          src={activePostDetail.coverImage} 
-                          alt={activePostDetail.imageAlt || activePostDetail.title} 
-                          className="w-full h-full object-cover" 
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-zinc-650 font-black">No Cover Image</div>
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-                      
-                      {/* Floating title tags */}
-                      <div className="absolute bottom-6 left-6 right-6 text-white space-y-2">
-                        <span className={cn(
-                          "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider shadow-sm",
-                          getCategoryBadgeClass(activePostDetail.contentType)
-                        )}>
-                          {activePostDetail.contentType}
-                        </span>
-                        <h1 className="text-xl md:text-2xl font-black leading-tight drop-shadow-md">
-                          {activePostDetail.title}
-                        </h1>
-                      </div>
-                    </div>
-
-                    {/* Content Excerpt Body */}
-                    <div className="p-6 md:p-8 space-y-6">
-                      {/* Meta dates and statistics */}
-                      <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-muted-foreground border-b border-border/10 pb-4">
-                        <span className="flex items-center gap-1.5">
-                          <Calendar className="h-4 w-4" />
-                          Diterbitkan pada {new Date(activePostDetail.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
-                        </span>
-                        <span>•</span>
-                        <span className="flex items-center gap-1.5">
-                          <Eye className="h-4 w-4" />
-                          {activePostDetail.views || 0} Kali Dilihat
-                        </span>
-                      </div>
-
-                      {/* Content rich text */}
-                      <div className="text-sm text-gray-800 dark:text-zinc-200 leading-relaxed font-medium whitespace-pre-wrap space-y-4">
-                        {activePostDetail.content}
-                      </div>
-
-                      {/* Additional Photo Gallery Grid (if they uploaded additional photos) */}
-                      {activePostDetail.images && activePostDetail.images.length > 0 && (
-                        <div className="space-y-3 pt-4 border-t border-border/10">
-                          <h4 className="text-xs font-black uppercase tracking-wider text-gray-900 dark:text-white">Foto Pendukung Halaman</h4>
-                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                            {activePostDetail.images.map((img: string, i: number) => (
-                              <div
-                                key={i}
-                                onClick={() => setDetailLightboxImage(img)}
-                                className="aspect-[4/3] rounded-xl overflow-hidden border border-border/20 bg-muted dark:bg-zinc-900 cursor-pointer hover:scale-102 transition-transform shadow-xs"
-                              >
-                                <img src={img} alt={`Tambahan ${i + 1}`} className="w-full h-full object-cover" />
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Pinned tags */}
-                      {activePostDetail.tags && activePostDetail.tags.length > 0 && (
-                        <div className="flex flex-wrap items-center gap-2 pt-2">
-                          {activePostDetail.tags.map((tag: string, i: number) => (
-                            <span key={i} className="text-[10px] font-bold text-gray-500 dark:text-zinc-400 bg-gray-50 dark:bg-zinc-900 border border-border/40 px-2.5 py-0.5 rounded-lg">
-                              #{tag}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Call To Action (CTA) Button */}
-                      {activePostDetail.ctaType && activePostDetail.ctaType !== 'None' && (
-                        <div className="pt-6 flex justify-center">
-                          {activePostDetail.ctaType === 'WhatsApp' ? (
-                            <Button
-                              asChild
-                              className="h-12 w-full sm:w-auto px-8 rounded-xl bg-green-500 hover:bg-green-600 text-white font-black text-sm shadow-lg flex items-center justify-center gap-2 hover:-translate-y-0.5 active:scale-95 transition-all border-none"
-                            >
-                              <a
-                                href={`https://wa.me/${activePostDetail.ctaValue?.replace(/[^0-9]/g, '')}?text=${encodeURIComponent('Halo! Saya membaca artikel "' + activePostDetail.title + '" dan ingin bertanya lebih lanjut.')}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                <MessageSquare className="h-5 w-5" />
-                                Hubungi via WhatsApp
-                              </a>
-                            </Button>
-                          ) : (
-                            <Button
-                              asChild
-                              className="h-12 w-full sm:w-auto px-8 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-sm shadow-lg flex items-center justify-center gap-2 hover:-translate-y-0.5 active:scale-95 transition-all border-none"
-                            >
-                              <a href={activePostDetail.ctaValue || '#'} target="_blank" rel="noopener noreferrer">
-                                <ExternalLink className="h-5 w-5" />
-                                {activePostDetail.ctaType === 'Pesan Sekarang' ? 'Pesan Sekarang' : 'Buka Tautan Informasi'}
-                              </a>
-                            </Button>
-                          )}
-                        </div>
-                      )}
-
-                      {/* Connected Related Product Card */}
-                      {activePostDetail.relatedProductIds && activePostDetail.relatedProductIds[0] && (
-                        (() => {
-                          const relProductId = activePostDetail.relatedProductIds[0];
-                          const relProd = products.find(p => p.id === relProductId);
-                          if (!relProd) return null;
-                          return (
-                            <div className="mt-8 p-5 rounded-2xl bg-amber-400/5 dark:bg-amber-400/3 border border-amber-400/20 space-y-4 shadow-sm">
-                              <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-amber-500">
-                                <Package className="h-4 w-4" />
-                                Produk Terkait Artikel Ini
-                              </div>
-                              <div className="flex flex-col sm:flex-row items-center gap-4 bg-white dark:bg-zinc-900 p-3 rounded-xl border border-border/20">
-                                <div className="h-16 w-20 rounded-lg overflow-hidden bg-muted dark:bg-zinc-800 shrink-0 shadow-xs border border-border/10">
-                                  {relProd.images && relProd.images[0] ? (
-                                    <img src={relProd.images[0]} alt={relProd.name} className="w-full h-full object-cover" />
-                                  ) : (
-                                    <div className="w-full h-full flex items-center justify-center text-[9px] font-black text-muted-foreground/35">No Photo</div>
-                                  )}
-                                </div>
-                                <div className="flex-grow text-center sm:text-left">
-                                  <h4 className="font-black text-sm text-gray-900 dark:text-white leading-tight">{relProd.name}</h4>
-                                  <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5 font-medium">{relProd.description}</p>
-                                  <p className="text-xs font-black text-amber-500 mt-1">Rp {relProd.price.toLocaleString('id-ID')}</p>
-                                </div>
-                                <Button
-                                  asChild
-                                  className="h-10 rounded-xl bg-gray-900 dark:bg-zinc-100 px-5 text-white dark:text-zinc-900 font-bold text-xs hover:bg-gray-800 dark:hover:bg-zinc-200 shadow-xs border-none shrink-0"
-                                >
-                                  <a href={`/jagobisnis/${params?.slug || 'site'}#products`}>
-                                    Beli Sekarang
-                                  </a>
-                                </Button>
-                              </div>
-                            </div>
-                          );
-                        })()
-                      )}
-
-                    </div>
-                  </div>
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Nested Detail Lightbox Zoom modal */}
-          <AnimatePresence>
-            {detailLightboxImage && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setDetailLightboxImage(null)}
-                className="fixed inset-0 bg-black/95 z-[100000] flex items-center justify-center p-4 backdrop-blur-md cursor-zoom-out"
-              >
-                <button
-                  onClick={() => setDetailLightboxImage(null)}
-                  className="absolute top-6 right-6 h-12 w-12 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all cursor-pointer border border-white/5"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-                <motion.img
-                  initial={{ scale: 0.95 }}
-                  animate={{ scale: 1 }}
-                  exit={{ scale: 0.95 }}
-                  src={detailLightboxImage}
-                  alt="Zoom detail gambar"
-                  className="max-w-full max-h-[85vh] rounded-2xl shadow-2xl object-contain border border-white/10"
-                />
-              </motion.div>
-            )}
-          </AnimatePresence>
 
         </section>
       );
