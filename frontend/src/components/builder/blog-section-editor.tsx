@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 interface BlogSectionContent {
   title: string;
   subtitle: string;
-  layout: 'grid' | 'table';
+  layout: 'grid' | 'table' | 'bento';
   maxPosts: number;
   postTypeFilter: string;
 }
@@ -57,26 +57,43 @@ export const BlogSectionEditor: React.FC<BlogSectionEditorProps> = ({ content, o
         />
       </div>
 
-      {/* Layout Style Choice (Grid vs Table) */}
+      {/* Layout Style Choice (Bento vs Grid vs Table) */}
       <div>
         <label className="text-[10px] font-black uppercase tracking-wider text-gray-400 dark:text-zinc-500 block mb-2">
           Gaya Tampilan Tata Letak (Layout)
         </label>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-3 gap-2.5">
+          {/* Bento selection card */}
+          <div 
+            onClick={() => updateContent({ layout: 'bento' })}
+            className={cn(
+              "p-3 rounded-xl border cursor-pointer transition-all flex flex-col items-center justify-center text-center space-y-1.5 select-none",
+              currentLayout === 'bento'
+                ? "bg-amber-400/10 dark:bg-amber-400/5 border-amber-400 text-amber-500" 
+                : "border-gray-250 dark:border-zinc-800 hover:border-gray-300 dark:hover:border-zinc-700 bg-white dark:bg-zinc-950 text-gray-500 dark:text-zinc-400"
+            )}
+          >
+            <Sparkles className="h-5 w-5" />
+            <div>
+              <p className="text-[11px] font-black">Bento Grid</p>
+              <p className="text-[8px] font-bold opacity-60">Layout asimetris premium</p>
+            </div>
+          </div>
+
           {/* Grid selection card */}
           <div 
             onClick={() => updateContent({ layout: 'grid' })}
             className={cn(
-              "p-4 rounded-2xl border cursor-pointer transition-all flex flex-col items-center justify-center text-center space-y-2 select-none",
+              "p-3 rounded-xl border cursor-pointer transition-all flex flex-col items-center justify-center text-center space-y-1.5 select-none",
               currentLayout === 'grid'
                 ? "bg-amber-400/10 dark:bg-amber-400/5 border-amber-400 text-amber-500" 
                 : "border-gray-250 dark:border-zinc-800 hover:border-gray-300 dark:hover:border-zinc-700 bg-white dark:bg-zinc-950 text-gray-500 dark:text-zinc-400"
             )}
           >
-            <LayoutGrid className="h-6 w-6" />
+            <LayoutGrid className="h-5 w-5" />
             <div>
-              <p className="text-xs font-black">Modern Grid</p>
-              <p className="text-[9px] font-bold opacity-60">Layout kartu responsif</p>
+              <p className="text-[11px] font-black">Modern Grid</p>
+              <p className="text-[8px] font-bold opacity-60">Layout kartu responsif</p>
             </div>
           </div>
 
@@ -84,16 +101,16 @@ export const BlogSectionEditor: React.FC<BlogSectionEditorProps> = ({ content, o
           <div 
             onClick={() => updateContent({ layout: 'table' })}
             className={cn(
-              "p-4 rounded-2xl border cursor-pointer transition-all flex flex-col items-center justify-center text-center space-y-2 select-none",
+              "p-3 rounded-xl border cursor-pointer transition-all flex flex-col items-center justify-center text-center space-y-1.5 select-none",
               currentLayout === 'table'
                 ? "bg-amber-400/10 dark:bg-amber-400/5 border-amber-400 text-amber-500" 
                 : "border-gray-250 dark:border-zinc-800 hover:border-gray-300 dark:hover:border-zinc-700 bg-white dark:bg-zinc-950 text-gray-500 dark:text-zinc-400"
             )}
           >
-            <Table className="h-6 w-6" />
+            <Table className="h-5 w-5" />
             <div>
-              <p className="text-xs font-black">Compact Table</p>
-              <p className="text-[9px] font-bold opacity-60">Daftar ringkas minimalis</p>
+              <p className="text-[11px] font-black">Table List</p>
+              <p className="text-[8px] font-bold opacity-60">Daftar ringkas minimalis</p>
             </div>
           </div>
         </div>

@@ -1131,6 +1131,186 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
                   }
                 </p>
               </div>
+            ) : blogLayout === 'bento' ? (
+              /* Bento Layout */
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {visiblePosts.map((post, idx) => {
+                  // Determine block properties in bento grid
+                  let cardClass = "";
+                  let isLarge = false;
+
+                  if (idx === 0) {
+                    cardClass = "md:col-span-2 md:row-span-2 min-h-[320px] md:min-h-[524px] flex flex-col justify-end p-6 md:p-8 relative overflow-hidden group border border-border/40 hover:border-amber-400 rounded-3xl cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300";
+                    isLarge = true;
+                  } else if (idx === 1) {
+                    cardClass = "md:col-span-1 md:row-span-2 min-h-[320px] md:min-h-[524px] flex flex-col justify-between p-6 overflow-hidden group border border-border/40 hover:border-amber-400 bg-white dark:bg-zinc-900/50 hover:bg-white dark:hover:bg-zinc-900 rounded-3xl cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300";
+                  } else {
+                    cardClass = "md:col-span-1 md:row-span-1 min-h-[220px] md:min-h-[250px] flex flex-col justify-between p-5 overflow-hidden group border border-border/40 hover:border-amber-400 bg-white dark:bg-zinc-900/50 hover:bg-white dark:hover:bg-zinc-900 rounded-2xl cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300";
+                  }
+
+                  if (isLarge) {
+                    return (
+                      <motion.div
+                        key={post.id}
+                        whileHover={{ y: -6 }}
+                        onClick={() => {
+                          if (slug) {
+                            router.push(`/jagobisnis/${slug}/posts/${post.slug}`);
+                          }
+                        }}
+                        className={cardClass}
+                      >
+                        {/* Hero Image as Background */}
+                        {post.coverImage ? (
+                          <>
+                            <img 
+                              src={post.coverImage} 
+                              alt={post.imageAlt || post.title} 
+                              className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700" 
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10 transition-opacity duration-300 group-hover:opacity-95" />
+                          </>
+                        ) : (
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/95 to-zinc-900 flex items-center justify-center text-xs font-black text-white/20 uppercase">
+                            No Cover
+                          </div>
+                        )}
+
+                        {/* Badges top right */}
+                        <div className="absolute top-5 right-5 flex gap-2 z-20">
+                          {post.isPinned && (
+                            <div className="bg-amber-500 text-white rounded-full p-1.5 shadow-md flex items-center justify-center">
+                              <Pin className="h-3.5 w-3.5 fill-current" />
+                            </div>
+                          )}
+                          <span className={cn(
+                            "px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider shadow-sm",
+                            getCategoryBadgeClass(post.contentType)
+                          )}>
+                            {post.contentType}
+                          </span>
+                        </div>
+
+                        {/* Content overlapping the hero image */}
+                        <div className="relative z-10 space-y-3.5 text-white max-w-xl">
+                          <div className="flex items-center gap-3.5 text-[9px] font-extrabold uppercase tracking-wider text-white/70">
+                            <span className="flex items-center gap-1">
+                              <Calendar className="h-3 w-3" />
+                              {new Date(post.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Eye className="h-3 w-3" />
+                              {post.views || 0} Dilihat
+                            </span>
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <h3 className="font-extrabold text-xl md:text-2xl tracking-tight leading-tight group-hover:text-amber-300 transition-colors">
+                              {post.title}
+                            </h3>
+                            {post.summary && (
+                              <p className="text-xs text-white/80 line-clamp-2 leading-relaxed font-medium">
+                                {post.summary}
+                              </p>
+                            )}
+                          </div>
+
+                          <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs font-extrabold text-white group-hover:text-amber-300 transition-colors">
+                            <span>Baca Selengkapnya</span>
+                            <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                          </div>
+                        </div>
+                      </motion.div>
+                    );
+                  }
+
+                  const showImage = !!post.coverImage;
+                  return (
+                    <motion.div
+                      key={post.id}
+                      whileHover={{ y: -6 }}
+                      onClick={() => {
+                        if (slug) {
+                          router.push(`/jagobisnis/${slug}/posts/${post.slug}`);
+                        }
+                      }}
+                      className={cardClass}
+                    >
+                      {idx === 1 ? (
+                        <div className="space-y-4 flex flex-col h-full justify-between">
+                          <div className="space-y-4">
+                            {showImage ? (
+                              <div className="aspect-[16/10] w-full overflow-hidden bg-muted dark:bg-zinc-800 rounded-2xl relative border border-border/10">
+                                <img 
+                                  src={post.coverImage} 
+                                  alt={post.title} 
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                                />
+                              </div>
+                            ) : (
+                              <div className="aspect-[16/10] w-full bg-gray-50 dark:bg-zinc-800/20 rounded-2xl flex items-center justify-center text-[9px] font-black text-muted-foreground/30 uppercase">
+                                No Cover
+                              </div>
+                            )}
+                            
+                            <div className="space-y-2">
+                              <div className="flex items-center justify-between text-[9px] font-bold text-muted-foreground uppercase tracking-wider">
+                                <span className="flex items-center gap-1">
+                                  <Calendar className="h-3 w-3" />
+                                  {new Date(post.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
+                                </span>
+                                <span className={cn("px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-wider", getCategoryBadgeClass(post.contentType))}>
+                                  {post.contentType}
+                                </span>
+                              </div>
+                              <h3 className="font-extrabold text-base text-gray-900 dark:text-white line-clamp-2 leading-tight group-hover:text-amber-500 transition-colors">
+                                {post.title}
+                              </h3>
+                              {post.summary && (
+                                <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed font-medium">
+                                  {post.summary}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                          
+                          <div className="pt-3 border-t border-border/10 flex items-center justify-between text-xs font-black text-gray-900 dark:text-white group-hover:text-amber-500 transition-colors shrink-0">
+                            <span>Baca Selengkapnya</span>
+                            <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col justify-between h-full space-y-3">
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between text-[8px] font-bold text-muted-foreground uppercase tracking-wider">
+                              <span className="flex items-center gap-1">
+                                <Calendar className="h-3 w-3" />
+                                {new Date(post.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
+                              </span>
+                              <span className={cn("px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider", getCategoryBadgeClass(post.contentType))}>
+                                {post.contentType}
+                              </span>
+                            </div>
+                            <h3 className="font-extrabold text-sm text-gray-900 dark:text-white line-clamp-2 leading-tight group-hover:text-amber-500 transition-colors">
+                              {post.title}
+                            </h3>
+                            {post.summary && (
+                              <p className="text-[11px] text-muted-foreground line-clamp-2 leading-relaxed font-medium">
+                                {post.summary}
+                              </p>
+                            )}
+                          </div>
+                          
+                          <div className="pt-2 border-t border-border/10 flex items-center justify-between text-[11px] font-black text-gray-900 dark:text-white group-hover:text-amber-500 transition-colors shrink-0">
+                            <span>Baca Selengkapnya</span>
+                            <ChevronRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
+                          </div>
+                        </div>
+                      )}
+                    </motion.div>
+                  );
+                })}
+              </div>
             ) : blogLayout === 'grid' ? (
               /* Grid Layout */
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
