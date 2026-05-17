@@ -19,7 +19,8 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { extname } from 'path';
+import { extname, join } from 'path';
+import * as fs from 'fs';
 
 interface RequestWithUser {
   user: {
@@ -64,6 +65,29 @@ export class ProductController {
     }
     const url = `http://localhost:3001/uploads/${file.filename}`;
     return { url };
+  }
+
+  @Get('media')
+  @ApiOperation({ summary: 'Get all uploaded media' })
+  getMedia() {
+    const uploadsDir = './uploads';
+    if (!fs.existsSync(uploadsDir)) {
+      return [];
+    }
+    const files = fs.readdirSync(uploadsDir);
+    const mediaUrls = files
+      .filter((file: string) => {
+        const filePath = join(uploadsDir, file);
+        const stat = fs.statSync(filePath);
+        return stat.isFile() && file.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i);
+      })
+      .map((file: string) => {
+        return {
+          name: file,
+          url: `http://localhost:3001/uploads/${file}`,
+        };
+      });
+    return mediaUrls;
   }
 
   @Post()

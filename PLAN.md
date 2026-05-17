@@ -151,6 +151,11 @@ Tasks:
 - [x] JagoBisnis Watermark: Integrated a beautiful, clean, and modern platform watermark branding matching the site's primary HSL colors inside both static fallback footers and the new dynamic block footer layout.
 - [x] Floating Action Controls Consistency: Unified backgrounds, grey borders, and hover micro-interactions of the floating side controls (Up chevron, Drag handle dots, Down chevron) to fix mismatched dark/light colors and make the grip dots highly visible.
 - [x] Drag & Drop Visual Builder: Implemented full-fidelity HTML5 Drag and Drop reordering on middle visual canvas triggered securely by grabbed action handles, combined with dragging new blocks directly from the left sidebar panel into empty or active indexes with gorgeous glow hover animations.
+- [x] Dynamic Embed Google Maps: Added iframe map preview container in Contact section and configured URL input field in editor panel.
+- [x] Aligned Stats Editor Fields: Completely resolved schema key mismatch between `content.items` and `content.stats`, added customizable columns aligned layout, alignment options, preset backgrounds, and section descriptions.
+- [x] Infinite Logo Marquee Animation: Configured hardware-accelerated CSS marquee keyframes in `globals.css` with smooth loop sliding and pause-on-hover logic.
+- [x] Reusable Media Library System: Integrated backend uploads listing directory API and frontend client hooks. Injected inline 'Pustaka' selection buttons next to every file upload zone (Logo, Hero Background, About Us, Feature Cards, Gallery, Logo Marquee, Grid 2x2 Images). Created a stunning, premium overlay modal library drawer supporting responsive light/dark aesthetics, allowing instant selection and reuse of previously uploaded assets without redundant requests.
+- [x] Compilation & Build Check: Checked TypeScript checks, Next.js static asset optimization, and verified 100% SUCCESS build with zero compilation warnings or errors.
 
 ## Phase 11: Post-MVP & Optimization
 Status: In Planning

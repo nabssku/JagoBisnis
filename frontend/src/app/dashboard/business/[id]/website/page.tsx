@@ -41,7 +41,8 @@ import {
   Link2, 
   PlusCircle, 
   Smile,
-  Star 
+  Star,
+  X
 } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
@@ -244,6 +245,13 @@ export default function WebsiteBuilderPage() {
   const galleryUploadRef = useRef<HTMLInputElement>(null);
   const cardUploadRefs = useRef<Record<number, HTMLInputElement>>({});
 
+  // Media Library states
+  const [mediaLibrary, setMediaLibrary] = useState<{ name: string; url: string }[]>([]);
+  const [activeMediaPickerTarget, setActiveMediaPickerTarget] = useState<{
+    type: 'logo' | 'hero-bg' | 'gallery' | 'card' | 'logos' | 'grid-rt' | 'grid-rb' | 'about-img';
+    extraIndex?: number;
+  } | null>(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -252,6 +260,14 @@ export default function WebsiteBuilderPage() {
         // Fetch raw products
         const rawProducts = await productService.getAll(businessId);
         setProducts(rawProducts);
+
+        // Fetch media library
+        try {
+          const mediaData = await productService.getMedia(businessId);
+          setMediaLibrary(mediaData);
+        } catch (mediaErr) {
+          console.error('Failed to fetch media library', mediaErr);
+        }
 
         // Normalize site sections data
         let normalizedSite = siteData;
@@ -462,7 +478,7 @@ export default function WebsiteBuilderPage() {
   };
 
   // Handle local file uploads using productService.uploadImage
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'logo' | 'hero-bg' | 'gallery' | 'card', extraIndex?: number) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'logo' | 'hero-bg' | 'gallery' | 'card' | 'logos' | 'grid-rt' | 'grid-rb' | 'about-img', extraIndex?: number) => {
     const file = e.target.files?.[0];
     if (!file || !site) return;
 
@@ -501,7 +517,64 @@ export default function WebsiteBuilderPage() {
               ...s,
               content: {
                 ...s.content,
+                images: [...currentImages, res.url].slice(0, 8)
+              }
+            };
+          }
+          return s;
+        });
+        setSite({ ...site, sections: newSections });
+      } else if (type === 'logos') {
+        const newSections = site.sections.map(s => {
+          if (s.id === activeSectionId) {
+            const currentImages = s.content.images || [];
+            return {
+              ...s,
+              content: {
+                ...s.content,
                 images: [...currentImages, res.url]
+              }
+            };
+          }
+          return s;
+        });
+        setSite({ ...site, sections: newSections });
+      } else if (type === 'grid-rt') {
+        const newSections = site.sections.map(s => {
+          if (s.id === activeSectionId) {
+            return {
+              ...s,
+              content: {
+                ...s.content,
+                rtImage: res.url
+              }
+            };
+          }
+          return s;
+        });
+        setSite({ ...site, sections: newSections });
+      } else if (type === 'grid-rb') {
+        const newSections = site.sections.map(s => {
+          if (s.id === activeSectionId) {
+            return {
+              ...s,
+              content: {
+                ...s.content,
+                rbImage: res.url
+              }
+            };
+          }
+          return s;
+        });
+        setSite({ ...site, sections: newSections });
+      } else if (type === 'about-img') {
+        const newSections = site.sections.map(s => {
+          if (s.id === activeSectionId) {
+            return {
+              ...s,
+              content: {
+                ...s.content,
+                imageUrl: res.url
               }
             };
           }
@@ -528,10 +601,143 @@ export default function WebsiteBuilderPage() {
         });
         setSite({ ...site, sections: newSections });
       }
+
+      // Refresh media library
+      try {
+        const mediaData = await productService.getMedia(businessId);
+        setMediaLibrary(mediaData);
+      } catch (mediaErr) {
+        console.error('Failed to refresh media library', mediaErr);
+      }
     } catch (err) {
       console.error(err);
       toast.error('Gagal mengunggah media');
     }
+  };
+
+  // Select an image from the reusable media library
+  const handleSelectMedia = (url: string) => {
+    if (!activeMediaPickerTarget || !site) return;
+    const { type, extraIndex } = activeMediaPickerTarget;
+
+    if (type === 'logo') {
+      setSite({
+        ...site,
+        theme: {
+          ...site.theme,
+          logoUrl: url,
+          logoIcon: undefined
+        }
+      });
+    } else if (type === 'hero-bg') {
+      const newSections = site.sections.map(s => {
+        if (s.id === activeSectionId) {
+          return {
+            ...s,
+            content: {
+              ...s.content,
+              backgroundImage: url
+            }
+          };
+        }
+        return s;
+      });
+      setSite({ ...site, sections: newSections });
+    } else if (type === 'gallery') {
+      const newSections = site.sections.map(s => {
+        if (s.id === activeSectionId) {
+          const currentImages = s.content.images || [];
+          return {
+            ...s,
+            content: {
+              ...s.content,
+              images: [...currentImages, url].slice(0, 8)
+            }
+          };
+        }
+        return s;
+      });
+      setSite({ ...site, sections: newSections });
+    } else if (type === 'logos') {
+      const newSections = site.sections.map(s => {
+        if (s.id === activeSectionId) {
+          const currentImages = s.content.images || [];
+          return {
+            ...s,
+            content: {
+              ...s.content,
+              images: [...currentImages, url]
+            }
+          };
+        }
+        return s;
+      });
+      setSite({ ...site, sections: newSections });
+    } else if (type === 'grid-rt') {
+      const newSections = site.sections.map(s => {
+        if (s.id === activeSectionId) {
+          return {
+            ...s,
+            content: {
+              ...s.content,
+              rtImage: url
+            }
+          };
+        }
+        return s;
+      });
+      setSite({ ...site, sections: newSections });
+    } else if (type === 'grid-rb') {
+      const newSections = site.sections.map(s => {
+        if (s.id === activeSectionId) {
+          return {
+            ...s,
+            content: {
+              ...s.content,
+              rbImage: url
+            }
+          };
+        }
+        return s;
+      });
+      setSite({ ...site, sections: newSections });
+    } else if (type === 'about-img') {
+      const newSections = site.sections.map(s => {
+        if (s.id === activeSectionId) {
+          return {
+            ...s,
+            content: {
+              ...s.content,
+              imageUrl: url
+            }
+          };
+        }
+        return s;
+      });
+      setSite({ ...site, sections: newSections });
+    } else if (type === 'card' && extraIndex !== undefined) {
+      const newSections = site.sections.map(s => {
+        if (s.id === activeSectionId) {
+          const cards = [...(s.content.cards || [])];
+          cards[extraIndex] = {
+            ...cards[extraIndex],
+            imageUrl: url
+          };
+          return {
+            ...s,
+            content: {
+              ...s.content,
+              cards
+            }
+          };
+        }
+        return s;
+      });
+      setSite({ ...site, sections: newSections });
+    }
+
+    toast.success('Media berhasil diterapkan!');
+    setActiveMediaPickerTarget(null);
   };
 
   // Update dynamic content fields for active section
@@ -1252,6 +1458,14 @@ export default function WebsiteBuilderPage() {
                               </>
                             )}
                           </div>
+                          <button
+                            type="button"
+                            onClick={() => setActiveMediaPickerTarget({ type: 'logo' })}
+                            className="w-full flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl border border-border dark:border-zinc-800 hover:bg-muted/50 text-[10px] font-bold text-gray-700 dark:text-zinc-300 transition-all mt-2"
+                          >
+                            <ImageIcon className="h-3.5 w-3.5 text-primary" />
+                            Pilih dari Pustaka Media
+                          </button>
                         </div>
 
                         {/* Pick Icon Dropdown */}
@@ -1434,6 +1648,14 @@ export default function WebsiteBuilderPage() {
                                   </>
                                 )}
                               </div>
+                              <button
+                                type="button"
+                                onClick={() => setActiveMediaPickerTarget({ type: 'hero-bg' })}
+                                className="w-full flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl border border-border dark:border-zinc-800 hover:bg-muted/50 text-[10px] font-bold text-gray-700 dark:text-zinc-300 transition-all mt-2"
+                              >
+                                <ImageIcon className="h-3.5 w-3.5 text-primary" />
+                                Pilih dari Pustaka Media
+                              </button>
                             </div>
 
                             {/* BUTTONS CONFIGURATION CHECKLIST */}
@@ -1557,7 +1779,7 @@ export default function WebsiteBuilderPage() {
 
                                     <span className="text-[8px] font-black text-muted-foreground uppercase tracking-widest block">KARTU {idx + 1}</span>
                                     
-                                    <div className="space-y-1.5">
+                                    <div className="space-y-2">
                                       <input
                                         type="text"
                                         className="w-11/12 rounded-lg border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs font-bold text-gray-900 dark:text-white focus:outline-none"
@@ -1579,6 +1801,45 @@ export default function WebsiteBuilderPage() {
                                         }}
                                         placeholder="Penjelasan ringkas keunggulan..."
                                       />
+
+                                      {/* Card Image upload section */}
+                                      <div className="space-y-1 pt-1.5 border-t border-border/40">
+                                        <label className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest block">Foto Kartu (Opsional)</label>
+                                        <input 
+                                          type="file" 
+                                          onChange={(e) => handleFileUpload(e, 'card', idx)} 
+                                          className="hidden" 
+                                          id={`card-file-${idx}`}
+                                          accept="image/*" 
+                                        />
+                                        <div className="flex items-center gap-3">
+                                          {card.imageUrl ? (
+                                            <img src={card.imageUrl} alt="Card preview" className="h-10 w-16 object-cover rounded-lg border border-border" />
+                                          ) : (
+                                            <div className="h-10 w-16 bg-muted dark:bg-zinc-900 rounded-lg border border-dashed border-border flex items-center justify-center">
+                                              <Upload className="h-4 w-4 text-muted-foreground/45" />
+                                            </div>
+                                          )}
+                                          <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => document.getElementById(`card-file-${idx}`)?.click()}
+                                            className="h-8 rounded-lg text-[10px] font-bold"
+                                          >
+                                            {card.imageUrl ? 'Ganti Foto' : 'Unggah Foto'}
+                                          </Button>
+                                          <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => setActiveMediaPickerTarget({ type: 'card', extraIndex: idx })}
+                                            className="h-8 rounded-lg text-[10px] font-bold gap-1"
+                                          >
+                                            <ImageIcon className="h-3.5 w-3.5 text-primary" />
+                                            Pustaka
+                                          </Button>
+                                        </div>
+                                      </div>
                                     </div>
                                   </div>
                                 ))}
@@ -1599,13 +1860,67 @@ export default function WebsiteBuilderPage() {
                                 onChange={(e) => updateActiveSectionContent('title', e.target.value)}
                               />
                             </div>
-                            <div className="space-y-1">
-                              <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider">Penjelasan Profil Bisnis</label>
-                              <textarea
-                                className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-700 dark:text-zinc-200 font-medium min-h-[140px] leading-relaxed"
-                                value={activeSection.content.description || ''}
-                                onChange={(e) => updateActiveSectionContent('description', e.target.value)}
+
+                            {/* Custom Upload Gambar (matching Image 4 layout) */}
+                            <div className="space-y-2">
+                              <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider block">Gambar Tentang Kami</label>
+                              <input 
+                                type="file" 
+                                onChange={(e) => handleFileUpload(e, 'about-img')} 
+                                className="hidden" 
+                                id="about-img-upload-input"
+                                accept="image/*" 
                               />
+                              <div 
+                                onClick={() => document.getElementById('about-img-upload-input')?.click()}
+                                className="border-2 border-dashed border-border dark:border-zinc-800 rounded-xl p-4 text-center cursor-pointer hover:border-primary bg-gray-50/20 dark:bg-zinc-950/20 hover:bg-gray-50 transition-all flex flex-col items-center justify-center gap-1 group"
+                              >
+                                {activeSection.content.imageUrl ? (
+                                  <div className="space-y-2 w-full">
+                                    <img src={activeSection.content.imageUrl} alt="Tentang Kami" className="h-20 mx-auto object-cover rounded-lg border" />
+                                    <p className="text-[9px] text-green-500 font-bold">✓ Gambar Berhasil Diunggah</p>
+                                  </div>
+                                ) : (
+                                  <>
+                                    <Upload className="h-4.5 w-4.5 text-muted-foreground group-hover:text-primary transition-colors" />
+                                    <p className="text-[11px] font-bold text-gray-700 dark:text-zinc-300">Pilih Berkas Gambar</p>
+                                    <p className="text-[8px] text-muted-foreground">Format JPG, PNG, atau SVG (Maks. 2MB)</p>
+                                  </>
+                                )}
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => setActiveMediaPickerTarget({ type: 'about-img' })}
+                                className="w-full flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl border border-border dark:border-zinc-800 hover:bg-muted/50 text-[10px] font-bold text-gray-700 dark:text-zinc-300 transition-all mt-2"
+                              >
+                                <ImageIcon className="h-3.5 w-3.5 text-primary" />
+                                Pilih dari Pustaka Media
+                              </button>
+                            </div>
+
+                            {/* Deskripsi berbentuk rich text box matching Image 4 */}
+                            <div className="space-y-1">
+                              <div className="flex items-center justify-between">
+                                <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider">Deskripsi Profil Bisnis</label>
+                              </div>
+                              
+                              {/* Rich editor look matching Image 4 */}
+                              <div className="rounded-xl border border-border dark:border-zinc-800 overflow-hidden bg-muted/20 dark:bg-zinc-950">
+                                <div className="flex items-center gap-1.5 px-3 py-1.5 border-b border-border/80 bg-gray-50/30 dark:bg-zinc-900/30 text-[10px] font-bold text-gray-550 dark:text-zinc-400">
+                                  <span className="cursor-pointer hover:text-primary">B</span>
+                                  <span className="italic cursor-pointer hover:text-primary">I</span>
+                                  <span className="underline cursor-pointer hover:text-primary">U</span>
+                                  <span className="mx-1 text-border/80">|</span>
+                                  <span className="cursor-pointer hover:text-primary">☰</span>
+                                  <span className="cursor-pointer hover:text-primary">☷</span>
+                                </div>
+                                <textarea
+                                  className="w-full bg-transparent px-3 py-2 text-xs text-gray-700 dark:text-zinc-200 font-medium min-h-[140px] leading-relaxed border-0 focus:outline-none focus:ring-0"
+                                  value={activeSection.content.description || ''}
+                                  onChange={(e) => updateActiveSectionContent('description', e.target.value)}
+                                  placeholder="Ketik profil/tentang bisnis Anda di sini..."
+                                />
+                              </div>
                             </div>
                           </div>
                         )}
@@ -1656,12 +1971,52 @@ export default function WebsiteBuilderPage() {
                               />
                             </div>
 
+                            {/* Layout Selector: Grid, Bento, Carousel */}
+                            <div className="space-y-2 pt-2 border-t border-border dark:border-zinc-850">
+                              <label className="text-[9px] font-black text-gray-900 dark:text-white uppercase tracking-wider block">Gaya Tata Letak (Layout)</label>
+                              <div className="grid grid-cols-3 gap-2">
+                                {[
+                                  { value: 'grid', label: 'Grid' },
+                                  { value: 'bento', label: 'Bento' },
+                                  { value: 'carousel', label: 'Carousel' }
+                                ].map((layout) => (
+                                  <button
+                                    key={layout.value}
+                                    type="button"
+                                    onClick={() => updateActiveSectionContent('layoutStyle', layout.value)}
+                                    className={cn(
+                                      "h-9 rounded-xl text-xs font-bold border transition-all",
+                                      (activeSection.content.layoutStyle || 'grid') === layout.value
+                                        ? "border-primary dark:border-amber-400 bg-primary/5 text-primary dark:text-amber-400 font-extrabold"
+                                        : "border-border dark:border-zinc-800 bg-white dark:bg-zinc-950 text-muted-foreground"
+                                    )}
+                                  >
+                                    {layout.label}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+
                             {/* Multiple image gallery upload grid */}
                             <div className="space-y-2 pt-2 border-t border-border dark:border-zinc-850">
-                              <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider block">Unggah Foto Galeri</label>
+                              <div className="flex items-center justify-between">
+                                <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider block">Unggah Foto Galeri (Maks 8 Foto)</label>
+                                <span className="text-[9px] font-bold text-muted-foreground">{(activeSection.content.images || []).length}/8</span>
+                              </div>
                               <div 
-                                onClick={() => galleryUploadRef.current?.click()}
-                                className="border-2 border-dashed border-border dark:border-zinc-800 rounded-xl p-5 text-center cursor-pointer hover:border-primary bg-gray-50/20 dark:bg-zinc-950/20 hover:bg-gray-50 transition-all flex flex-col items-center justify-center gap-1 group"
+                                onClick={() => {
+                                  if ((activeSection.content.images || []).length >= 8) {
+                                    toast.error('Maksimal 8 media dalam galeri!');
+                                    return;
+                                  }
+                                  galleryUploadRef.current?.click();
+                                }}
+                                className={cn(
+                                  "border-2 border-dashed rounded-xl p-5 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-1 group",
+                                  (activeSection.content.images || []).length >= 8 
+                                    ? "border-gray-250 bg-gray-100/50 dark:bg-zinc-900/10 cursor-not-allowed opacity-50"
+                                    : "border-border dark:border-zinc-800 hover:border-primary bg-gray-50/20 dark:bg-zinc-950/20 hover:bg-gray-50"
+                                )}
                               >
                                 <input 
                                   type="file" 
@@ -1673,6 +2028,15 @@ export default function WebsiteBuilderPage() {
                                 <Upload className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
                                 <p className="text-xs font-bold text-gray-700 dark:text-zinc-300">Pilih & Tambah Foto</p>
                               </div>
+                              <button
+                                type="button"
+                                disabled={(activeSection.content.images || []).length >= 8}
+                                onClick={() => setActiveMediaPickerTarget({ type: 'gallery' })}
+                                className="w-full flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl border border-border dark:border-zinc-800 hover:bg-muted/50 text-[10px] font-bold text-gray-700 dark:text-zinc-300 transition-all mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                              >
+                                <ImageIcon className="h-3.5 w-3.5 text-primary" />
+                                Pilih dari Pustaka Media
+                              </button>
 
                               {/* Uploaded images list with deletion */}
                               <div className="grid grid-cols-3 gap-2 mt-3">
@@ -1771,168 +2135,611 @@ export default function WebsiteBuilderPage() {
                           </div>
                         )}
 
-                        {/* OTHER BLOCKS DYNAMIC FIELDS FALLBACKS */}
-                        {!['hero', 'features-cards', 'about', 'products', 'gallery', 'faq'].includes(activeSection.type) && (
+                        {/* CTA DYNAMIC FIELDS */}
+                        {activeSection.type === 'cta' && (
                           <div className="space-y-4">
-                            {/* Generic Title */}
-                            {activeSection.content.title !== undefined && (
+                            <div className="space-y-1">
+                              <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider">Judul CTA</label>
+                              <input
+                                type="text"
+                                className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-900 dark:text-white font-bold"
+                                value={activeSection.content.title || ''}
+                                onChange={(e) => updateActiveSectionContent('title', e.target.value)}
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider">Deskripsi CTA</label>
+                              <textarea
+                                className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-700 dark:text-zinc-200 font-medium min-h-[60px]"
+                                value={activeSection.content.description || ''}
+                                onChange={(e) => updateActiveSectionContent('description', e.target.value)}
+                              />
+                            </div>
+
+                            {/* Preset Background & Text Colors */}
+                            <div className="space-y-2 pt-2 border-t border-border dark:border-zinc-850">
+                              <label className="text-[9px] font-black text-gray-900 dark:text-white uppercase tracking-wider block">Warna Latar Belakang (Preset)</label>
+                              <div className="flex items-center gap-3">
+                                {[
+                                  { value: 'primary', label: 'Brand', bg: 'bg-primary' },
+                                  { value: 'dark', label: 'Dark', bg: 'bg-zinc-900' },
+                                  { value: 'amber', label: 'Warm', bg: 'bg-amber-500' },
+                                  { value: 'muted', label: 'Light', bg: 'bg-gray-100' }
+                                ].map((preset) => (
+                                  <button
+                                    key={preset.value}
+                                    type="button"
+                                    onClick={() => updateActiveSectionContent('themeBg', preset.value)}
+                                    className={cn(
+                                      "h-8 px-3 rounded-lg text-[10px] font-bold border transition-all flex items-center gap-1.5",
+                                      (activeSection.content.themeBg || 'primary') === preset.value
+                                        ? "border-primary dark:border-amber-400 text-primary dark:text-amber-400 bg-primary/5 font-extrabold"
+                                        : "border-border dark:border-zinc-800 bg-white dark:bg-zinc-950 text-muted-foreground"
+                                    )}
+                                  >
+                                    <span className={cn("h-2.5 w-2.5 rounded-full", preset.bg)} />
+                                    {preset.label}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Button Action Selector */}
+                            <div className="space-y-2 pt-2 border-t border-border dark:border-zinc-850">
+                              <label className="text-[9px] font-black text-gray-900 dark:text-white uppercase tracking-wider block">Aksi Tombol</label>
+                              <div className="grid grid-cols-3 gap-2">
+                                {[
+                                  { value: 'whatsapp', label: 'WhatsApp' },
+                                  { value: 'catalog', label: 'Katalog' },
+                                  { value: 'custom', label: 'Kustom Link' }
+                                ].map((act) => (
+                                  <button
+                                    key={act.value}
+                                    type="button"
+                                    onClick={() => updateActiveSectionContent('buttonAction', act.value)}
+                                    className={cn(
+                                      "h-8 rounded-lg text-[10px] font-bold border transition-all",
+                                      (activeSection.content.buttonAction || 'whatsapp') === act.value
+                                        ? "border-primary dark:border-amber-400 bg-primary/5 text-primary dark:text-amber-400 font-extrabold"
+                                        : "border-border dark:border-zinc-800 bg-white dark:bg-zinc-950 text-muted-foreground"
+                                    )}
+                                  >
+                                    {act.label}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+
+                            <div className="space-y-1">
+                              <label className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest block">Teks Tombol</label>
+                              <input
+                                type="text"
+                                className="w-full rounded-lg border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs text-gray-900 dark:text-white font-bold"
+                                value={activeSection.content.buttonText || ''}
+                                onChange={(e) => updateActiveSectionContent('buttonText', e.target.value)}
+                                placeholder="Hubungi Kami Sekarang"
+                              />
+                            </div>
+
+                            {(activeSection.content.buttonAction === 'custom') && (
                               <div className="space-y-1">
-                                <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider">Judul Blok</label>
+                                <label className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest block">Tautan URL Tombol</label>
                                 <input
                                   type="text"
-                                  className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-900 dark:text-white font-bold"
-                                  value={activeSection.content.title || ''}
-                                  onChange={(e) => updateActiveSectionContent('title', e.target.value)}
+                                  className="w-full rounded-lg border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs text-gray-900 dark:text-white font-medium"
+                                  value={activeSection.content.buttonUrl || ''}
+                                  onChange={(e) => updateActiveSectionContent('buttonUrl', e.target.value)}
+                                  placeholder="https://example.com"
                                 />
                               </div>
                             )}
-                            
-                            {/* Generic Subtitle */}
-                            {activeSection.content.subtitle !== undefined && (
-                              <div className="space-y-1">
-                                <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider">Subtitle</label>
-                                <input
-                                  type="text"
-                                  className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-900 dark:text-white font-medium"
-                                  value={activeSection.content.subtitle || ''}
-                                  onChange={(e) => updateActiveSectionContent('subtitle', e.target.value)}
-                                />
-                              </div>
-                            )}
+                          </div>
+                        )}
 
-                            {/* Contact Custom Fields */}
-                            {activeSection.type === 'contact' && (
-                              <div className="space-y-4 pt-2">
-                                <div className="space-y-1">
-                                  <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider block">Nomor Telepon Kontak</label>
-                                  <input
-                                    type="text"
-                                    className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs font-bold text-gray-900 dark:text-white"
-                                    value={activeSection.content.phone || ''}
-                                    onChange={(e) => updateActiveSectionContent('phone', e.target.value)}
-                                    placeholder="Contoh: 081234567890"
-                                  />
-                                </div>
-                                <div className="space-y-1">
-                                  <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider block">Alamat Usaha</label>
-                                  <input
-                                    type="text"
-                                    className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs font-bold text-gray-900 dark:text-white"
-                                    value={activeSection.content.address || ''}
-                                    onChange={(e) => updateActiveSectionContent('address', e.target.value)}
-                                    placeholder="Contoh: Jl. Diponegoro No. 12"
-                                  />
-                                </div>
-                                <div className="space-y-1">
-                                  <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider block">Pesan Otomatis WhatsApp</label>
-                                  <textarea
-                                    className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs font-medium text-gray-900 dark:text-white"
-                                    value={activeSection.content.whatsappText || ''}
-                                    onChange={(e) => updateActiveSectionContent('whatsappText', e.target.value)}
-                                  />
-                                </div>
-                              </div>
-                            )}
+                        {/* STATS DYNAMIC FIELDS */}
+                        {activeSection.type === 'stats' && (
+                          <div className="space-y-4">
+                            <div className="space-y-1">
+                              <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider">Judul Seksyen</label>
+                              <input
+                                type="text"
+                                className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-900 dark:text-white font-bold"
+                                value={activeSection.content.title || ''}
+                                onChange={(e) => updateActiveSectionContent('title', e.target.value)}
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider">Deskripsi Seksyen</label>
+                              <textarea
+                                className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-900 dark:text-white font-medium min-h-[60px]"
+                                value={activeSection.content.description || ''}
+                                onChange={(e) => updateActiveSectionContent('description', e.target.value)}
+                                placeholder="Tuliskan pengantar statistik..."
+                              />
+                            </div>
 
-                            {/* Footer Custom Fields */}
-                            {activeSection.type === 'footer' && (
-                              <div className="space-y-4 pt-2">
-                                <div className="space-y-1">
-                                  <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider block">Teks Hak Cipta (Copyright)</label>
-                                  <input
-                                    type="text"
-                                    className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs font-bold text-gray-900 dark:text-white"
-                                    value={activeSection.content.copyright || ''}
-                                    onChange={(e) => updateActiveSectionContent('copyright', e.target.value)}
-                                    placeholder="Contoh: © 2026 Semua Hak Dilindungi."
-                                  />
-                                </div>
-                                <div className="space-y-1">
-                                  <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider block">Deskripsi Singkat Brand</label>
-                                  <textarea
-                                    className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs font-medium text-gray-900 dark:text-white min-h-[60px]"
-                                    value={activeSection.content.description || ''}
-                                    onChange={(e) => updateActiveSectionContent('description', e.target.value)}
-                                    placeholder="Partner UMKM terbaik untuk kemudahan bisnis digital Anda."
-                                  />
-                                </div>
-                                <div className="space-y-3 pt-2 border-t border-border dark:border-zinc-850">
-                                  <label className="text-[9px] font-black text-gray-900 dark:text-white uppercase tracking-wider block">Tautan Media Sosial</label>
-                                  <div className="space-y-2">
-                                    <div className="space-y-1">
-                                      <label className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest block">Instagram URL</label>
+                            {/* Preset Background & Text Colors */}
+                            <div className="space-y-2 pt-2 border-t border-border dark:border-zinc-850">
+                              <label className="text-[9px] font-black text-gray-900 dark:text-white uppercase tracking-wider block">Warna Latar Belakang (Preset)</label>
+                              <div className="flex items-center gap-3">
+                                {[
+                                  { value: 'white', label: 'Putih', bg: 'bg-white border' },
+                                  { value: 'muted', label: 'Muted', bg: 'bg-gray-100' },
+                                  { value: 'primary', label: 'Brand', bg: 'bg-primary' },
+                                  { value: 'dark', label: 'Gelap', bg: 'bg-zinc-900' }
+                                ].map((preset) => (
+                                  <button
+                                    key={preset.value}
+                                    type="button"
+                                    onClick={() => updateActiveSectionContent('themeBg', preset.value)}
+                                    className={cn(
+                                      "h-8 px-3 rounded-lg text-[10px] font-bold border transition-all flex items-center gap-1.5",
+                                      (activeSection.content.themeBg || 'muted') === preset.value
+                                        ? "border-primary dark:border-amber-400 text-primary dark:text-amber-400 bg-primary/5 font-extrabold"
+                                        : "border-border dark:border-zinc-800 bg-white dark:bg-zinc-950 text-muted-foreground"
+                                    )}
+                                  >
+                                    <span className={cn("h-2.5 w-2.5 rounded-full", preset.bg)} />
+                                    {preset.label}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Columns count Selector */}
+                            <div className="space-y-2 pt-2 border-t border-border dark:border-zinc-850">
+                              <label className="text-[9px] font-black text-gray-900 dark:text-white uppercase tracking-wider block">Jumlah Kolom</label>
+                              <div className="grid grid-cols-3 gap-2">
+                                {[
+                                  { value: 2, label: '2 Kolom' },
+                                  { value: 3, label: '3 Kolom' },
+                                  { value: 4, label: '4 Kolom' }
+                                ].map((col) => (
+                                  <button
+                                    key={col.value}
+                                    type="button"
+                                    onClick={() => updateActiveSectionContent('cols', col.value)}
+                                    className={cn(
+                                      "h-8 rounded-lg text-[10px] font-bold border transition-all",
+                                      (activeSection.content.cols || 3) === col.value
+                                        ? "border-primary dark:border-amber-400 bg-primary/5 text-primary dark:text-amber-400 font-extrabold"
+                                        : "border-border dark:border-zinc-800 bg-white dark:bg-zinc-950 text-muted-foreground"
+                                    )}
+                                  >
+                                    {col.label}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Alignment Selector */}
+                            <div className="space-y-2 pt-2 border-t border-border dark:border-zinc-850">
+                              <label className="text-[9px] font-black text-gray-900 dark:text-white uppercase tracking-wider block">Rata Teks (Alignment)</label>
+                              <div className="grid grid-cols-3 gap-2">
+                                {[
+                                  { value: 'left', label: 'Kiri' },
+                                  { value: 'center', label: 'Tengah' },
+                                  { value: 'right', label: 'Kanan' }
+                                ].map((align) => (
+                                  <button
+                                    key={align.value}
+                                    type="button"
+                                    onClick={() => updateActiveSectionContent('align', align.value)}
+                                    className={cn(
+                                      "h-8 rounded-lg text-[10px] font-bold border transition-all",
+                                      (activeSection.content.align || 'center') === align.value
+                                        ? "border-primary dark:border-amber-400 bg-primary/5 text-primary dark:text-amber-400 font-extrabold"
+                                        : "border-border dark:border-zinc-800 bg-white dark:bg-zinc-950 text-muted-foreground"
+                                    )}
+                                  >
+                                    {align.label}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Dynamic items for stats */}
+                            <div className="space-y-3 pt-3 border-t border-border dark:border-zinc-850">
+                              <div className="flex items-center justify-between">
+                                <label className="text-[10px] font-black text-gray-900 dark:text-white uppercase tracking-wider">Daftar Item Statistik</label>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => {
+                                    const stats = [...(activeSection.content.stats || [])];
+                                    stats.push({ value: '100+', label: 'Pelanggan Puas' });
+                                    updateActiveSectionContent('stats', stats);
+                                  }}
+                                  className="h-8 rounded-lg text-primary text-[10px] font-bold p-1 gap-1"
+                                >
+                                  <PlusCircle className="h-4 w-4" />
+                                  Tambah
+                                </Button>
+                              </div>
+
+                              <div className="flex flex-col gap-3">
+                                {(activeSection.content.stats || []).map((item: any, idx: number) => (
+                                  <div key={idx} className="p-3 bg-muted/20 dark:bg-zinc-950/20 border border-border/40 rounded-xl space-y-2 relative">
+                                    <button
+                                      onClick={() => {
+                                        const stats = (activeSection.content.stats || []).filter((_: any, i: number) => i !== idx);
+                                        updateActiveSectionContent('stats', stats);
+                                      }}
+                                      className="absolute top-2 right-2 p-1 text-muted-foreground hover:text-red-500 rounded transition-colors"
+                                    >
+                                      <Trash2 className="h-3.5 w-3.5" />
+                                    </button>
+
+                                    <span className="text-[8px] font-black text-muted-foreground uppercase tracking-widest block">STATISTIK {idx + 1}</span>
+                                    
+                                    <div className="space-y-1.5">
                                       <input
                                         type="text"
-                                        className="w-full rounded-lg border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs text-gray-900 dark:text-white font-medium"
-                                        value={activeSection.content.instagram || ''}
-                                        onChange={(e) => updateActiveSectionContent('instagram', e.target.value)}
-                                        placeholder="https://instagram.com/akun-anda"
+                                        className="w-11/12 rounded-lg border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs font-bold text-gray-900 dark:text-white"
+                                        value={item.value || ''}
+                                        onChange={(e) => {
+                                          const stats = [...activeSection.content.stats];
+                                          stats[idx] = { ...stats[idx], value: e.target.value };
+                                          updateActiveSectionContent('stats', stats);
+                                        }}
+                                        placeholder="Angka (Contoh: 10k+, 99%)"
                                       />
-                                    </div>
-                                    <div className="space-y-1">
-                                      <label className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest block">Facebook URL</label>
                                       <input
                                         type="text"
-                                        className="w-full rounded-lg border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs text-gray-900 dark:text-white font-medium"
-                                        value={activeSection.content.facebook || ''}
-                                        onChange={(e) => updateActiveSectionContent('facebook', e.target.value)}
-                                        placeholder="https://facebook.com/halaman-anda"
-                                      />
-                                    </div>
-                                    <div className="space-y-1">
-                                      <label className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest block">Twitter/X URL</label>
-                                      <input
-                                        type="text"
-                                        className="w-full rounded-lg border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs text-gray-900 dark:text-white font-medium"
-                                        value={activeSection.content.twitter || ''}
-                                        onChange={(e) => updateActiveSectionContent('twitter', e.target.value)}
-                                        placeholder="https://twitter.com/akun-anda"
+                                        className="w-full rounded-lg border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-zinc-300"
+                                        value={item.label || ''}
+                                        onChange={(e) => {
+                                          const stats = [...activeSection.content.stats];
+                                          stats[idx] = { ...stats[idx], label: e.target.value };
+                                          updateActiveSectionContent('stats', stats);
+                                        }}
+                                        placeholder="Deskripsi Singkat"
                                       />
                                     </div>
                                   </div>
-                                </div>
+                                ))}
                               </div>
-                            )}
+                            </div>
+                          </div>
+                        )}
 
-                            {/* Logos commas items */}
-                            {activeSection.type === 'logos' && (
+                        {/* FEATURES-GRID DYNAMIC FIELDS (ALTERNATING 2x2) */}
+                        {activeSection.type === 'features-grid' && (
+                          <div className="space-y-4">
+                            <div className="space-y-1">
+                              <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider">Judul Grid Seksyen</label>
+                              <input
+                                type="text"
+                                className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-900 dark:text-white font-bold"
+                                value={activeSection.content.title || ''}
+                                onChange={(e) => updateActiveSectionContent('title', e.target.value)}
+                              />
+                            </div>
+
+                            {/* Row 1 (Kiri Atas Teks, Kanan Atas Gambar) */}
+                            <div className="p-3 bg-muted/20 dark:bg-zinc-950/20 border border-border/40 rounded-xl space-y-2">
+                              <span className="text-[9px] font-black text-gray-900 dark:text-white uppercase tracking-wider block">Baris 1 (Teks Kiri & Gambar Kanan)</span>
                               <div className="space-y-1.5">
-                                <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider block">Deretan Logo (Pisahkan dengan Koma)</label>
+                                <label className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest block">Judul Kiri Atas</label>
                                 <input
                                   type="text"
-                                  className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-900 dark:text-white font-bold"
-                                  value={activeSection.content.items?.join(', ') || ''}
-                                  onChange={(e) => {
-                                    const items = e.target.value.split(',').map(item => item.trim()).filter(Boolean);
-                                    updateActiveSectionContent('items', items);
-                                  }}
+                                  className="w-full rounded-lg border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs text-gray-900 dark:text-white font-bold"
+                                  value={activeSection.content.rtTitle || ''}
+                                  onChange={(e) => updateActiveSectionContent('rtTitle', e.target.value)}
+                                  placeholder="Judul Kiri Atas"
                                 />
-                              </div>
-                            )}
-
-                            {/* Generic Action Buttons details */}
-                            {activeSection.content.buttonText !== undefined && (
-                              <div className="space-y-3 pt-3 border-t border-border dark:border-zinc-850">
-                                <div className="space-y-1">
-                                  <label className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest block">Teks Tombol Aksi</label>
-                                  <input
-                                    type="text"
-                                    className="w-full rounded-lg border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs text-gray-900 dark:text-white font-bold"
-                                    value={activeSection.content.buttonText || ''}
-                                    onChange={(e) => updateActiveSectionContent('buttonText', e.target.value)}
-                                  />
+                                <label className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest block">Deskripsi Kiri Atas</label>
+                                <textarea
+                                  className="w-full rounded-lg border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs text-gray-700 dark:text-zinc-300 min-h-[50px]"
+                                  value={activeSection.content.rtDesc || ''}
+                                  onChange={(e) => updateActiveSectionContent('rtDesc', e.target.value)}
+                                  placeholder="Deskripsi Kiri Atas..."
+                                />
+                                <label className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest block">Gambar Kanan Atas</label>
+                                <input 
+                                  type="file" 
+                                  onChange={(e) => handleFileUpload(e, 'grid-rt')} 
+                                  className="hidden" 
+                                  id="grid-rt-upload-input"
+                                  accept="image/*" 
+                                />
+                                <div className="flex items-center gap-3 mt-1">
+                                  {activeSection.content.rtImage ? (
+                                    <img src={activeSection.content.rtImage} alt="Preview rt" className="h-10 w-16 object-cover rounded-lg border" />
+                                  ) : (
+                                    <div className="h-10 w-16 bg-muted dark:bg-zinc-900 rounded-lg border border-dashed border-border flex items-center justify-center">
+                                      <Upload className="h-4 w-4 text-muted-foreground/45" />
+                                    </div>
+                                  )}
+                                  <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => document.getElementById('grid-rt-upload-input')?.click()}
+                                    className="h-8 rounded-lg text-[10px] font-bold"
+                                  >
+                                    Unggah Gambar
+                                  </Button>
+                                  <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => setActiveMediaPickerTarget({ type: 'grid-rt' })}
+                                    className="h-8 rounded-lg text-[10px] font-bold gap-1"
+                                  >
+                                    <ImageIcon className="h-3.5 w-3.5 text-primary" />
+                                    Pustaka
+                                  </Button>
                                 </div>
+                              </div>
+                            </div>
+
+                            {/* Row 2 (Kiri Bawah Gambar, Kanan Bawah Teks) */}
+                            <div className="p-3 bg-muted/20 dark:bg-zinc-950/20 border border-border/40 rounded-xl space-y-2">
+                              <span className="text-[9px] font-black text-gray-900 dark:text-white uppercase tracking-wider block">Baris 2 (Gambar Kiri & Teks Kanan)</span>
+                              <div className="space-y-1.5">
+                                <label className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest block">Judul Kanan Bawah</label>
+                                <input
+                                  type="text"
+                                  className="w-full rounded-lg border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs text-gray-900 dark:text-white font-bold"
+                                  value={activeSection.content.rbTitle || ''}
+                                  onChange={(e) => updateActiveSectionContent('rbTitle', e.target.value)}
+                                  placeholder="Judul Kanan Bawah"
+                                />
+                                <label className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest block">Deskripsi Kanan Bawah</label>
+                                <textarea
+                                  className="w-full rounded-lg border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs text-gray-700 dark:text-zinc-300 min-h-[50px]"
+                                  value={activeSection.content.rbDesc || ''}
+                                  onChange={(e) => updateActiveSectionContent('rbDesc', e.target.value)}
+                                  placeholder="Deskripsi Kanan Bawah..."
+                                />
+                                <label className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest block">Gambar Kiri Bawah</label>
+                                <input 
+                                  type="file" 
+                                  onChange={(e) => handleFileUpload(e, 'grid-rb')} 
+                                  className="hidden" 
+                                  id="grid-rb-upload-input"
+                                  accept="image/*" 
+                                />
+                                <div className="flex items-center gap-3 mt-1">
+                                  {activeSection.content.rbImage ? (
+                                    <img src={activeSection.content.rbImage} alt="Preview rb" className="h-10 w-16 object-cover rounded-lg border" />
+                                  ) : (
+                                    <div className="h-10 w-16 bg-muted dark:bg-zinc-900 rounded-lg border border-dashed border-border flex items-center justify-center">
+                                      <Upload className="h-4 w-4 text-muted-foreground/45" />
+                                    </div>
+                                  )}
+                                  <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => document.getElementById('grid-rb-upload-input')?.click()}
+                                    className="h-8 rounded-lg text-[10px] font-bold"
+                                  >
+                                    Unggah Gambar
+                                  </Button>
+                                  <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => setActiveMediaPickerTarget({ type: 'grid-rb' })}
+                                    className="h-8 rounded-lg text-[10px] font-bold gap-1"
+                                  >
+                                    <ImageIcon className="h-3.5 w-3.5 text-primary" />
+                                    Pustaka
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* LOGOS DYNAMIC FIELDS WITH MARQUEE */}
+                        {activeSection.type === 'logos' && (
+                          <div className="space-y-4">
+                            {/* Autoplay marquee scroll check toggle */}
+                            <div className="flex items-center justify-between p-3 rounded-xl bg-muted/20 dark:bg-zinc-950/20 border border-border/40">
+                              <span className="text-xs font-bold text-gray-800 dark:text-zinc-200">Geser Otomatis Marquee</span>
+                              <input 
+                                type="checkbox"
+                                checked={activeSection.content.marquee !== false}
+                                onChange={(e) => updateActiveSectionContent('marquee', e.target.checked)}
+                                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary/20 accent-primary"
+                              />
+                            </div>
+
+                            {/* Logos Upload Grid */}
+                            <div className="space-y-2 pt-2 border-t border-border dark:border-zinc-850">
+                              <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider block">Unggah Gambar Logo Mitra</label>
+                              <input 
+                                type="file" 
+                                onChange={(e) => handleFileUpload(e, 'logos')} 
+                                className="hidden" 
+                                id="logos-upload-input"
+                                accept="image/*" 
+                              />
+                              <div 
+                                onClick={() => document.getElementById('logos-upload-input')?.click()}
+                                className="border-2 border-dashed border-border dark:border-zinc-800 rounded-xl p-4 text-center cursor-pointer hover:border-primary bg-gray-50/20 dark:bg-zinc-950/20 hover:bg-gray-50 transition-all flex flex-col items-center justify-center gap-1 group"
+                              >
+                                <Upload className="h-4.5 w-4.5 text-muted-foreground group-hover:text-primary transition-colors" />
+                                <p className="text-[11px] font-bold text-gray-700 dark:text-zinc-300">Pilih & Tambah Logo</p>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => setActiveMediaPickerTarget({ type: 'logos' })}
+                                className="w-full flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl border border-border dark:border-zinc-800 hover:bg-muted/50 text-[10px] font-bold text-gray-700 dark:text-zinc-300 transition-all mt-2"
+                              >
+                                <ImageIcon className="h-3.5 w-3.5 text-primary" />
+                                Pilih dari Pustaka Media
+                              </button>
+
+                              {/* Uploaded logos list with deletion */}
+                              <div className="grid grid-cols-4 gap-2 mt-3">
+                                {(activeSection.content.images || []).map((imgUrl: string, imgIdx: number) => (
+                                  <div key={imgIdx} className="aspect-video bg-muted dark:bg-zinc-900 rounded-lg overflow-hidden border border-border/50 relative group flex items-center justify-center p-1.5">
+                                    <img src={imgUrl} alt="Logo partner" className="max-h-full max-w-full object-contain" />
+                                    <button
+                                      onClick={() => {
+                                        const newImages = (activeSection.content.images || []).filter((_: any, i: number) => i !== imgIdx);
+                                        updateActiveSectionContent('images', newImages);
+                                      }}
+                                      className="absolute inset-0 bg-red-500/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"
+                                    >
+                                      <Trash2 className="h-3.5 w-3.5" />
+                                    </button>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Fallback Text field */}
+                            <div className="space-y-1 pt-2 border-t border-border dark:border-zinc-850">
+                              <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider block">Teks Cadangan (Jika Gambar Kosong)</label>
+                              <input
+                                type="text"
+                                className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-900 dark:text-white font-medium"
+                                value={activeSection.content.items?.join(', ') || ''}
+                                onChange={(e) => {
+                                  const items = e.target.value.split(',').map(item => item.trim()).filter(Boolean);
+                                  updateActiveSectionContent('items', items);
+                                }}
+                                placeholder="Shopee, Tokopedia, Lazada"
+                              />
+                            </div>
+                          </div>
+                        )}
+
+                        {/* CONTACT DYNAMIC FIELDS */}
+                        {activeSection.type === 'contact' && (
+                          <div className="space-y-4">
+                            <div className="space-y-1">
+                              <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider">Judul Kontak</label>
+                              <input
+                                type="text"
+                                className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-900 dark:text-white font-bold"
+                                value={activeSection.content.title || ''}
+                                onChange={(e) => updateActiveSectionContent('title', e.target.value)}
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider">Nomor Telepon Kontak</label>
+                              <input
+                                type="text"
+                                className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs font-bold text-gray-900 dark:text-white"
+                                value={activeSection.content.phone || ''}
+                                onChange={(e) => updateActiveSectionContent('phone', e.target.value)}
+                                placeholder="Contoh: 081234567890"
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider">Alamat Usaha</label>
+                              <input
+                                type="text"
+                                className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs font-bold text-gray-900 dark:text-white"
+                                value={activeSection.content.address || ''}
+                                onChange={(e) => updateActiveSectionContent('address', e.target.value)}
+                                placeholder="Contoh: Jl. Diponegoro No. 12"
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider">Pesan Otomatis WhatsApp</label>
+                              <textarea
+                                className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs font-medium text-gray-900 dark:text-white min-h-[60px]"
+                                value={activeSection.content.whatsappText || ''}
+                                onChange={(e) => updateActiveSectionContent('whatsappText', e.target.value)}
+                              />
+                            </div>
+
+                            {/* Embed Google Maps URL input */}
+                            <div className="space-y-1 pt-2 border-t border-border dark:border-zinc-850">
+                              <label className="text-[9px] font-black text-gray-900 dark:text-white uppercase tracking-wider block">Embed Google Maps URL</label>
+                              <input
+                                type="text"
+                                className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs font-medium text-gray-900 dark:text-white"
+                                value={activeSection.content.mapUrl || ''}
+                                onChange={(e) => updateActiveSectionContent('mapUrl', e.target.value)}
+                                placeholder="https://www.google.com/maps/embed?pb=..."
+                              />
+                              <p className="text-[8px] text-muted-foreground mt-0.5">Salin tautan src dari menu Bagikan &gt; Sematkan Peta pada Google Maps.</p>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* FOOTER DYNAMIC FIELDS WITH WATERMARK */}
+                        {activeSection.type === 'footer' && (
+                          <div className="space-y-4">
+                            <div className="space-y-1">
+                              <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider block">Teks Hak Cipta (Copyright)</label>
+                              <input
+                                type="text"
+                                className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs font-bold text-gray-900 dark:text-white"
+                                value={activeSection.content.copyright || ''}
+                                onChange={(e) => updateActiveSectionContent('copyright', e.target.value)}
+                                placeholder="Contoh: © 2026 Onderstroom. Semua Hak Dilindungi."
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider block">Deskripsi Singkat Brand</label>
+                              <textarea
+                                className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs font-medium text-gray-900 dark:text-white min-h-[60px]"
+                                value={activeSection.content.description || ''}
+                                onChange={(e) => updateActiveSectionContent('description', e.target.value)}
+                                placeholder="Partner UMKM terbaik untuk kemudahan bisnis digital Anda."
+                              />
+                            </div>
+
+                            {/* Watermark Watermark toggle (Watermark Jagobisnis) */}
+                            <div className="flex items-center justify-between p-3 rounded-xl bg-muted/20 dark:bg-zinc-950/20 border border-border/40">
+                              <div className="space-y-0.5">
+                                <span className="text-xs font-bold text-gray-800 dark:text-zinc-200 block">Watermark JagoBisnis</span>
+                                <span className="text-[8px] text-muted-foreground block">Tampilkan logo bangga JagoBisnis di footer</span>
+                              </div>
+                              <input 
+                                type="checkbox"
+                                disabled
+                                checked={activeSection.content.watermark !== false}
+                                onChange={(e) => updateActiveSectionContent('watermark', e.target.checked)}
+                                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary/20 accent-primary"
+                              />
+                            </div>
+
+                            {/* Tautan Media Sosial */}
+                            <div className="space-y-3 pt-2 border-t border-border dark:border-zinc-850">
+                              <label className="text-[9px] font-black text-gray-900 dark:text-white uppercase tracking-wider block">Tautan Media Sosial</label>
+                              <div className="space-y-2">
                                 <div className="space-y-1">
-                                  <label className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest block">URL Tujuan Tombol</label>
+                                  <label className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest block">Instagram URL</label>
                                   <input
                                     type="text"
                                     className="w-full rounded-lg border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs text-gray-900 dark:text-white font-medium"
-                                    value={activeSection.content.buttonUrl || ''}
-                                    onChange={(e) => updateActiveSectionContent('buttonUrl', e.target.value)}
+                                    value={activeSection.content.instagram || ''}
+                                    onChange={(e) => updateActiveSectionContent('instagram', e.target.value)}
+                                    placeholder="https://instagram.com/akun-anda"
+                                  />
+                                </div>
+                                <div className="space-y-1">
+                                  <label className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest block">Facebook URL</label>
+                                  <input
+                                    type="text"
+                                    className="w-full rounded-lg border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs text-gray-900 dark:text-white font-medium"
+                                    value={activeSection.content.facebook || ''}
+                                    onChange={(e) => updateActiveSectionContent('facebook', e.target.value)}
+                                    placeholder="https://facebook.com/halaman-anda"
+                                  />
+                                </div>
+                                <div className="space-y-1">
+                                  <label className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest block">Twitter/X URL</label>
+                                  <input
+                                    type="text"
+                                    className="w-full rounded-lg border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs text-gray-900 dark:text-white font-medium"
+                                    value={activeSection.content.twitter || ''}
+                                    onChange={(e) => updateActiveSectionContent('twitter', e.target.value)}
+                                    placeholder="https://twitter.com/akun-anda"
                                   />
                                 </div>
                               </div>
-                            )}
+                            </div>
                           </div>
                         )}
                       </div>
@@ -1943,6 +2750,83 @@ export default function WebsiteBuilderPage() {
             </AnimatePresence>
           </div>
         </aside>
+      {/* PREMIUM MEDIA LIBRARY PICKER MODAL */}
+      {activeMediaPickerTarget && (
+        <div className="fixed inset-0 bg-black/65 z-[999] backdrop-blur-[2px] flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-zinc-950 border border-border dark:border-zinc-900 shadow-2xl rounded-2xl max-w-2xl w-full max-h-[80vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-200">
+            {/* Header */}
+            <div className="px-5 py-4 border-b border-border dark:border-zinc-900 flex items-center justify-between bg-gray-50/50 dark:bg-zinc-900/30">
+              <div>
+                <h3 className="text-sm font-black text-gray-900 dark:text-white flex items-center gap-2">
+                  <ImageIcon className="h-4.5 w-4.5 text-primary animate-bounce" />
+                  Pustaka Media Bisnis
+                </h3>
+                <p className="text-[10px] text-muted-foreground mt-0.5">Pilih berkas media yang pernah Anda unggah untuk digunakan kembali.</p>
+              </div>
+              <button 
+                onClick={() => setActiveMediaPickerTarget(null)}
+                className="h-8 w-8 rounded-xl border border-border dark:border-zinc-800 hover:bg-muted dark:hover:bg-zinc-900 flex items-center justify-center text-gray-500 dark:text-zinc-400 hover:text-gray-800 dark:hover:text-white transition-all"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            {/* Content Body */}
+            <div className="flex-1 p-5 overflow-y-auto min-h-[300px] max-h-[550px] bg-white dark:bg-zinc-950">
+              {mediaLibrary.length === 0 ? (
+                <div className="h-full flex flex-col items-center justify-center text-center p-8 space-y-3">
+                  <div className="h-12 w-12 rounded-2xl bg-primary/10 dark:bg-primary/5 flex items-center justify-center text-primary animate-pulse">
+                    <ImageIcon className="h-6 w-6" />
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-xs font-black text-gray-900 dark:text-white">Pustaka Media Kosong</p>
+                    <p className="text-[10px] text-muted-foreground max-w-xs">Semua berkas gambar yang Anda unggah melalui sidebar editor akan tersimpan otomatis di sini agar bisa dipakai ulang.</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+                  {mediaLibrary.map((item, idx) => (
+                    <div 
+                      key={idx}
+                      onClick={() => handleSelectMedia(item.url)}
+                      className="group border border-border dark:border-zinc-800 rounded-xl overflow-hidden cursor-pointer hover:border-primary dark:hover:border-primary bg-muted/20 dark:bg-zinc-900/10 hover:bg-white dark:hover:bg-zinc-900 transition-all flex flex-col shadow-sm hover:shadow-md"
+                    >
+                      <div className="aspect-square bg-muted dark:bg-zinc-900 relative flex items-center justify-center overflow-hidden">
+                        <img 
+                          src={item.url} 
+                          alt={item.name} 
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                        />
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/25 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
+                          <span className="text-[10px] font-black text-white bg-primary px-2.5 py-1 rounded-lg shadow">Gunakan</span>
+                        </div>
+                      </div>
+                      <div className="p-2 border-t border-border/60 dark:border-zinc-900 flex flex-col bg-white dark:bg-zinc-950">
+                        <span className="text-[9px] font-bold text-gray-700 dark:text-zinc-300 truncate max-w-full" title={item.name}>
+                          {item.name}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="px-5 py-3.5 border-t border-border dark:border-zinc-900 bg-gray-50/50 dark:bg-zinc-900/30 flex items-center justify-between">
+              <span className="text-[9px] text-muted-foreground font-medium">Klik pada gambar untuk langsung menerapkan ke elemen yang dipilih.</span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setActiveMediaPickerTarget(null)}
+                className="h-8 rounded-xl text-[10px] font-bold px-4"
+              >
+                Batal
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
       </div>
     </div>
   );

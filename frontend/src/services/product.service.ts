@@ -55,4 +55,11 @@ export const productService = {
     );
     return response.data;
   },
+
+  async getMedia(businessId: string): Promise<{ name: string; url: string }[]> {
+    const response = await apiClient.get<{ name: string; url: string }[]>(
+      `/businesses/${businessId}/products/media`,
+    );
+    return response.data;
+  },
 };
