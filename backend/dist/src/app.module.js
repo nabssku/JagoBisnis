@@ -16,6 +16,7 @@ const auth_module_1 = require("./auth/auth.module");
 const business_module_1 = require("./business/business.module");
 const product_module_1 = require("./product/product.module");
 const site_module_1 = require("./site/site.module");
+const post_module_1 = require("./post/post.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -33,6 +34,7 @@ exports.AppModule = AppModule = __decorate([
             business_module_1.BusinessModule,
             product_module_1.ProductModule,
             site_module_1.SiteModule,
+            post_module_1.PostModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService, prisma_service_1.PrismaService],

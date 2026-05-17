@@ -184,6 +184,18 @@ const AVAILABLE_BLOCKS = [
       facebook: '', 
       twitter: '' 
     } 
+  },
+  { 
+    type: 'blog', 
+    name: 'Blog & Kegiatan', 
+    description: 'Tampilkan pengumuman, promo, & artikel terbaru secara dinamis', 
+    defaultContent: { 
+      title: 'Artikel & Kegiatan Terbaru', 
+      subtitle: 'Ikuti pembaruan terkini, pengumuman, dan artikel edukatif dari kami.', 
+      layout: 'grid',
+      maxPosts: 3,
+      postTypeFilter: 'Semua'
+    } 
   }
 ];
 

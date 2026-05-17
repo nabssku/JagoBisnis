@@ -19,7 +19,8 @@ export type SectionType =
   | 'cta' 
   | 'faq'
   | 'contact'
-  | 'footer';
+  | 'footer'
+  | 'blog';
 
 export interface Section {
   id: string;

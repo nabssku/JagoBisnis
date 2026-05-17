@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { BusinessModule } from './business/business.module';
 import { ProductModule } from './product/product.module';
 import { SiteModule } from './site/site.module';
+import { PostModule } from './post/post.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { SiteModule } from './site/site.module';
     BusinessModule,
     ProductModule,
     SiteModule,
+    PostModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

@@ -38,6 +38,7 @@ model Business {
   BusinessUser BusinessUser[]
   Product      Product[]
   Site         Site?
+  Post         Post[]
 }
 
 model Site {
@@ -83,6 +84,35 @@ model Product {
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  business Business @relation(fields: [businessId], references: [id])
+
+  @@unique([businessId, slug])
+}
+
+model Post {
+  id                String   @id @default(uuid())
+  businessId        String
+  title             String
+  slug              String
+  coverImage        String?
+  images            String[] @default([])
+  focusKeyword      String?
+  metaTitle         String?
+  metaDescription   String?
+  content           String
+  summary           String?
+  ctaType           String?  @default("Tanpa Tombol")
+  ctaValue          String?
+  imageAlt          String?
+  contentType       String   @default("Artikel")
+  status            String   @default("Draft")
+  isPinned          Boolean  @default(false)
+  tags              String[] @default([])
+  views             Int      @default(0)
+  relatedProductIds String[] @default([])
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
   business Business @relation(fields: [businessId], references: [id])
 

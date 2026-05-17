@@ -12,12 +12,14 @@ import {
   Type, 
   Package, 
   MessageSquare, 
-  GripVertical 
+  GripVertical,
+  FileText
 } from 'lucide-react';
 import { HeroSectionEditor } from './hero-section-editor';
 import { AboutSectionEditor } from './about-section-editor';
 import { ProductsSectionEditor } from './products-section-editor';
 import { ContactSectionEditor } from './contact-section-editor';
+import { BlogSectionEditor } from './blog-section-editor';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
@@ -55,6 +57,7 @@ export const SectionListEditor: React.FC<SectionListEditorProps> = ({ sections, 
     about: Layout,
     products: Package,
     contact: MessageSquare,
+    blog: FileText,
   };
 
   const renderEditor = (section: Section) => {
@@ -67,6 +70,8 @@ export const SectionListEditor: React.FC<SectionListEditorProps> = ({ sections, 
         return <ProductsSectionEditor content={section.content} onChange={(c) => updateSectionContent(section.id, c)} />;
       case 'contact':
         return <ContactSectionEditor content={section.content} onChange={(c) => updateSectionContent(section.id, c)} />;
+      case 'blog':
+        return <BlogSectionEditor content={section.content} onChange={(c) => updateSectionContent(section.id, c)} />;
       default:
         return null;
     }

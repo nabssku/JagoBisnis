@@ -161,6 +161,11 @@ Tasks:
 - [x] Robust & Dynamic Backend CORS Config: Migrated hardcoded localhost origin to support dynamic `FRONTEND_URL` environment lists, added support for custom options and headers (Content-Type, Accept, Authorization, X-Requested-With), and allowed any dynamic local host/IP testing in development mode.
 - [x] Interactive Dashboard Profile Dropdown: Overhauled the profile header shell element to toggle a premium, beautiful floating dropdown matching the user's design screenshot, with custom gear settings actions, color-coordinated logout controls, clean light/dark support, and automatic close-on-click-outside listener.
 - [x] Global User Account Settings Page: Created a dedicated personal account settings page at `/dashboard/settings` containing profile photo preset picker/URL custom input, display name, phone number, email address, and old/new password update forms. Integrated database models, RESTful API endpoints, Zod schema validations, and state handling.
+- [x] Backend Blog/Post Module: Engineered PostgreSQL schema models, NestJS controller routing `/api/v1/posts`, data transfer objects, Pino logging, and secure JWT-guarded mutations.
+- [x] Minimalist Blog Dashboard CRUD Page: Created `/dashboard/business/[id]/posts` featuring quick search, status categorization (Draft, Publik, Arsip), cover thumbnails, dynamic list layout, and a smooth creation entry flow.
+- [x] Premium PostFormModal with Live SEO Quality: Built double-column editing panels featuring cover image select, 8 support gallery items, a full rich-text Markdown editor, metadata descriptors (keywords, title, description), and live-updating SEO score metrics with actionable checklists.
+- [x] Customization Block integration: Added the 'Blog' block template into the 3-column builder workspace, supporting direct grid/table canvas mockups and custom dynamic item layouts.
+- [x] Public Article Sliding Drawer & Lightbox zoom: Rendered high-fidelity blog sections on `/jagobisnis/[slug]`, opening comprehensive overlay slider sheets displaying full text, supporting gallery lightboxes, and linked cross-selling related product card CTA items.
 
 
 
