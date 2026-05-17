@@ -23,4 +23,12 @@ export interface Site {
   publishedAt?: string;
   createdAt: string;
   updatedAt: string;
+  business?: {
+    name: string;
+    phone?: string;
+    email?: string;
+    address?: string;
+    Product?: any[];
+  };
 }
+

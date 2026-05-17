@@ -7,6 +7,8 @@ import { Section, SiteTheme } from '@/types/site';
 import { Product } from '@/types/product';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useParams } from 'next/navigation';
+import Link from 'next/link';
 
 interface SectionRendererProps {
   section: Section;
@@ -23,6 +25,9 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
   index, 
   siteTitle 
 }) => {
+  const params = useParams();
+  const slug = params?.slug as string;
+
   const { content } = section;
 
   const containerVariants: Variants = {
@@ -162,50 +167,54 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
 
             {content.showProducts && products.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-12">
-                {products.map((product, i) => (
-                  <motion.div 
-                    key={product.id} 
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1, duration: 0.5 }}
-                    className="group flex flex-col h-full rounded-[2.5rem] bg-white border border-border/50 overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-700 hover:-translate-y-4"
-                  >
-                    <div className="aspect-[4/5] bg-muted flex items-center justify-center overflow-hidden relative">
-                      {product.imageUrl ? (
-                        /* eslint-disable-next-line @next/next/no-img-element */
-                        <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
-                      ) : (
-                        <div className="flex flex-col items-center opacity-10">
-                          <Package className="h-20 w-20 mb-4" />
-                          <span className="text-xs font-black uppercase tracking-widest text-center px-4">Katalog {siteTitle}</span>
+                {products.map((product, i) => {
+                  const productDetailUrl = slug ? `/jagobisnis/${slug}/product/${product.id}` : '#';
+                  return (
+                    <Link key={product.id} href={productDetailUrl} className="block h-full">
+                      <motion.div 
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.1, duration: 0.5 }}
+                        className="group flex flex-col h-full rounded-[2.5rem] bg-white border border-border/50 overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-700 hover:-translate-y-4 cursor-pointer"
+                      >
+                        <div className="aspect-[4/5] bg-muted flex items-center justify-center overflow-hidden relative">
+                          {product.imageUrl ? (
+                            /* eslint-disable-next-line @next/next/no-img-element */
+                            <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+                          ) : (
+                            <div className="flex flex-col items-center opacity-10">
+                              <Package className="h-20 w-20 mb-4" />
+                              <span className="text-xs font-black uppercase tracking-widest text-center px-4">Katalog {siteTitle}</span>
+                            </div>
+                          )}
+                          <div className="absolute top-6 left-6">
+                            <div className="bg-white/90 backdrop-blur-md rounded-full px-4 py-1.5 text-[10px] font-black uppercase tracking-widest shadow-sm">
+                              {product.category || 'Terbaru'}
+                            </div>
+                          </div>
                         </div>
-                      )}
-                      <div className="absolute top-6 left-6">
-                        <div className="bg-white/90 backdrop-blur-md rounded-full px-4 py-1.5 text-[10px] font-black uppercase tracking-widest shadow-sm">
-                          {product.category || 'Terbaru'}
+                        <div className="p-10 flex flex-col flex-1">
+                          <div className="flex-1 space-y-3">
+                            <h3 className="font-black text-2xl tracking-tight text-gray-900 group-hover:text-primary transition-colors" style={{ '--primary': theme.primaryColor } as any}>{product.name}</h3>
+                            <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 font-medium">{product.description}</p>
+                          </div>
+                          <div className="flex items-center justify-between mt-10 pt-8 border-t border-border/50">
+                            <div className="flex flex-col">
+                              <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-1">Harga</span>
+                              <p className="font-black text-2xl tracking-tighter" style={{ color: theme.primaryColor }}>
+                                Rp{product.price.toLocaleString('id-ID')}
+                              </p>
+                            </div>
+                            <Button size="icon" className="h-14 w-14 rounded-2xl shadow-lg transition-all hover:rotate-90 active:scale-90" style={{ backgroundColor: theme.primaryColor }}>
+                              <ChevronRight className="h-7 w-7" />
+                            </Button>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                    <div className="p-10 flex flex-col flex-1">
-                      <div className="flex-1 space-y-3">
-                        <h3 className="font-black text-2xl tracking-tight text-gray-900 group-hover:text-primary transition-colors" style={{ '--primary': theme.primaryColor } as any}>{product.name}</h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 font-medium">{product.description}</p>
-                      </div>
-                      <div className="flex items-center justify-between mt-10 pt-8 border-t border-border/50">
-                        <div className="flex flex-col">
-                          <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-1">Harga</span>
-                          <p className="font-black text-2xl tracking-tighter" style={{ color: theme.primaryColor }}>
-                            Rp{product.price.toLocaleString('id-ID')}
-                          </p>
-                        </div>
-                        <Button size="icon" className="h-14 w-14 rounded-2xl shadow-lg transition-all hover:rotate-90 active:scale-90" style={{ backgroundColor: theme.primaryColor }}>
-                          <ChevronRight className="h-7 w-7" />
-                        </Button>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
+                      </motion.div>
+                    </Link>
+                  );
+                })}
               </div>
             ) : (
               <div className="py-40 text-center bg-muted/30 rounded-[4rem] border-2 border-dashed border-border/50 flex flex-col items-center gap-6">
