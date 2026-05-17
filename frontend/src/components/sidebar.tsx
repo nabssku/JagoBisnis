@@ -62,19 +62,19 @@ export function Sidebar({ businessId }: SidebarProps) {
     { label: 'Ringkasan', icon: LayoutDashboard, href: '/dashboard', active: pathname === '/dashboard' },
     { label: 'Kelola Bisnis', icon: Store, href: businessId ? `/dashboard/business/${businessId}/settings` : '#', active: pathname.includes('/settings') },
     { label: 'Konten', icon: FileText, href: businessId ? `/dashboard/business/${businessId}/posts` : '#', active: pathname.includes('/posts') },
-    { label: 'Inbox', icon: Mail, href: '#', active: false },
+    // { label: 'Inbox', icon: Mail, href: '#', active: false },
     { label: 'Sosial Media', icon: Send, href: businessId ? `/dashboard/business/${businessId}/social-posts` : '#', active: pathname.includes('/social-posts') },
     { label: 'Katalog', icon: LayoutList, href: businessId ? `/dashboard/business/${businessId}/products` : '#', active: pathname.includes('/products') },
     { label: 'Media', icon: ImageIcon, href: businessId ? `/dashboard/business/${businessId}/media` : '#', active: pathname.includes('/media') },
     { label: 'Pesanan', icon: ShoppingBag, href: businessId ? `/dashboard/business/${businessId}/orders` : '#', active: pathname.includes('/orders') },
     { label: 'Kustomisasi', icon: Edit, href: businessId ? `/dashboard/business/${businessId}/website` : '#', active: pathname.includes('/website') },
     { label: 'Integrasi', icon: Share2, href: businessId ? `/dashboard/business/${businessId}/integrations` : '#', active: pathname.includes('/integrations') },
-    { label: 'Tools', icon: Wrench, href: '#', active: false },
-    { label: 'Penghasilan', icon: DollarSign, href: '#', active: false },
-    { label: 'Materi Promosi', icon: Speaker, href: '#', active: false },
-    { label: 'Langganan', icon: CreditCard, href: '#', active: false },
-    { label: 'Pengaturan', icon: Settings, href: '#', active: false },
-    { label: 'Bantuan', icon: HelpCircle, href: '#', active: false },
+    // { label: 'Tools', icon: Wrench, href: '#', active: false },
+    // { label: 'Penghasilan', icon: DollarSign, href: '#', active: false },
+    // { label: 'Materi Promosi', icon: Speaker, href: '#', active: false },
+    // { label: 'Langganan', icon: CreditCard, href: '#', active: false },
+    // { label: 'Pengaturan', icon: Settings, href: '#', active: false },
+    // { label: 'Bantuan', icon: HelpCircle, href: '#', active: false },
   ];
 
   return (
@@ -92,7 +92,7 @@ export function Sidebar({ businessId }: SidebarProps) {
       {/* Site URL Box */}
       {business && (
         <div className="px-4 mb-4 shrink-0">
-          <div 
+          <div
             onClick={() => window.open(`/jagobisnis/${business.slug}`, '_blank')}
             className="flex items-center justify-between rounded-xl bg-gray-50 dark:bg-zinc-900/30 border border-gray-100 dark:border-zinc-800/80 p-3 group hover:border-gray-200 dark:hover:border-zinc-700 transition-all cursor-pointer"
           >
@@ -114,8 +114,8 @@ export function Sidebar({ businessId }: SidebarProps) {
               href={route.href}
               className={cn(
                 'group flex items-center justify-between rounded-xl px-4 py-2.5 text-sm font-medium transition-all duration-200',
-                route.active 
-                  ? 'bg-gray-100 dark:bg-zinc-900 text-gray-900 dark:text-white shadow-sm' 
+                route.active
+                  ? 'bg-gray-100 dark:bg-zinc-900 text-gray-900 dark:text-white shadow-sm'
                   : 'text-gray-500 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-zinc-900/50 hover:text-gray-900 dark:hover:text-white',
                 route.href === '#' && 'opacity-60 cursor-not-allowed'
               )}
@@ -134,7 +134,7 @@ export function Sidebar({ businessId }: SidebarProps) {
       <div className="p-4 border-t border-gray-100 dark:border-zinc-900 shrink-0 space-y-4">
         {/* Theme Toggle */}
         <div className="flex items-center justify-between rounded-2xl bg-gray-50 dark:bg-zinc-900/50 p-1.5 border border-gray-100 dark:border-zinc-800/80 shadow-sm">
-          <button 
+          <button
             onClick={() => setTheme('light')}
             className={cn(
               "flex h-8 flex-1 items-center justify-center rounded-xl transition-all hover:scale-[1.02]",
@@ -145,7 +145,7 @@ export function Sidebar({ businessId }: SidebarProps) {
           >
             <Sun className="h-4 w-4" />
           </button>
-          <button 
+          <button
             onClick={() => setTheme('dark')}
             className={cn(
               "flex h-8 flex-1 items-center justify-center rounded-xl transition-all hover:scale-[1.02]",
@@ -156,7 +156,7 @@ export function Sidebar({ businessId }: SidebarProps) {
           >
             <Moon className="h-4 w-4" />
           </button>
-          <button 
+          <button
             onClick={() => setTheme('system')}
             className={cn(
               "flex h-8 flex-1 items-center justify-center rounded-xl transition-all hover:scale-[1.02]",

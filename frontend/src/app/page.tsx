@@ -4,17 +4,17 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { 
-  Store, 
-  Globe, 
-  ArrowRight, 
-  Check, 
-  ShieldCheck, 
-  Zap, 
-  Smartphone, 
-  ShoppingBag, 
-  MessageSquare, 
-  ChevronDown, 
+import {
+  Store,
+  Globe,
+  ArrowRight,
+  Check,
+  ShieldCheck,
+  Zap,
+  Smartphone,
+  ShoppingBag,
+  MessageSquare,
+  ChevronDown,
   HelpCircle,
   Play,
   Layers,
@@ -50,7 +50,7 @@ const FAQ_ITEMS = [
 
 export default function LandingPage() {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
-  
+
   // Interactive Showcase States
   const [showcaseCategory, setShowcaseCategory] = useState<'kopi' | 'camilan'>('kopi');
   const [builderActiveBlock, setBuilderActiveBlock] = useState<string>('hero');
@@ -58,7 +58,7 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-zinc-950 text-gray-900 dark:text-zinc-50 font-sans transition-colors duration-300">
-      
+
       {/* 1. Header / Navigation */}
       <header className="sticky top-0 z-40 w-full border-b border-gray-100 dark:border-zinc-900 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl h-20 items-center justify-between px-6">
@@ -81,14 +81,14 @@ export default function LandingPage() {
 
           {/* Action CTAs */}
           <div className="flex items-center gap-4">
-            <Link 
-              href="/login" 
+            <Link
+              href="/login"
               className="text-sm font-black text-gray-700 dark:text-zinc-300 hover:text-[#e8aa20] transition-colors px-3 py-2"
             >
               Masuk
             </Link>
-            <Link 
-              href="/register" 
+            <Link
+              href="/register"
               className="h-11 rounded-xl bg-[#e8aa20] hover:bg-[#d4991c] px-5 text-sm font-black text-black shadow-md shadow-amber-500/10 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center"
             >
               Mulai Gratis
@@ -104,7 +104,7 @@ export default function LandingPage() {
 
         <div className="mx-auto max-w-7xl px-6">
           <div className="grid gap-12 lg:grid-cols-12 items-center">
-            
+
             {/* Left Content */}
             <div className="lg:col-span-6 space-y-8 text-center lg:text-left">
               <div className="inline-flex items-center gap-2 rounded-full bg-[#e8aa20]/10 dark:bg-[#e8aa20]/20 px-4 py-1.5 text-xs font-black uppercase tracking-[0.2em] text-[#e8aa20]">
@@ -123,15 +123,15 @@ export default function LandingPage() {
               </div>
 
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                <Link 
-                  href="/register" 
+                <Link
+                  href="/register"
                   className="w-full sm:w-auto h-14 rounded-xl bg-[#e8aa20] hover:bg-[#d4991c] px-8 text-base font-black text-black shadow-lg shadow-amber-500/20 hover:scale-105 transition-all flex items-center justify-center gap-2 group"
                 >
                   Mulai Gratis Sekarang
                   <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
-                <a 
-                  href="#fitur" 
+                <a
+                  href="#fitur"
                   className="w-full sm:w-auto h-14 rounded-xl border border-gray-200 dark:border-zinc-800 bg-gray-50/50 dark:bg-zinc-900/50 hover:bg-gray-100 px-8 text-base font-black text-gray-800 dark:text-zinc-200 hover:scale-105 transition-all flex items-center justify-center"
                 >
                   Lihat Fitur
@@ -158,7 +158,7 @@ export default function LandingPage() {
             {/* Right Showcase: Interactive Editor Mockup */}
             <div className="lg:col-span-6">
               <div className="relative rounded-[2.5rem] bg-zinc-900 p-3 shadow-2xl border-4 border-zinc-800">
-                
+
                 {/* Mock Website Bar */}
                 <div className="bg-zinc-950 rounded-[2rem] overflow-hidden border border-zinc-800">
                   <div className="flex items-center justify-between px-4 py-3 bg-zinc-900/50 border-b border-zinc-850 shrink-0">
@@ -197,13 +197,13 @@ export default function LandingPage() {
 
                     {/* Filter Category */}
                     <div className="flex gap-2">
-                      <button 
+                      <button
                         onClick={() => setShowcaseCategory('kopi')}
                         className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${showcaseCategory === 'kopi' ? 'bg-[#e8aa20] text-black' : 'bg-zinc-800 text-zinc-400'}`}
                       >
                         Varian Kopi
                       </button>
-                      <button 
+                      <button
                         onClick={() => setShowcaseCategory('camilan')}
                         className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${showcaseCategory === 'camilan' ? 'bg-[#e8aa20] text-black' : 'bg-zinc-800 text-zinc-400'}`}
                       >
@@ -265,7 +265,7 @@ export default function LandingPage() {
       <section id="fitur" className="py-20 lg:py-32 bg-gray-50/50 dark:bg-zinc-900/20 border-y border-gray-100 dark:border-zinc-900">
         <div className="mx-auto max-w-7xl px-6">
           <div className="grid gap-12 lg:grid-cols-12 items-center">
-            
+
             {/* Left Mockup Showcase */}
             <div className="lg:col-span-6 order-last lg:order-first">
               <div className="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-3xl p-6 shadow-xl space-y-6">
@@ -278,7 +278,7 @@ export default function LandingPage() {
                 </div>
 
                 <div className="space-y-3">
-                  <div 
+                  <div
                     onClick={() => setBuilderActiveBlock('hero')}
                     className={`p-4 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${builderActiveBlock === 'hero' ? 'border-[#e8aa20] bg-[#e8aa20]/5' : 'border-gray-100 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-800'}`}
                   >
@@ -292,7 +292,7 @@ export default function LandingPage() {
                     {builderActiveBlock === 'hero' && <Check className="h-4 w-4 text-[#e8aa20]" />}
                   </div>
 
-                  <div 
+                  <div
                     onClick={() => setBuilderActiveBlock('katalog')}
                     className={`p-4 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${builderActiveBlock === 'katalog' ? 'border-[#e8aa20] bg-[#e8aa20]/5' : 'border-gray-100 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-800'}`}
                   >
@@ -306,7 +306,7 @@ export default function LandingPage() {
                     {builderActiveBlock === 'katalog' && <Check className="h-4 w-4 text-[#e8aa20]" />}
                   </div>
 
-                  <div 
+                  <div
                     onClick={() => setBuilderActiveBlock('wa')}
                     className={`p-4 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${builderActiveBlock === 'wa' ? 'border-[#e8aa20] bg-[#e8aa20]/5' : 'border-gray-100 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-800'}`}
                   >
@@ -358,8 +358,8 @@ export default function LandingPage() {
               </ul>
 
               <div className="pt-4">
-                <Link 
-                  href="/register" 
+                <Link
+                  href="/register"
                   className="inline-flex items-center gap-2 text-sm font-black text-[#e8aa20] hover:text-[#d4991c] group"
                 >
                   Coba Buat Website Pertama Anda
@@ -376,7 +376,7 @@ export default function LandingPage() {
       <section id="toko" className="py-20 lg:py-32">
         <div className="mx-auto max-w-7xl px-6">
           <div className="grid gap-12 lg:grid-cols-12 items-center">
-            
+
             {/* Left Content */}
             <div className="lg:col-span-6 space-y-6">
               <div className="inline-flex items-center gap-2 rounded-full bg-green-500/10 px-4 py-1 text-xs font-black uppercase text-green-500">
@@ -408,8 +408,8 @@ export default function LandingPage() {
               </ul>
 
               <div className="pt-4">
-                <Link 
-                  href="/register" 
+                <Link
+                  href="/register"
                   className="inline-flex items-center gap-2 text-sm font-black text-green-500 hover:text-green-600 group"
                 >
                   Mulai Jualan dengan Katalog JagoBisnis
@@ -421,25 +421,25 @@ export default function LandingPage() {
             {/* Right Interactive Checkout Simulation */}
             <div className="lg:col-span-6">
               <div className="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-3xl p-6 shadow-xl space-y-6">
-                
+
                 {/* Steps indicator */}
                 <div className="flex items-center justify-between border-b border-gray-100 dark:border-zinc-800 pb-4">
                   <span className="text-xs font-black text-gray-400 uppercase">Simulasi Checkout Pelanggan</span>
                   <div className="flex gap-2">
-                    <button 
-                      onClick={() => setCheckoutStep(1)} 
+                    <button
+                      onClick={() => setCheckoutStep(1)}
                       className={`h-6 w-6 rounded-full text-xs font-bold flex items-center justify-center transition-all ${checkoutStep === 1 ? 'bg-[#e8aa20] text-black font-black' : 'bg-gray-100 dark:bg-zinc-850 text-gray-400'}`}
                     >
                       1
                     </button>
-                    <button 
-                      onClick={() => setCheckoutStep(2)} 
+                    <button
+                      onClick={() => setCheckoutStep(2)}
                       className={`h-6 w-6 rounded-full text-xs font-bold flex items-center justify-center transition-all ${checkoutStep === 2 ? 'bg-[#e8aa20] text-black font-black' : 'bg-gray-100 dark:bg-zinc-850 text-gray-400'}`}
                     >
                       2
                     </button>
-                    <button 
-                      onClick={() => setCheckoutStep(3)} 
+                    <button
+                      onClick={() => setCheckoutStep(3)}
                       className={`h-6 w-6 rounded-full text-xs font-bold flex items-center justify-center transition-all ${checkoutStep === 3 ? 'bg-[#e8aa20] text-black font-black' : 'bg-gray-100 dark:bg-zinc-850 text-gray-400'}`}
                     >
                       3
@@ -463,7 +463,7 @@ export default function LandingPage() {
                           <span className="text-xs font-bold">1x Es Kopi Susu Aren</span>
                           <span className="text-xs font-black text-[#e8aa20]">Rp 18.000</span>
                         </div>
-                        <Button 
+                        <Button
                           onClick={() => setCheckoutStep(2)}
                           className="w-full h-11 bg-black dark:bg-white text-white dark:text-black font-black rounded-xl text-xs flex items-center justify-center gap-2"
                         >
@@ -492,7 +492,7 @@ export default function LandingPage() {
                             <span className="text-xs font-bold">Transfer Bank</span>
                           </div>
                         </div>
-                        <Button 
+                        <Button
                           onClick={() => setCheckoutStep(3)}
                           className="w-full h-11 bg-[#e8aa20] text-black font-black rounded-xl text-xs flex items-center justify-center gap-2"
                         >
@@ -515,7 +515,7 @@ export default function LandingPage() {
                         </div>
                         <h4 className="text-sm font-black text-green-500">Pembayaran Sukses!</h4>
                         <p className="text-[11px] text-gray-400 dark:text-zinc-500">Rincian pesanan telah dikirim ke WhatsApp Pembeli & Penjual secara otomatis.</p>
-                        <Button 
+                        <Button
                           onClick={() => setCheckoutStep(1)}
                           variant="outline"
                           className="h-9 px-4 border-gray-200 dark:border-zinc-800 text-xs font-bold rounded-xl"
@@ -538,7 +538,7 @@ export default function LandingPage() {
       <section id="faq" className="py-20 lg:py-32 bg-gray-50/50 dark:bg-zinc-900/20 border-t border-gray-100 dark:border-zinc-900">
         <div className="mx-auto max-w-7xl px-6">
           <div className="grid gap-12 lg:grid-cols-12">
-            
+
             {/* Left FAQ text */}
             <div className="lg:col-span-4 space-y-6 text-center lg:text-left">
               <div className="inline-flex items-center gap-2 rounded-full bg-[#e8aa20]/10 px-4 py-1 text-xs font-black uppercase text-[#e8aa20]">
@@ -552,13 +552,13 @@ export default function LandingPage() {
                 Punya pertanyaan mengenai fitur, biaya, atau batasan sistem? Temukan jawabannya di sini, atau hubungi kami langsung via Live Chat.
               </p>
               <div className="pt-2">
-                <a 
-                  href="https://wa.me/628123456789" 
+                <a
+                  href="https://wa.me/6285930258437"
                   target="_blank"
                   className="inline-flex h-12 items-center justify-center rounded-xl bg-green-500 hover:bg-green-600 px-6 text-sm font-black text-white hover:scale-105 transition-all gap-2"
                 >
                   <MessageSquare className="h-5 w-5" />
-                  Hubungi Tim Temmu
+                  Hubungi Tim JagoBisnis
                 </a>
               </div>
             </div>
@@ -566,7 +566,7 @@ export default function LandingPage() {
             {/* Right Accordion List */}
             <div className="lg:col-span-8 space-y-4">
               {FAQ_ITEMS.map((item, idx) => (
-                <div 
+                <div
                   key={idx}
                   className="rounded-2xl border border-gray-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
                 >
@@ -579,7 +579,7 @@ export default function LandingPage() {
                     </span>
                     <ChevronDown className={`h-5 w-5 text-gray-400 shrink-0 transition-transform duration-300 ${activeFaq === idx ? 'rotate-180 text-[#e8aa20]' : ''}`} />
                   </button>
-                  
+
                   <AnimatePresence initial={false}>
                     {activeFaq === idx && (
                       <motion.div
@@ -616,14 +616,14 @@ export default function LandingPage() {
                 Gabung bersama ratusan UMKM Indonesia yang telah Go-Digital menggunakan aplikasi modern JagoBisnis. Instan, mudah, dan gratis selamanya.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-                <Link 
+                <Link
                   href="/register"
                   className="w-full sm:w-auto h-14 rounded-xl bg-[#e8aa20] hover:bg-[#d4991c] px-8 text-base font-black text-black hover:scale-105 transition-all flex items-center justify-center gap-2"
                 >
                   Buat Profil Toko Sekarang
                   <ArrowRight className="h-5 w-5" />
                 </Link>
-                <Link 
+                <Link
                   href="/login"
                   className="w-full sm:w-auto h-14 rounded-xl border border-zinc-700 bg-zinc-800/50 hover:bg-zinc-800 px-8 text-base font-black text-white hover:scale-105 transition-all flex items-center justify-center"
                 >

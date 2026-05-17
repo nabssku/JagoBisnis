@@ -108,7 +108,7 @@ export default function DashboardPage() {
     <DashboardShell businessId={businessId} user={user}>
       <div className="space-y-10 pb-10">
         {/* Top Cards Section */}
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid gap-6 lg:grid-cols-2">
           {/* Welcome Banner */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -164,7 +164,7 @@ export default function DashboardPage() {
           </motion.div>
 
           {/* Integration Card (Xendit) */}
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1 }}
@@ -188,7 +188,7 @@ export default function DashboardPage() {
               Hubungkan Xendit
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
-          </motion.div>
+          </motion.div> */}
         </div>
 
         {/* Activity Summary Section */}
@@ -232,23 +232,23 @@ export default function DashboardPage() {
               <div className="space-y-2">
                 <p className="text-[10px] font-black uppercase tracking-widest text-amber-400">Paket Anda</p>
                 <div className="flex items-center justify-between">
-                  <h3 className="text-4xl font-black tracking-tight">Free</h3>
+                  <h3 className="text-4xl font-black tracking-tight">Free | Beta</h3>
                   <div className="h-10 w-10 rounded-xl bg-amber-400/10 flex items-center justify-center text-amber-400">
                     <Star className="h-5 w-5 fill-amber-400" />
                   </div>
                 </div>
               </div>
               <p className="text-sm font-medium text-gray-400 leading-relaxed">
-                Dapatkan fitur analitik mendalam, materi promosi, dan domain kustom dengan berlangganan paket Premium.
+                Karena masih dalam tahap beta, kamu mendapatkan akses gratis selamanya.
               </p>
-              <Button className="w-full h-12 rounded-xl bg-white/5 border border-white/10 font-black text-white hover:bg-white/10 transition-all">
+              {/* <Button className="w-full h-12 rounded-xl bg-white/5 border border-white/10 font-black text-white hover:bg-white/10 transition-all">
                 Upgrade Sekarang
-              </Button>
+              </Button> */}
             </div>
           </motion.div>
 
           {/* Community Section */}
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
@@ -269,7 +269,7 @@ export default function DashboardPage() {
             <div className="h-24 w-24 rounded-2xl border-2 border-gray-100 dark:border-zinc-800 p-2 shrink-0 bg-white dark:bg-zinc-800">
               <QrCode className="h-full w-full text-gray-300 dark:text-zinc-500" />
             </div>
-          </motion.div>
+          </motion.div> */}
         </div>
       </div>
     </DashboardShell>
