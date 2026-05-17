@@ -158,6 +158,7 @@ Tasks:
 - [x] Bento Gallery Layout & Lightbox Viewer: Overhauled the Bento layout in `SectionRenderer` to match the exact non-uniform grid layout of the user's mockup image using explicit Tailwind `col-start` & `row-start` mappings. Implemented a beautiful, highly interactive full-screen Lightbox Modal trigger on click for all gallery items on the public page with a dark background dimming backdrop, blur, smooth scale-in animations, and a premium border.
 - [x] Live Editor Dark Mode Polish: Fully aligned tab select active/inactive states, preview mode switchers high contrast hovers, disabled side action chevrons, rich-text formatting toolbar icons, theme preset swatches, and upload dropzones (About Us, Logo List, Gallery) for visually seamless Dark Mode support.
 - [x] Compilation & Build Check: Checked TypeScript checks, Next.js static asset optimization, and verified 100% SUCCESS build with zero compilation warnings or errors.
+- [x] Robust & Dynamic Backend CORS Config: Migrated hardcoded localhost origin to support dynamic `FRONTEND_URL` environment lists, added support for custom options and headers (Content-Type, Accept, Authorization, X-Requested-With), and allowed any dynamic local host/IP testing in development mode.
 
 
 ## Phase 11: Post-MVP & Optimization
