@@ -13,13 +13,13 @@ export declare class BusinessController {
     create(req: RequestWithUser, dto: CreateBusinessDto): Promise<{
         description: string | null;
         name: string;
+        phone: string | null;
         id: string;
         createdAt: Date;
         updatedAt: Date;
         slug: string;
         logoUrl: string | null;
         category: string | null;
-        phone: string | null;
         address: string | null;
     }>;
     findAll(req: RequestWithUser): Promise<({
@@ -29,49 +29,49 @@ export declare class BusinessController {
     } & {
         description: string | null;
         name: string;
+        phone: string | null;
         id: string;
         createdAt: Date;
         updatedAt: Date;
         slug: string;
         logoUrl: string | null;
         category: string | null;
-        phone: string | null;
         address: string | null;
     })[]>;
     findOne(req: RequestWithUser, id: string): Promise<{
         description: string | null;
         name: string;
+        phone: string | null;
         id: string;
         createdAt: Date;
         updatedAt: Date;
         slug: string;
         logoUrl: string | null;
         category: string | null;
-        phone: string | null;
         address: string | null;
     }>;
     update(req: RequestWithUser, id: string, dto: UpdateBusinessDto): Promise<{
         description: string | null;
         name: string;
+        phone: string | null;
         id: string;
         createdAt: Date;
         updatedAt: Date;
         slug: string;
         logoUrl: string | null;
         category: string | null;
-        phone: string | null;
         address: string | null;
     }>;
     remove(req: RequestWithUser, id: string): Promise<{
         description: string | null;
         name: string;
+        phone: string | null;
         id: string;
         createdAt: Date;
         updatedAt: Date;
         slug: string;
         logoUrl: string | null;
         category: string | null;
-        phone: string | null;
         address: string | null;
     }>;
 }

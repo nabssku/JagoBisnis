@@ -18,6 +18,16 @@ export const authService = {
     return response.data;
   },
 
+  async updateProfile(data: { name: string; email: string; phone?: string; avatarUrl?: string }): Promise<User> {
+    const response = await apiClient.put<User>('/auth/profile', data);
+    return response.data;
+  },
+
+  async updatePassword(data: { oldPassword: string; newPassword: string }): Promise<{ success: boolean; message: string }> {
+    const response = await apiClient.put<{ success: boolean; message: string }>('/auth/password', data);
+    return response.data;
+  },
+
   logout() {
     localStorage.removeItem('accessToken');
   }

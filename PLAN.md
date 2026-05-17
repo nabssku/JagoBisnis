@@ -160,6 +160,8 @@ Tasks:
 - [x] Compilation & Build Check: Checked TypeScript checks, Next.js static asset optimization, and verified 100% SUCCESS build with zero compilation warnings or errors.
 - [x] Robust & Dynamic Backend CORS Config: Migrated hardcoded localhost origin to support dynamic `FRONTEND_URL` environment lists, added support for custom options and headers (Content-Type, Accept, Authorization, X-Requested-With), and allowed any dynamic local host/IP testing in development mode.
 - [x] Interactive Dashboard Profile Dropdown: Overhauled the profile header shell element to toggle a premium, beautiful floating dropdown matching the user's design screenshot, with custom gear settings actions, color-coordinated logout controls, clean light/dark support, and automatic close-on-click-outside listener.
+- [x] Global User Account Settings Page: Created a dedicated personal account settings page at `/dashboard/settings` containing profile photo preset picker/URL custom input, display name, phone number, email address, and old/new password update forms. Integrated database models, RESTful API endpoints, Zod schema validations, and state handling.
+
 
 
 

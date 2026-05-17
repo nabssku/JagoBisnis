@@ -104,6 +104,45 @@ let AuthService = class AuthService {
         const { password, ...result } = user;
         return result;
     }
+    async updateProfile(userId, dto) {
+        const existingUser = await this.prisma.user.findUnique({
+            where: { email: dto.email },
+        });
+        if (existingUser && existingUser.id !== userId) {
+            throw new common_1.ConflictException('Email already in use');
+        }
+        const updatedUser = await this.prisma.user.update({
+            where: { id: userId },
+            data: {
+                name: dto.name,
+                email: dto.email,
+                phone: dto.phone || null,
+                avatarUrl: dto.avatarUrl || null,
+            },
+        });
+        const { password, ...result } = updatedUser;
+        return result;
+    }
+    async updatePassword(userId, dto) {
+        const user = await this.prisma.user.findUnique({
+            where: { id: userId },
+        });
+        if (!user) {
+            throw new common_1.UnauthorizedException();
+        }
+        const isPasswordValid = await bcrypt.compare(dto.oldPassword, user.password);
+        if (!isPasswordValid) {
+            throw new common_1.BadRequestException('Password lama tidak sesuai');
+        }
+        const hashedPassword = await bcrypt.hash(dto.newPassword, 10);
+        await this.prisma.user.update({
+            where: { id: userId },
+            data: {
+                password: hashedPassword,
+            },
+        });
+        return { success: true, message: 'Kata sandi berhasil diperbarui' };
+    }
     generateToken(userId, email) {
         return this.jwtService.sign({ userId, email });
     }

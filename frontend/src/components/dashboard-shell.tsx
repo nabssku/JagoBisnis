@@ -7,11 +7,12 @@ import { useRouter, usePathname } from 'next/navigation';
 import { authService } from '@/services/auth.service';
 import { Sidebar } from './sidebar';
 import { cn } from '@/lib/utils';
+import { User } from '@/types/auth';
 
 interface DashboardShellProps {
   children: React.ReactNode;
   businessId?: string;
-  user?: { id?: string; name: string; email: string } | null;
+  user?: User | null;
 }
 
 export function DashboardShell({ children, businessId, user }: DashboardShellProps) {
@@ -79,9 +80,14 @@ export function DashboardShell({ children, businessId, user }: DashboardShellPro
                     ? "border-amber-400 dark:border-amber-400" 
                     : "border-white dark:border-zinc-900 group-hover:border-amber-100 dark:group-hover:border-zinc-800"
                 )}>
-                  <div className="h-full w-full bg-gradient-to-br from-[#1F2937] to-gray-900 flex items-center justify-center text-white font-black text-sm">
-                    {user?.name?.charAt(0)?.toUpperCase() || 'U'}
-                  </div>
+                  {user?.avatarUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={user.avatarUrl} alt={user.name} className="h-full w-full object-cover" />
+                  ) : (
+                    <div className="h-full w-full bg-gradient-to-br from-[#1F2937] to-gray-900 flex items-center justify-center text-white font-black text-sm">
+                      {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -91,11 +97,7 @@ export function DashboardShell({ children, businessId, user }: DashboardShellPro
                   <button
                     onClick={() => {
                       setIsDropdownOpen(false);
-                      if (businessId) {
-                        router.push(`/dashboard/business/${businessId}/settings`);
-                      } else {
-                        router.push('/dashboard');
-                      }
+                      router.push('/dashboard/settings');
                     }}
                     className="w-full flex items-center gap-3 px-4 py-3 text-xs font-bold text-gray-700 dark:text-zinc-300 hover:text-gray-900 dark:hover:text-white rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800/60 transition-all text-left"
                   >
