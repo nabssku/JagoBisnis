@@ -104,6 +104,7 @@ export declare class SiteService {
                 price: number;
                 stock: number;
                 imageUrl: string | null;
+                images: string[];
                 isActive: boolean;
             }[];
         } & {

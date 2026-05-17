@@ -16,6 +16,7 @@ export declare class PublicSiteController {
                 price: number;
                 stock: number;
                 imageUrl: string | null;
+                images: string[];
                 isActive: boolean;
             }[];
         } & {

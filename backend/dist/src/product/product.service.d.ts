@@ -16,6 +16,7 @@ export declare class ProductService {
         price: number;
         stock: number;
         imageUrl: string | null;
+        images: string[];
         isActive: boolean;
     }>;
     findAll(userId: string, businessId: string): Promise<{
@@ -30,6 +31,7 @@ export declare class ProductService {
         price: number;
         stock: number;
         imageUrl: string | null;
+        images: string[];
         isActive: boolean;
     }[]>;
     findOne(userId: string, businessId: string, id: string): Promise<{
@@ -44,6 +46,7 @@ export declare class ProductService {
         price: number;
         stock: number;
         imageUrl: string | null;
+        images: string[];
         isActive: boolean;
     }>;
     update(userId: string, businessId: string, id: string, dto: UpdateProductDto): Promise<{
@@ -58,6 +61,7 @@ export declare class ProductService {
         price: number;
         stock: number;
         imageUrl: string | null;
+        images: string[];
         isActive: boolean;
     }>;
     remove(userId: string, businessId: string, id: string): Promise<{
@@ -72,6 +76,7 @@ export declare class ProductService {
         price: number;
         stock: number;
         imageUrl: string | null;
+        images: string[];
         isActive: boolean;
     }>;
     private checkAccess;

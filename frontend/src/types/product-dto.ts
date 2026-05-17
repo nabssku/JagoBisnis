@@ -10,6 +10,7 @@ export const productSchema = z.object({
   price: z.coerce.number().min(0, 'Harga tidak boleh negatif'),
   stock: z.coerce.number().min(0, 'Stok tidak boleh negatif'),
   imageUrl: z.string().optional(),
+  images: z.array(z.string()).default([]),
   category: z.string().optional(),
   isActive: z.boolean().default(true),
 });

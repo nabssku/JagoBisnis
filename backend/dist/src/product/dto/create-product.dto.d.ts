@@ -5,6 +5,7 @@ export declare class CreateProductDto {
     price: number;
     stock?: number;
     imageUrl?: string;
+    images?: string[];
     category?: string;
     isActive?: boolean;
 }

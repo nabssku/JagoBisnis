@@ -19,10 +19,20 @@ const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
 const product_service_1 = require("./product.service");
 const create_product_dto_1 = require("./dto/create-product.dto");
 const update_product_dto_1 = require("./dto/update-product.dto");
+const platform_express_1 = require("@nestjs/platform-express");
+const multer_1 = require("multer");
+const path_1 = require("path");
 let ProductController = class ProductController {
     productService;
     constructor(productService) {
         this.productService = productService;
+    }
+    uploadFile(file) {
+        if (!file) {
+            throw new common_1.BadRequestException('File is required');
+        }
+        const url = `http://localhost:3001/uploads/${file.filename}`;
+        return { url };
     }
     create(req, businessId, dto) {
         return this.productService.create(req.user.id, businessId, dto);
@@ -41,6 +51,33 @@ let ProductController = class ProductController {
     }
 };
 exports.ProductController = ProductController;
+__decorate([
+    (0, common_1.Post)('upload'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', {
+        storage: (0, multer_1.diskStorage)({
+            destination: './uploads',
+            filename: (req, file, callback) => {
+                const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+                const ext = (0, path_1.extname)(file.originalname);
+                callback(null, `${uniqueSuffix}${ext}`);
+            },
+        }),
+        fileFilter: (req, file, callback) => {
+            if (!file.mimetype.match(/\/(jpg|jpeg|png|gif|webp)$/)) {
+                return callback(new Error('Only image files are allowed!'), false);
+            }
+            callback(null, true);
+        },
+        limits: {
+            fileSize: 5 * 1024 * 1024,
+        },
+    })),
+    (0, swagger_1.ApiOperation)({ summary: 'Upload product image' }),
+    __param(0, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], ProductController.prototype, "uploadFile", null);
 __decorate([
     (0, common_1.Post)(),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new product' }),

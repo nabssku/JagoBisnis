@@ -247,7 +247,7 @@ export default function WebsiteBuilderPage() {
                           <label className="text-[10px] font-bold text-muted-foreground dark:text-zinc-500 uppercase tracking-widest">Custom Slug (URL)</label>
                           <div className="flex items-center group">
                             <div className="rounded-l-xl border border-r-0 border-border dark:border-zinc-800 bg-muted dark:bg-zinc-800 px-3 py-3 text-xs font-bold text-muted-foreground dark:text-zinc-400">
-                              /jago/
+                              /jagobisnis/
                             </div>
                             <input 
                               className="flex-1 rounded-r-xl border border-border dark:border-zinc-800 bg-muted/30 dark:bg-zinc-950 px-4 py-3 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-bold text-primary dark:text-amber-400"
@@ -268,13 +268,13 @@ export default function WebsiteBuilderPage() {
                         </div>
                         <div className="rounded-xl bg-white dark:bg-zinc-800 p-3 border border-gray-150 dark:border-zinc-700 shadow-sm">
                           <p className="text-[10px] font-mono text-muted-foreground dark:text-zinc-400 break-all mb-3 px-1">
-                            {window.location.origin}/jago/{site.slug}
+                            {window.location.origin}/jagobisnis/{site.slug}
                           </p>
                           <Button 
                             variant="primary" 
                             size="sm" 
                             className="w-full text-xs font-black h-9 rounded-lg"
-                            onClick={() => window.open(`/jago/${site.slug}`, '_blank')}
+                            onClick={() => window.open(`/jagobisnis/${site.slug}`, '_blank')}
                           >
                             <Eye className="h-3.5 w-3.5 mr-2" />
                             Kunjungi Situs

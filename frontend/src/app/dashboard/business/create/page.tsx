@@ -92,7 +92,7 @@ export default function CreateBusinessPage() {
               placeholder="contoh-kopi-senja"
               {...register('slug')}
               error={errors.slug?.message}
-              description="Ini akan digunakan sebagai alamat website Anda: jagobisnis.com/jago/slug"
+              description="Ini akan digunakan sebagai alamat website Anda: jagobisnis.id/jagobisnis/slug"
             />
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <Input

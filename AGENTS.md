@@ -97,7 +97,7 @@ Fitur yang boleh dibuat:
 - Website builder sederhana berbasis section JSON
 - Preview website
 - Publish website
-- Public website `/jago/[slug]`
+- Public website `/jagobisnis/[slug]`
 
 Fitur yang belum boleh dibuat:
 - Payment gateway

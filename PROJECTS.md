@@ -19,7 +19,7 @@ Storage: Local Storage
 - Dashboard
 - Website builder drag and drop
 - CRUD produk
-- Public website /jago/[slug]
+- Public website /jagobisnis/[slug]
 
 ## Jangan dibuat dulu
 - Payment

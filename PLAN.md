@@ -77,7 +77,7 @@ Status: Completed
 
 Tasks:
 - [x] Publish site endpoint
-- [x] Public route `/jago/[slug]`
+- [x] Public route `/jagobisnis/[slug]`
 - [x] Render public website from JSON
 - [x] SEO metadata
 
@@ -108,6 +108,10 @@ Tasks:
 - [x] Visual gallery grid placeholder and rich-text style editor layout
 - [x] Integrated inline modal triggers in dashboard product list page (`page.tsx`)
 - [x] Zero-warning TypeScript standard validation & perfect compilation
+- [x] Database migration for product gallery (`images String[]` in `schema.prisma`)
+- [x] Secure multiple image upload REST handlers in backend and frontend client services
+- [x] Interactive multiple image gallery upload & live grid with hover-delete preview in form modal
+- [x] Product active/inactive toggle switch synchronized with the database default state
 
 ## Phase 9: Post-MVP & Optimization
 Status: In Planning

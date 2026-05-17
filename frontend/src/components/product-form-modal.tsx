@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { X, Upload, ImageIcon, Loader2, Bold, Italic, Underline, List, ListOrdered, AlignLeft, AlignCenter, AlignRight, Link2, Check } from 'lucide-react';
+import { X, Upload, Loader2, Bold, Italic, Underline, List, ListOrdered, AlignLeft, AlignCenter, AlignRight, Link2, Check, Plus } from 'lucide-react';
 import { productSchema, ProductDto } from '@/types/product-dto';
 import { productService } from '@/services/product.service';
 import { Button } from '@/components/ui/button';
@@ -31,10 +31,10 @@ export function ProductFormModal({
   const [isUploading, setIsUploading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   
-  // Custom interactive mock gallery array
-  const [galleryPlaceholders] = useState([1, 2, 3, 4]);
+  const [galleryPreviews, setGalleryPreviews] = useState<string[]>([]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
 
   const {
     register,
@@ -51,6 +51,7 @@ export function ProductFormModal({
       isActive: true,
       category: 'Makanan & Minuman',
       description: '',
+      images: [],
     },
   });
 
@@ -61,6 +62,7 @@ export function ProductFormModal({
     if (isOpen) {
       setError(null);
       setImagePreview(null);
+      setGalleryPreviews([]);
       if (productId) {
         setIsFetching(true);
         productService
@@ -75,9 +77,13 @@ export function ProductFormModal({
               description: product.description || '',
               imageUrl: product.imageUrl || '',
               isActive: product.isActive,
+              images: product.images || [],
             });
             if (product.imageUrl) {
               setImagePreview(product.imageUrl);
+            }
+            if (product.images) {
+              setGalleryPreviews(product.images);
             }
           })
           .catch((err) => {
@@ -97,7 +103,9 @@ export function ProductFormModal({
           description: '',
           imageUrl: '',
           isActive: true,
+          images: [],
         });
+        setGalleryPreviews([]);
       }
     }
   }, [isOpen, productId, businessId, reset]);
@@ -143,6 +151,43 @@ export function ProductFormModal({
     } finally {
       setIsUploading(false);
     }
+  };
+
+  // Handle gallery multiple image upload
+  const handleGalleryChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setIsUploading(true);
+    setError(null);
+
+    const newUrls = [...galleryPreviews];
+
+    try {
+      for (let i = 0; i < files.length; i++) {
+         const file = files[i];
+         const response = await productService.uploadImage(businessId, file);
+         newUrls.push(response.url);
+      }
+      setGalleryPreviews(newUrls);
+      setValue('images', newUrls, { shouldValidate: true });
+    } catch (err: unknown) {
+      console.error('Gallery image upload failed', err);
+      let errMsg = 'Gagal mengunggah gambar galeri.';
+      if (axios.isAxiosError(err)) {
+        errMsg = err.response?.data?.message || errMsg;
+      }
+      setError(errMsg);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  // Remove image from gallery list
+  const handleRemoveGalleryImage = (indexToRemove: number) => {
+    const updated = galleryPreviews.filter((_, idx) => idx !== indexToRemove);
+    setGalleryPreviews(updated);
+    setValue('images', updated, { shouldValidate: true });
   };
 
   // Submit product
@@ -264,18 +309,50 @@ export function ProductFormModal({
                 <div className="space-y-2">
                   <label className="text-xs font-black uppercase tracking-widest text-gray-400 dark:text-zinc-500">Galeri Tambahan</label>
                   <div className="grid grid-cols-4 gap-2">
-                    {galleryPlaceholders.map((slot) => (
-                      <div 
-                        key={slot}
-                        onClick={() => fileInputRef.current?.click()}
-                        className="aspect-square rounded-xl border-2 border-dashed border-gray-200 dark:border-zinc-800 hover:border-amber-400 dark:hover:border-amber-400 bg-gray-50/50 dark:bg-zinc-900/30 flex items-center justify-center cursor-pointer transition-all hover:scale-105"
-                      >
-                        <ImageIcon className="h-4 w-4 text-gray-300 dark:text-zinc-600" />
-                      </div>
-                    ))}
+                    {[0, 1, 2, 3].map((index) => {
+                      const url = galleryPreviews[index];
+                      return (
+                        <div 
+                          key={index}
+                          className="relative aspect-square rounded-xl border-2 border-dashed border-gray-200 dark:border-zinc-800 hover:border-amber-400 dark:hover:border-amber-400 bg-gray-50/50 dark:bg-zinc-900/30 flex items-center justify-center overflow-hidden transition-all group"
+                        >
+                          {url ? (
+                            <>
+                              <img 
+                                src={url} 
+                                alt={`Galeri ${index + 1}`} 
+                                className="h-full w-full object-cover" 
+                              />
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveGalleryImage(index)}
+                                className="absolute top-1.5 right-1.5 p-1 bg-red-500 hover:bg-red-600 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shadow-md z-10"
+                              >
+                                <X className="h-3 w-3" />
+                              </button>
+                            </>
+                          ) : (
+                            <div 
+                              onClick={() => galleryInputRef.current?.click()}
+                              className="w-full h-full flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
+                            >
+                              <Plus className="h-4 w-4 text-gray-400 dark:text-zinc-500" />
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
+                  <input 
+                    type="file" 
+                    ref={galleryInputRef}
+                    onChange={handleGalleryChange}
+                    accept="image/*"
+                    multiple
+                    className="hidden" 
+                  />
                   <p className="text-[10px] font-bold text-center text-gray-400 dark:text-zinc-500 pt-2">
-                    Unggah gambar utama sebagai cover katalog Anda.
+                    Unggah cover utama dan tambahkan galeri produk di atas (bisa multiple).
                   </p>
                 </div>
               </div>

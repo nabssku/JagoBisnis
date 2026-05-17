@@ -10,6 +10,9 @@ interface RequestWithUser {
 export declare class ProductController {
     private readonly productService;
     constructor(productService: ProductService);
+    uploadFile(file: any): {
+        url: string;
+    };
     create(req: RequestWithUser, businessId: string, dto: CreateProductDto): Promise<{
         description: string | null;
         name: string;
@@ -22,6 +25,7 @@ export declare class ProductController {
         price: number;
         stock: number;
         imageUrl: string | null;
+        images: string[];
         isActive: boolean;
     }>;
     findAll(req: RequestWithUser, businessId: string): Promise<{
@@ -36,6 +40,7 @@ export declare class ProductController {
         price: number;
         stock: number;
         imageUrl: string | null;
+        images: string[];
         isActive: boolean;
     }[]>;
     findOne(req: RequestWithUser, businessId: string, productId: string): Promise<{
@@ -50,6 +55,7 @@ export declare class ProductController {
         price: number;
         stock: number;
         imageUrl: string | null;
+        images: string[];
         isActive: boolean;
     }>;
     update(req: RequestWithUser, businessId: string, productId: string, dto: UpdateProductDto): Promise<{
@@ -64,6 +70,7 @@ export declare class ProductController {
         price: number;
         stock: number;
         imageUrl: string | null;
+        images: string[];
         isActive: boolean;
     }>;
     remove(req: RequestWithUser, businessId: string, productId: string): Promise<{
@@ -78,6 +85,7 @@ export declare class ProductController {
         price: number;
         stock: number;
         imageUrl: string | null;
+        images: string[];
         isActive: boolean;
     }>;
 }

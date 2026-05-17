@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
+  IsArray,
   IsBoolean,
   IsInt,
   IsNotEmpty,
@@ -44,6 +45,12 @@ export class CreateProductDto {
   @IsUrl()
   @IsOptional()
   imageUrl?: string;
+
+  @ApiPropertyOptional({ type: [String], example: ['https://example.com/image1.png'] })
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  images?: string[];
 
   @ApiPropertyOptional({ example: 'Minuman' })
   @IsString()

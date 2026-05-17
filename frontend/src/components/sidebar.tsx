@@ -44,6 +44,13 @@ export function Sidebar({ businessId }: SidebarProps) {
   const pathname = usePathname();
   const [business, setBusiness] = useState<Business | null>(null);
   const { theme, setTheme } = useTheme();
+  const [hostUrl, setHostUrl] = useState('jagobisnis.id');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setHostUrl(window.location.host);
+    }
+  }, []);
 
   useEffect(() => {
     if (businessId) {
@@ -85,10 +92,13 @@ export function Sidebar({ businessId }: SidebarProps) {
       {/* Site URL Box */}
       {business && (
         <div className="px-4 mb-4 shrink-0">
-          <div className="flex items-center justify-between rounded-xl bg-gray-50 dark:bg-zinc-900/30 border border-gray-100 dark:border-zinc-800/80 p-3 group hover:border-gray-200 dark:hover:border-zinc-700 transition-all cursor-pointer">
+          <div 
+            onClick={() => window.open(`/jagobisnis/${business.slug}`, '_blank')}
+            className="flex items-center justify-between rounded-xl bg-gray-50 dark:bg-zinc-900/30 border border-gray-100 dark:border-zinc-800/80 p-3 group hover:border-gray-200 dark:hover:border-zinc-700 transition-all cursor-pointer"
+          >
             <div className="flex flex-col overflow-hidden">
               <span className="text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-zinc-500">Website URL</span>
-              <span className="truncate text-xs font-bold text-gray-600 dark:text-zinc-300">jagobisnis.id/{business.slug}</span>
+              <span className="truncate text-xs font-bold text-gray-600 dark:text-zinc-300">{hostUrl}/jagobisnis/{business.slug}</span>
             </div>
             <ExternalLink className="h-3 w-3 text-gray-300 dark:text-zinc-600 group-hover:text-gray-500 dark:group-hover:text-zinc-400" />
           </div>

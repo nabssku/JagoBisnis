@@ -42,7 +42,6 @@ let ProductService = class ProductService {
         return this.prisma.product.findMany({
             where: {
                 businessId,
-                isActive: true,
             },
             orderBy: { createdAt: 'desc' },
         });
@@ -78,9 +77,8 @@ let ProductService = class ProductService {
     async remove(userId, businessId, id) {
         await this.checkPermission(userId, businessId);
         await this.findOne(userId, businessId, id);
-        return this.prisma.product.update({
+        return this.prisma.product.delete({
             where: { id },
-            data: { isActive: false },
         });
     }
     async checkAccess(userId, businessId) {
