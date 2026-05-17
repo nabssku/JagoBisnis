@@ -146,6 +146,7 @@ Tasks:
 - [x] Middle Canvas Layout Overhaul: Warm golden/yellow active highlight border enclosing the selected canvas section container
 - [x] Tentang Kami Redesign: 2-column layout and premium 3-character fashion shop SVG illustration synchronized between Public Site Renderer and visual canvas mockup
 - [x] Ordering Sync Fix: Eliminated redundant CSS flexbox order override in SectionRenderer and implemented non-mutating sort on preview, public, and editor canvas
+- [x] Hero Background Redesign: Refactored hero template in SectionRenderer to use the uploaded image as a gorgeous container background with elegant high-contrast overlays instead of rendering as an inline element.
 
 ## Phase 11: Post-MVP & Optimization
 Status: In Planning

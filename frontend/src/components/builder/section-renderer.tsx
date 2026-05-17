@@ -81,20 +81,34 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
       const waLink = phoneClean ? `https://wa.me/${phoneClean}?text=${encodeURIComponent(content.whatsappText || 'Halo! Saya tertarik dengan produk Anda.')}` : '#';
       const mapsLink = content.address ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(content.address)}` : '#';
 
+      const hasBgImage = !!content.backgroundImage;
+
       return (
-        <section id={section.id} className="py-20 px-6 text-center lg:py-28 relative overflow-hidden flex flex-col items-center justify-center bg-white dark:bg-[#0B0F19] transition-colors">
-          {/* Dynamic background element */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none overflow-hidden">
-            <motion.div 
-              animate={{ 
-                scale: [1, 1.15, 1],
-                opacity: [0.03, 0.07, 0.03]
-              }}
-              transition={{ duration: 12, repeat: Infinity }}
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-[130px]" 
-              style={{ backgroundColor: theme.primaryColor }} 
-            />
-          </div>
+        <section 
+          id={section.id} 
+          className={cn(
+            "py-24 px-6 text-center lg:py-36 relative overflow-hidden flex flex-col items-center justify-center transition-colors bg-cover bg-center bg-no-repeat",
+            hasBgImage ? "min-h-[500px] lg:min-h-[600px]" : "bg-white dark:bg-[#0B0F19]"
+          )}
+          style={hasBgImage ? { backgroundImage: `url(${content.backgroundImage})` } : undefined}
+        >
+          {/* Overlay if background image exists */}
+          {hasBgImage ? (
+            <div className="absolute inset-0 bg-zinc-950/65 dark:bg-zinc-950/75 z-0" />
+          ) : (
+            /* Dynamic background element when there is no background image */
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none overflow-hidden">
+              <motion.div 
+                animate={{ 
+                  scale: [1, 1.15, 1],
+                  opacity: [0.03, 0.07, 0.03]
+                }}
+                transition={{ duration: 12, repeat: Infinity }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-[130px]" 
+                style={{ backgroundColor: theme.primaryColor }} 
+              />
+            </div>
+          )}
           
           <motion.div 
             initial="hidden"
@@ -103,31 +117,37 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
             variants={containerVariants}
             className="max-w-4xl mx-auto space-y-6 relative z-10"
           >
-            <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.15em]" style={{ color: theme.primaryColor }}>
-              <Sparkles className="h-3.5 w-3.5" />
-              Bisnis Terpercaya
-            </div>
+            {hasBgImage ? (
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/15 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-white backdrop-blur-md">
+                <Sparkles className="h-3.5 w-3.5 text-yellow-400 animate-pulse" />
+                Bisnis Terpercaya
+              </div>
+            ) : (
+              <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.15em]" style={{ color: theme.primaryColor }}>
+                <Sparkles className="h-3.5 w-3.5" />
+                Bisnis Terpercaya
+              </div>
+            )}
             
-            <h1 className="text-3xl font-black tracking-tight lg:text-5xl leading-tight text-balance text-gray-900 dark:text-white">
+            <h1 className={cn(
+              "text-3xl font-black tracking-tight lg:text-5xl leading-tight text-balance transition-colors",
+              hasBgImage ? "text-white" : "text-gray-900 dark:text-white"
+            )}>
               {content.headline || 'Selamat Datang di Bisnis Kami'}
             </h1>
             
-            <p className="text-sm lg:text-base font-medium opacity-75 max-w-xl mx-auto leading-relaxed text-balance text-gray-700 dark:text-zinc-300">
+            <p className={cn(
+              "text-sm lg:text-base font-medium max-w-xl mx-auto leading-relaxed text-balance transition-colors",
+              hasBgImage ? "text-zinc-200" : "text-gray-700 dark:text-zinc-300 opacity-75"
+            )}>
               {content.subheadline || 'Kami menyediakan produk dan layanan terbaik khusus untuk kebutuhan Anda.'}
             </p>
-
-            {/* Render Background Image Preview (if provided) */}
-            {content.backgroundImage && (
-              <div className="my-8 max-w-xl mx-auto rounded-2xl overflow-hidden shadow-md aspect-[16/9] border border-gray-100 dark:border-zinc-800">
-                <img src={content.backgroundImage} alt="Background Preview" className="w-full h-full object-cover" />
-              </div>
-            )}
             
             <div className="pt-6 flex flex-wrap items-center justify-center gap-3">
               {buttons.custom && (
                 <Button 
                   asChild
-                  className="h-11 px-6 rounded-xl font-bold text-sm shadow-md transition-all hover:-translate-y-0.5 active:scale-95 text-white"
+                  className="h-11 px-6 rounded-xl font-bold text-sm shadow-md transition-all hover:-translate-y-0.5 active:scale-95 text-white border-none"
                   style={buttonStyle}
                 >
                   <a href={customUrl}>
@@ -141,7 +161,12 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
                 <Button 
                   variant="outline"
                   asChild
-                  className="h-11 px-6 rounded-xl font-bold text-sm border-gray-200 dark:border-zinc-800 hover:-translate-y-0.5 active:scale-95 text-gray-700 dark:text-zinc-200"
+                  className={cn(
+                    "h-11 px-6 rounded-xl font-bold text-sm hover:-translate-y-0.5 active:scale-95",
+                    hasBgImage 
+                      ? "border-white/20 hover:bg-white/10 text-white bg-transparent" 
+                      : "border-gray-200 dark:border-zinc-800 text-gray-700 dark:text-zinc-200"
+                  )}
                 >
                   <a href={slug ? `/jagobisnis/${slug}#products` : '#products'}>
                     Lihat Katalog
@@ -153,7 +178,7 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
               {buttons.whatsapp && (
                 <Button 
                   asChild
-                  className="h-11 px-6 rounded-xl font-bold text-sm shadow-md bg-green-600 hover:bg-green-700 text-white transition-all hover:-translate-y-0.5 active:scale-95"
+                  className="h-11 px-6 rounded-xl font-bold text-sm shadow-md bg-green-600 hover:bg-green-700 text-white transition-all hover:-translate-y-0.5 active:scale-95 border-none"
                 >
                   <a href={waLink} target="_blank" rel="noopener noreferrer">
                     Hubungi WhatsApp
@@ -166,7 +191,12 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
                 <Button 
                   variant="outline"
                   asChild
-                  className="h-11 px-6 rounded-xl font-bold text-sm border-gray-200 dark:border-zinc-800 hover:-translate-y-0.5 active:scale-95 text-gray-700 dark:text-zinc-200"
+                  className={cn(
+                    "h-11 px-6 rounded-xl font-bold text-sm hover:-translate-y-0.5 active:scale-95",
+                    hasBgImage 
+                      ? "border-white/20 hover:bg-white/10 text-white bg-transparent" 
+                      : "border-gray-200 dark:border-zinc-800 text-gray-700 dark:text-zinc-200"
+                  )}
                 >
                   <a href={mapsLink} target="_blank" rel="noopener noreferrer">
                     Petunjuk Peta
