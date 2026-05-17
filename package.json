@@ -1,0 +1,19 @@
+{
+  "name": "jagobisnis",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "frontend:dev": "npm run dev -w frontend",
+    "backend:dev": "npm run start:dev -w backend",
+    "frontend:build": "npm run build -w frontend",
+    "backend:build": "npm run build -w backend",
+    "frontend:lint": "npm run lint -w frontend",
+    "backend:lint": "npm run lint -w backend",
+    "build": "npm run frontend:build && npm run backend:build",
+    "lint": "npm run frontend:lint && npm run backend:lint"
+  }
+}

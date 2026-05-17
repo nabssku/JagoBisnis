@@ -1,0 +1,80 @@
+import { PrismaService } from '../prisma.service';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
+export declare class ProductService {
+    private prisma;
+    constructor(prisma: PrismaService);
+    create(userId: string, businessId: string, dto: CreateProductDto): Promise<{
+        description: string | null;
+        name: string;
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        slug: string;
+        category: string | null;
+        businessId: string;
+        price: number;
+        stock: number;
+        imageUrl: string | null;
+        isActive: boolean;
+    }>;
+    findAll(userId: string, businessId: string): Promise<{
+        description: string | null;
+        name: string;
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        slug: string;
+        category: string | null;
+        businessId: string;
+        price: number;
+        stock: number;
+        imageUrl: string | null;
+        isActive: boolean;
+    }[]>;
+    findOne(userId: string, businessId: string, id: string): Promise<{
+        description: string | null;
+        name: string;
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        slug: string;
+        category: string | null;
+        businessId: string;
+        price: number;
+        stock: number;
+        imageUrl: string | null;
+        isActive: boolean;
+    }>;
+    update(userId: string, businessId: string, id: string, dto: UpdateProductDto): Promise<{
+        description: string | null;
+        name: string;
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        slug: string;
+        category: string | null;
+        businessId: string;
+        price: number;
+        stock: number;
+        imageUrl: string | null;
+        isActive: boolean;
+    }>;
+    remove(userId: string, businessId: string, id: string): Promise<{
+        description: string | null;
+        name: string;
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        slug: string;
+        category: string | null;
+        businessId: string;
+        price: number;
+        stock: number;
+        imageUrl: string | null;
+        isActive: boolean;
+    }>;
+    private checkAccess;
+    private checkPermission;
+    private generateSlug;
+}
