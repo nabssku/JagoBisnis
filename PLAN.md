@@ -97,7 +97,19 @@ Tasks:
 - [x] Synchronized Dashboard & Preview aesthetics
 - [x] Dark Mode support & toggle logic (light/dark/system)
 
-## Phase 8: Post-MVP & Optimization
+## Phase 8: Advanced Product Catalogue UI & File Upload
+Status: Completed
+
+Tasks:
+- [x] Backend static file serving configurations (`main.ts`)
+- [x] Secure Multer product upload endpoint in controller (`product.controller.ts`)
+- [x] Premium ProductFormModal component with responsive Light/Dark mode (`product-form-modal.tsx`)
+- [x] Drag-and-drop / select local file upload component replacing text URL field
+- [x] Visual gallery grid placeholder and rich-text style editor layout
+- [x] Integrated inline modal triggers in dashboard product list page (`page.tsx`)
+- [x] Zero-warning TypeScript standard validation & perfect compilation
+
+## Phase 9: Post-MVP & Optimization
 Status: In Planning
 
 Tasks:

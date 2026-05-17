@@ -43,7 +43,6 @@ export class ProductService {
     return this.prisma.product.findMany({
       where: {
         businessId,
-        isActive: true, // Typically we only list active products by default
       },
       orderBy: { createdAt: 'desc' },
     });
@@ -94,9 +93,8 @@ export class ProductService {
     await this.checkPermission(userId, businessId);
     await this.findOne(userId, businessId, id);
 
-    return this.prisma.product.update({
+    return this.prisma.product.delete({
       where: { id },
-      data: { isActive: false },
     });
   }
 

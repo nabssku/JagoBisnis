@@ -40,4 +40,19 @@ export const productService = {
   async delete(businessId: string, productId: string): Promise<void> {
     await apiClient.delete(`/businesses/${businessId}/products/${productId}`);
   },
+
+  async uploadImage(businessId: string, file: File): Promise<{ url: string }> {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await apiClient.post<{ url: string }>(
+      `/businesses/${businessId}/products/upload`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
+    );
+    return response.data;
+  },
 };

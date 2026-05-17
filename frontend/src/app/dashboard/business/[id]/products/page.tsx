@@ -15,6 +15,7 @@ import { User } from '@/types/auth';
 import { motion } from 'framer-motion';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
+import { ProductFormModal } from '@/components/product-form-modal';
 
 export default function ProductListPage() {
   const params = useParams();
@@ -24,6 +25,8 @@ export default function ProductListPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteProductId, setDeleteProductId] = useState<string | null>(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editProductId, setEditProductId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -91,12 +94,16 @@ export default function ProductListPage() {
             <h1 className="text-4xl font-black tracking-tight text-gray-900 dark:text-white">Katalog Produk</h1>
             <p className="text-sm font-medium text-gray-400 dark:text-zinc-400">Kelola daftar jualan dan inventaris Anda.</p>
           </div>
-          <Link href={`/dashboard/business/${businessId}/products/create`}>
-            <Button className="h-12 rounded-xl bg-gray-900 dark:bg-zinc-100 px-6 font-black text-white dark:text-zinc-900 hover:bg-gray-800 dark:hover:bg-zinc-200 shadow-lg transition-all hover:scale-105">
-              <Plus className="mr-2 h-5 w-5" />
-              Tambah Produk
-            </Button>
-          </Link>
+          <Button 
+            onClick={() => {
+              setEditProductId(null);
+              setIsFormOpen(true);
+            }}
+            className="h-12 rounded-xl bg-gray-900 dark:bg-zinc-100 px-6 font-black text-white dark:text-zinc-900 hover:bg-gray-800 dark:hover:bg-zinc-200 shadow-lg transition-all hover:scale-105"
+          >
+            <Plus className="mr-2 h-5 w-5" />
+            Tambah Produk
+          </Button>
         </div>
 
         <Card className="overflow-hidden border-gray-100 dark:border-zinc-800 shadow-xl rounded-[2rem] bg-white dark:bg-zinc-900">
@@ -165,11 +172,17 @@ export default function ProductListPage() {
                         </td>
                         <td className="px-8 py-5 text-right">
                           <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <Link href={`/dashboard/business/${businessId}/products/${product.id}/edit`}>
-                              <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl hover:bg-white dark:hover:bg-zinc-850 hover:shadow-md dark:hover:shadow-none">
-                                <Edit className="h-4 w-4 text-gray-400 dark:text-zinc-500" />
-                              </Button>
-                            </Link>
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-10 w-10 rounded-xl hover:bg-white dark:hover:bg-zinc-850 hover:shadow-md dark:hover:shadow-none"
+                              onClick={() => {
+                                setEditProductId(product.id);
+                                setIsFormOpen(true);
+                              }}
+                            >
+                              <Edit className="h-4 w-4 text-gray-400 dark:text-zinc-500" />
+                            </Button>
                             <Button 
                               variant="ghost" 
                               size="icon" 
@@ -205,6 +218,24 @@ export default function ProductListPage() {
             </Button>
           </div>
         }
+      />
+
+      <ProductFormModal
+        isOpen={isFormOpen}
+        onClose={() => setIsFormOpen(false)}
+        productId={editProductId}
+        businessId={businessId}
+        onSuccess={async () => {
+          setIsLoading(true);
+          try {
+            const productsData = await productService.getAll(businessId);
+            setProducts(productsData);
+          } catch (err) {
+            console.error('Failed to reload products', err);
+          } finally {
+            setIsLoading(false);
+          }
+        }}
       />
     </DashboardShell>
   );
