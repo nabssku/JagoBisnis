@@ -45,6 +45,7 @@ interface SectionRendererProps {
   products: Product[];
   index: number;
   siteTitle: string;
+  onOrderProduct?: (product: Product) => void;
 }
 
 export const SectionRenderer: React.FC<SectionRendererProps> = ({ 
@@ -52,7 +53,8 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
   theme, 
   products, 
   index, 
-  siteTitle 
+  siteTitle,
+  onOrderProduct
 }) => {
   const params = useParams();
   const router = useRouter();
@@ -327,8 +329,18 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
                                 Rp{product.price.toLocaleString('id-ID')}
                               </p>
                             </div>
-                            <Button size="icon" className="h-8 w-8 rounded-lg shadow-sm transition-all hover:translate-x-0.5 active:scale-90 text-white" style={buttonStyle}>
-                              <ChevronRight className="h-4 w-4" />
+                            <Button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                if (onOrderProduct) {
+                                  onOrderProduct(product);
+                                }
+                              }}
+                              className="h-8 px-3.5 rounded-xl font-bold text-xs shadow-sm hover:scale-[1.02] active:scale-95 text-white transition-all border-none"
+                              style={buttonStyle}
+                            >
+                              Pesan Sekarang
                             </Button>
                           </div>
                         </div>

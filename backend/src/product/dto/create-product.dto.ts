@@ -42,7 +42,7 @@ export class CreateProductDto {
   stock?: number;
 
   @ApiPropertyOptional({ example: 'https://example.com/product.png' })
-  @IsUrl()
+  @IsString()
   @IsOptional()
   imageUrl?: string;
 

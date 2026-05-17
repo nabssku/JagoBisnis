@@ -25,6 +25,7 @@ import {
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { SectionRenderer } from '@/components/builder/section-renderer';
+import { OrderModal } from '@/components/order/order-modal';
 
 export default function PublicWebsitePage() {
   const params = useParams();
@@ -34,6 +35,17 @@ export default function PublicWebsitePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+
+  const handleOrderSuccess = (orderId: string, paymentUrl?: string) => {
+    if (paymentUrl) {
+      window.location.href = paymentUrl;
+    } else {
+      window.location.href = `/jagobisnis/${slug}/orders/${orderId}`;
+    }
+  };
 
   useEffect(() => {
     const fetchSite = async () => {
@@ -194,9 +206,24 @@ export default function PublicWebsitePage() {
             products={products} 
             index={index}
             siteTitle={site.title}
+            onOrderProduct={(prod) => {
+              setSelectedProduct(prod);
+              setIsOrderModalOpen(true);
+            }}
           />
         ))}
       </main>
+
+      {/* Order Modal */}
+      {site && (
+        <OrderModal
+          isOpen={isOrderModalOpen}
+          onClose={() => setIsOrderModalOpen(false)}
+          product={selectedProduct}
+          site={site}
+          onSuccess={handleOrderSuccess}
+        />
+      )}
 
       {/* Fallback Static Footer if no dynamic footer block is present */}
       {!sections.some(s => s.type === 'footer') && (

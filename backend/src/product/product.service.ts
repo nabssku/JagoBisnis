@@ -122,6 +122,32 @@ export class ProductService {
     }
   }
 
+  async createMedia(userId: string, businessId: string, file: any) {
+    const mediaCount = await this.prisma.media.count({
+      where: { businessId },
+    });
+    
+    if (mediaCount >= 500) {
+      throw new ConflictException(
+        'Batas maksimal penyimpanan media (500 file) telah tercapai.',
+      );
+    }
+
+    const url = `http://localhost:3001/uploads/${file.filename}`;
+
+    return this.prisma.media.create({
+      data: {
+        businessId,
+        uploadedById: userId,
+        url,
+        filename: file.filename,
+        name: file.originalname,
+        mimeType: file.mimetype,
+        size: file.size,
+      },
+    });
+  }
+
   private generateSlug(name: string): string {
     return name
       .toLowerCase()

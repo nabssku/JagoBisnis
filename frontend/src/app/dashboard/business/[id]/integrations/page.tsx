@@ -51,6 +51,8 @@ import { businessService } from '@/services/business.service';
 import { Business } from '@/types/business';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { authService } from '@/services/auth.service';
+import { User } from '@/types/auth';
 
 function IntegrationsCenterContent() {
   const router = useRouter();
@@ -60,6 +62,7 @@ function IntegrationsCenterContent() {
   const businessId = params.id as string;
   const [business, setBusiness] = useState<Business | null>(null);
   const [integrations, setIntegrations] = useState<Integration[]>([]);
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isActionLoading, setIsActionLoading] = useState<string | null>(null);
 
@@ -78,12 +81,14 @@ function IntegrationsCenterContent() {
   // Fetch all business and connected integration details
   const fetchData = async () => {
     try {
-      const [businessData, integrationsData] = await Promise.all([
+      const [businessData, integrationsData, userData] = await Promise.all([
         businessService.getById(businessId),
         integrationService.getAll(businessId),
+        authService.getMe().catch(() => null)
       ]);
       setBusiness(businessData);
       setIntegrations(integrationsData);
+      setUser(userData);
     } catch (error) {
       toast.error('Gagal memuat data Integrasi.');
     } finally {
@@ -264,7 +269,7 @@ function IntegrationsCenterContent() {
   };
 
   return (
-    <DashboardShell businessId={businessId}>
+    <DashboardShell businessId={businessId} user={user}>
       <div className="p-8 max-w-7xl mx-auto space-y-8 font-sans">
         
         {/* Header Breadcrumb */}

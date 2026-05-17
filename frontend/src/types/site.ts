@@ -47,4 +47,12 @@ export interface Site {
     address?: string;
     Product?: any[];
   };
+  integrations?: {
+    pakasir?: {
+      connected: boolean;
+    };
+    googleAnalytics?: {
+      measurementId?: string;
+    };
+  };
 }

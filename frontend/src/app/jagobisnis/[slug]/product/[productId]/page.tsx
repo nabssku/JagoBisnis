@@ -28,6 +28,7 @@ import {
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { OrderModal } from '@/components/order/order-modal';
 
 export default function PublicProductDetailPage() {
   const params = useParams();
@@ -43,6 +44,16 @@ export default function PublicProductDetailPage() {
   const [activeImage, setActiveImage] = useState<string>('');
   const [activeTab, setActiveTab] = useState<'deskripsi' | 'spesifikasi'>('deskripsi');
   const [copied, setCopied] = useState(false);
+
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+
+  const handleOrderSuccess = (orderId: string, paymentUrl?: string) => {
+    if (paymentUrl) {
+      window.location.href = paymentUrl;
+    } else {
+      window.location.href = `/jagobisnis/${slug}/orders/${orderId}`;
+    }
+  };
 
   // Load site and products
   useEffect(() => {
@@ -353,7 +364,7 @@ export default function PublicProductDetailPage() {
 
             {/* Checkout Button */}
             <Button 
-              onClick={() => window.open(waUrl, '_blank')}
+              onClick={() => setIsOrderModalOpen(true)}
               className="w-full h-10 rounded-xl font-bold text-xs shadow-md text-white transition-all hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 border-none"
             >
               <MessageSquare className="h-4 w-4 fill-current" />
@@ -472,6 +483,17 @@ export default function PublicProductDetailPage() {
         )}
 
       </main>
+
+      {/* Order Modal */}
+      {site && product && (
+        <OrderModal
+          isOpen={isOrderModalOpen}
+          onClose={() => setIsOrderModalOpen(false)}
+          product={product}
+          site={site}
+          onSuccess={handleOrderSuccess}
+        />
+      )}
 
       {/* Footer */}
       <footer className="py-10 px-6 border-t border-gray-100 dark:border-zinc-900 bg-gray-50/30 dark:bg-zinc-950/20">

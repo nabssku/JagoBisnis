@@ -22,6 +22,7 @@ model User {
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   BusinessUser BusinessUser[]
+  Media        Media[]
 }
 
 model Business {
@@ -41,6 +42,8 @@ model Business {
   Post         Post[]
   Integration  Integration[]
   SocialPost   SocialPost[]
+  Order        Order[]
+  Media        Media[]
 }
 
 model Site {
@@ -88,6 +91,7 @@ model Product {
   updatedAt   DateTime @updatedAt
 
   business Business @relation(fields: [businessId], references: [id])
+  Order    Order[]
 
   @@unique([businessId, slug])
 }
@@ -197,5 +201,63 @@ model SocialPost {
 
   business        Business           @relation(fields: [businessId], references: [id])
   integration     Integration        @relation(fields: [integrationId], references: [id])
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum PaymentStatus {
+  UNPAID
+  PENDING
+  PAID
+  EXPIRED
+  FAILED
+}
+
+model Order {
+  id                   String        @id @default(uuid())
+  businessId           String
+  productId            String
+  customerName         String
+  customerPhone        String
+  customerEmail        String?
+  customerAddress      String?
+  quantity             Int
+  productNameSnapshot  String
+  productPriceSnapshot Int
+  subtotal             Int
+  paymentMethod        String
+  orderStatus          OrderStatus   @default(PENDING)
+  paymentStatus        PaymentStatus @default(UNPAID)
+  pakasirOrderId       String?       @unique
+  pakasirPaymentUrl    String?
+  pakasirPaymentMethod String?
+  notes                String?
+  metadata             Json?
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+
+  business Business @relation(fields: [businessId], references: [id])
+  product  Product  @relation(fields: [productId], references: [id])
+}
+
+model Media {
+  id           String   @id @default(uuid())
+  businessId   String
+  uploadedById String
+  url          String
+  filename     String
+  name         String
+  mimeType     String
+  size         Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  business   Business @relation(fields: [businessId], references: [id])
+  uploadedBy User     @relation(fields: [uploadedById], references: [id])
 }
 

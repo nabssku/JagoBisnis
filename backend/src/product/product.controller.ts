@@ -59,10 +59,18 @@ export class ProductController {
     }),
   )
   @ApiOperation({ summary: 'Upload product image' })
-  uploadFile(@UploadedFile() file: any) {
+  async uploadFile(
+    @Param('businessId') businessId: string,
+    @Request() req: any,
+    @UploadedFile() file: any,
+  ) {
     if (!file) {
       throw new BadRequestException('File is required');
     }
+    
+    // Also record this file in the Media library database for this business!
+    await this.productService.createMedia(req.user.id, businessId, file);
+
     const url = `http://localhost:3001/uploads/${file.filename}`;
     return { url };
   }

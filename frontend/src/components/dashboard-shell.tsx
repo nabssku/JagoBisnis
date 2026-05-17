@@ -41,7 +41,10 @@ export function DashboardShell({ children, businessId, user }: DashboardShellPro
   const getPageTitle = () => {
     if (pathname.includes('/settings')) return 'Profil Usaha';
     if (pathname.includes('/products')) return 'Katalog Produk';
+    if (pathname.includes('/orders')) return 'Kelola Pesanan';
     if (pathname.includes('/website')) return 'Website Builder';
+    if (pathname.includes('/integrations')) return 'Pusat Integrasi';
+    if (pathname.includes('/media')) return 'Galeri Media';
     return 'Ringkasan';
   };
 

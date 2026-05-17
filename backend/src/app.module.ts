@@ -10,6 +10,9 @@ import { SiteModule } from './site/site.module';
 import { PostModule } from './post/post.module';
 import { IntegrationModule } from './integration/integration.module';
 import { SocialPublishingModule } from './social-publishing/social-publishing.module';
+import { OrderModule } from './order/order.module';
+import { PaymentModule } from './payment/payment.module';
+import { MediaModule } from './media/media.module';
 
 @Module({
   imports: [
@@ -28,6 +31,9 @@ import { SocialPublishingModule } from './social-publishing/social-publishing.mo
     PostModule,
     IntegrationModule,
     SocialPublishingModule,
+    OrderModule,
+    PaymentModule,
+    MediaModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

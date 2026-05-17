@@ -81,5 +81,17 @@ export declare class ProductService {
     }>;
     private checkAccess;
     private checkPermission;
+    createMedia(userId: string, businessId: string, file: any): Promise<{
+        name: string;
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        businessId: string;
+        url: string;
+        filename: string;
+        mimeType: string;
+        size: number;
+        uploadedById: string;
+    }>;
     private generateSlug;
 }

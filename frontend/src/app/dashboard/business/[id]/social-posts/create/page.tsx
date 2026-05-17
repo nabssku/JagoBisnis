@@ -20,7 +20,6 @@ import {
   MessageCircle,
   Bookmark,
   ChevronRight,
-  User,
   Clock,
   Globe2,
   Trash2,
@@ -56,6 +55,8 @@ import { businessService } from '@/services/business.service';
 import { Business } from '@/types/business';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { authService } from '@/services/auth.service';
+import { User } from '@/types/auth';
 
 export default function CreateSocialPostPage() {
   const params = useParams();
@@ -63,6 +64,7 @@ export default function CreateSocialPostPage() {
   
   const businessId = params.id as string;
   const [business, setBusiness] = useState<Business | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
@@ -87,6 +89,11 @@ export default function CreateSocialPostPage() {
     // Load Media Library
     productService.getMedia(businessId)
       .then(setPustakaMedia)
+      .catch(console.error);
+
+    // Load User
+    authService.getMe()
+      .then(setUser)
       .catch(console.error);
   }, [businessId]);
 
@@ -153,7 +160,7 @@ export default function CreateSocialPostPage() {
   );
 
   return (
-    <DashboardShell businessId={businessId}>
+    <DashboardShell businessId={businessId} user={user}>
       <div className="p-8 max-w-7xl mx-auto space-y-8 font-sans">
         
         {/* Header Breadcrumb */}

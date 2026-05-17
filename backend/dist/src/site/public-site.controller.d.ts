@@ -3,6 +3,14 @@ export declare class PublicSiteController {
     private readonly siteService;
     constructor(siteService: SiteService);
     getPublicSite(slug: string): Promise<{
+        integrations: {
+            pakasir: {
+                connected: boolean;
+            };
+            googleAnalytics: {
+                measurementId: any;
+            };
+        };
         business: {
             Product: {
                 description: string | null;
@@ -31,7 +39,6 @@ export declare class PublicSiteController {
             category: string | null;
             address: string | null;
         };
-    } & {
         title: string;
         id: string;
         createdAt: Date;

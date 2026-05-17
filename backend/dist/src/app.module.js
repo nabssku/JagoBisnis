@@ -19,6 +19,9 @@ const site_module_1 = require("./site/site.module");
 const post_module_1 = require("./post/post.module");
 const integration_module_1 = require("./integration/integration.module");
 const social_publishing_module_1 = require("./social-publishing/social-publishing.module");
+const order_module_1 = require("./order/order.module");
+const payment_module_1 = require("./payment/payment.module");
+const media_module_1 = require("./media/media.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -39,6 +42,9 @@ exports.AppModule = AppModule = __decorate([
             post_module_1.PostModule,
             integration_module_1.IntegrationModule,
             social_publishing_module_1.SocialPublishingModule,
+            order_module_1.OrderModule,
+            payment_module_1.PaymentModule,
+            media_module_1.MediaModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService, prisma_service_1.PrismaService],

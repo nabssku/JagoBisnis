@@ -189,7 +189,28 @@ let SiteService = class SiteService {
         if (!site || !site.isPublished) {
             throw new common_1.NotFoundException('Website tidak ditemukan atau belum dipublikasikan');
         }
-        return site;
+        const integrationsList = await this.prisma.integration.findMany({
+            where: {
+                businessId: site.businessId,
+                status: 'CONNECTED',
+            },
+        });
+        const isPakasirConnected = integrationsList.some((integration) => integration.provider === 'PAKASIR');
+        const gaIntegration = integrationsList.find((integration) => integration.provider === 'GOOGLE_ANALYTICS');
+        const measurementId = gaIntegration && gaIntegration.config
+            ? gaIntegration.config.measurementId
+            : '';
+        return {
+            ...site,
+            integrations: {
+                pakasir: {
+                    connected: isPakasirConnected,
+                },
+                googleAnalytics: {
+                    measurementId: measurementId || '',
+                },
+            },
+        };
     }
     async checkMembership(businessId, userId) {
         const membership = await this.prisma.businessUser.findUnique({

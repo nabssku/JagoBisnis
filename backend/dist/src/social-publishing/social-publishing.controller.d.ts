@@ -16,8 +16,8 @@ export declare class SocialPublishingController {
         content: string;
         businessId: string;
         publishedAt: Date | null;
-        status: import("@prisma/client").$Enums.SocialPostStatus;
         provider: import("@prisma/client").$Enums.SocialPostProvider;
+        status: import("@prisma/client").$Enums.SocialPostStatus;
         mediaType: import("@prisma/client").$Enums.MediaType;
         mediaUrls: import("@prisma/client/runtime/library").JsonValue | null;
         providerPostId: string | null;
@@ -36,8 +36,8 @@ export declare class SocialPublishingController {
         content: string;
         businessId: string;
         publishedAt: Date | null;
-        status: import("@prisma/client").$Enums.SocialPostStatus;
         provider: import("@prisma/client").$Enums.SocialPostProvider;
+        status: import("@prisma/client").$Enums.SocialPostStatus;
         mediaType: import("@prisma/client").$Enums.MediaType;
         mediaUrls: import("@prisma/client/runtime/library").JsonValue | null;
         providerPostId: string | null;
@@ -56,8 +56,8 @@ export declare class SocialPublishingController {
         content: string;
         businessId: string;
         publishedAt: Date | null;
-        status: import("@prisma/client").$Enums.SocialPostStatus;
         provider: import("@prisma/client").$Enums.SocialPostProvider;
+        status: import("@prisma/client").$Enums.SocialPostStatus;
         mediaType: import("@prisma/client").$Enums.MediaType;
         mediaUrls: import("@prisma/client/runtime/library").JsonValue | null;
         providerPostId: string | null;
@@ -71,8 +71,8 @@ export declare class SocialPublishingController {
         content: string;
         businessId: string;
         publishedAt: Date | null;
-        status: import("@prisma/client").$Enums.SocialPostStatus;
         provider: import("@prisma/client").$Enums.SocialPostProvider;
+        status: import("@prisma/client").$Enums.SocialPostStatus;
         mediaType: import("@prisma/client").$Enums.MediaType;
         mediaUrls: import("@prisma/client/runtime/library").JsonValue | null;
         providerPostId: string | null;
@@ -86,8 +86,8 @@ export declare class SocialPublishingController {
         content: string;
         businessId: string;
         publishedAt: Date | null;
-        status: import("@prisma/client").$Enums.SocialPostStatus;
         provider: import("@prisma/client").$Enums.SocialPostProvider;
+        status: import("@prisma/client").$Enums.SocialPostStatus;
         mediaType: import("@prisma/client").$Enums.MediaType;
         mediaUrls: import("@prisma/client/runtime/library").JsonValue | null;
         providerPostId: string | null;

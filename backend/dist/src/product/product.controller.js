@@ -61,10 +61,11 @@ let ProductController = class ProductController {
     constructor(productService) {
         this.productService = productService;
     }
-    uploadFile(file) {
+    async uploadFile(businessId, req, file) {
         if (!file) {
             throw new common_1.BadRequestException('File is required');
         }
+        await this.productService.createMedia(req.user.id, businessId, file);
         const url = `http://localhost:3001/uploads/${file.filename}`;
         return { url };
     }
@@ -127,10 +128,12 @@ __decorate([
         },
     })),
     (0, swagger_1.ApiOperation)({ summary: 'Upload product image' }),
-    __param(0, (0, common_1.UploadedFile)()),
+    __param(0, (0, common_1.Param)('businessId')),
+    __param(1, (0, common_1.Request)()),
+    __param(2, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [String, Object, Object]),
+    __metadata("design:returntype", Promise)
 ], ProductController.prototype, "uploadFile", null);
 __decorate([
     (0, common_1.Get)('media'),

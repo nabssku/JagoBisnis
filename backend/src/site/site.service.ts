@@ -214,7 +214,37 @@ export class SiteService {
       throw new NotFoundException('Website tidak ditemukan atau belum dipublikasikan');
     }
 
-    return site;
+    // Fetch active integrations for the business
+    const integrationsList = await this.prisma.integration.findMany({
+      where: {
+        businessId: site.businessId,
+        status: 'CONNECTED',
+      },
+    });
+
+    const isPakasirConnected = integrationsList.some(
+      (integration) => integration.provider === 'PAKASIR',
+    );
+
+    const gaIntegration = integrationsList.find(
+      (integration) => integration.provider === 'GOOGLE_ANALYTICS',
+    );
+
+    const measurementId = gaIntegration && gaIntegration.config
+      ? (gaIntegration.config as any).measurementId
+      : '';
+
+    return {
+      ...site,
+      integrations: {
+        pakasir: {
+          connected: isPakasirConnected,
+        },
+        googleAnalytics: {
+          measurementId: measurementId || '',
+        },
+      },
+    };
   }
 
   private async checkMembership(businessId: string, userId: string) {

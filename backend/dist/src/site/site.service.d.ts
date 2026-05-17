@@ -91,6 +91,14 @@ export declare class SiteService {
         publishedAt: Date | null;
     }>;
     getPublicSite(slug: string): Promise<{
+        integrations: {
+            pakasir: {
+                connected: boolean;
+            };
+            googleAnalytics: {
+                measurementId: any;
+            };
+        };
         business: {
             Product: {
                 description: string | null;
@@ -119,7 +127,6 @@ export declare class SiteService {
             category: string | null;
             address: string | null;
         };
-    } & {
         title: string;
         id: string;
         createdAt: Date;

@@ -10,9 +10,9 @@ interface RequestWithUser {
 export declare class ProductController {
     private readonly productService;
     constructor(productService: ProductService);
-    uploadFile(file: any): {
+    uploadFile(businessId: string, req: any, file: any): Promise<{
         url: string;
-    };
+    }>;
     getMedia(): {
         name: string;
         url: string;

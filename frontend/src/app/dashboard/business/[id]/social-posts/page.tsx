@@ -48,6 +48,8 @@ import { socialPublishingService, SocialPost } from '@/services/social-publishin
 import { integrationService } from '@/services/integration.service';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { authService } from '@/services/auth.service';
+import { User } from '@/types/auth';
 
 export default function SocialPublishingDashboard() {
   const params = useParams();
@@ -55,6 +57,7 @@ export default function SocialPublishingDashboard() {
   
   const businessId = params.id as string;
   const [posts, setPosts] = useState<SocialPost[]>([]);
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   
   // Filtering & Search
@@ -68,11 +71,13 @@ export default function SocialPublishingDashboard() {
 
   const fetchData = async () => {
     try {
-      const [postsData, integrationsData] = await Promise.all([
+      const [postsData, integrationsData, userData] = await Promise.all([
         socialPublishingService.getAll(businessId),
         integrationService.getAll(businessId),
+        authService.getMe().catch(() => null)
       ]);
       setPosts(postsData);
+      setUser(userData);
       
       // Determine if at least Instagram or Threads is active
       const hasSocial = integrationsData.some(
@@ -162,7 +167,7 @@ export default function SocialPublishingDashboard() {
   });
 
   return (
-    <DashboardShell businessId={businessId}>
+    <DashboardShell businessId={businessId} user={user}>
       <div className="p-8 max-w-7xl mx-auto space-y-8 font-sans">
         
         {/* Header Section */}

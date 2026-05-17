@@ -16,6 +16,7 @@ export declare class PostService {
         slug: string;
         businessId: string;
         images: string[];
+        status: string;
         coverImage: string | null;
         focusKeyword: string | null;
         metaTitle: string | null;
@@ -24,7 +25,6 @@ export declare class PostService {
         ctaValue: string | null;
         imageAlt: string | null;
         contentType: string;
-        status: string;
         isPinned: boolean;
         relatedProductIds: string[];
     }>;
@@ -40,6 +40,7 @@ export declare class PostService {
         slug: string;
         businessId: string;
         images: string[];
+        status: string;
         coverImage: string | null;
         focusKeyword: string | null;
         metaTitle: string | null;
@@ -48,7 +49,6 @@ export declare class PostService {
         ctaValue: string | null;
         imageAlt: string | null;
         contentType: string;
-        status: string;
         isPinned: boolean;
         relatedProductIds: string[];
     }[]>;
@@ -64,6 +64,7 @@ export declare class PostService {
         slug: string;
         businessId: string;
         images: string[];
+        status: string;
         coverImage: string | null;
         focusKeyword: string | null;
         metaTitle: string | null;
@@ -72,7 +73,6 @@ export declare class PostService {
         ctaValue: string | null;
         imageAlt: string | null;
         contentType: string;
-        status: string;
         isPinned: boolean;
         relatedProductIds: string[];
     }>;
@@ -88,6 +88,7 @@ export declare class PostService {
         slug: string;
         businessId: string;
         images: string[];
+        status: string;
         coverImage: string | null;
         focusKeyword: string | null;
         metaTitle: string | null;
@@ -96,7 +97,6 @@ export declare class PostService {
         ctaValue: string | null;
         imageAlt: string | null;
         contentType: string;
-        status: string;
         isPinned: boolean;
         relatedProductIds: string[];
     }>;
@@ -112,6 +112,7 @@ export declare class PostService {
         slug: string;
         businessId: string;
         images: string[];
+        status: string;
         coverImage: string | null;
         focusKeyword: string | null;
         metaTitle: string | null;
@@ -120,7 +121,6 @@ export declare class PostService {
         ctaValue: string | null;
         imageAlt: string | null;
         contentType: string;
-        status: string;
         isPinned: boolean;
         relatedProductIds: string[];
     }>;
@@ -136,6 +136,7 @@ export declare class PostService {
         slug: string;
         businessId: string;
         images: string[];
+        status: string;
         coverImage: string | null;
         focusKeyword: string | null;
         metaTitle: string | null;
@@ -144,7 +145,6 @@ export declare class PostService {
         ctaValue: string | null;
         imageAlt: string | null;
         contentType: string;
-        status: string;
         isPinned: boolean;
         relatedProductIds: string[];
     }[]>;
@@ -160,6 +160,7 @@ export declare class PostService {
         slug: string;
         businessId: string;
         images: string[];
+        status: string;
         coverImage: string | null;
         focusKeyword: string | null;
         metaTitle: string | null;
@@ -168,7 +169,6 @@ export declare class PostService {
         ctaValue: string | null;
         imageAlt: string | null;
         contentType: string;
-        status: string;
         isPinned: boolean;
         relatedProductIds: string[];
     }>;

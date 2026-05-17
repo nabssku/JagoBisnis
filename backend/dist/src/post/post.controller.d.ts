@@ -22,6 +22,7 @@ export declare class PostController {
         slug: string;
         businessId: string;
         images: string[];
+        status: string;
         coverImage: string | null;
         focusKeyword: string | null;
         metaTitle: string | null;
@@ -30,7 +31,6 @@ export declare class PostController {
         ctaValue: string | null;
         imageAlt: string | null;
         contentType: string;
-        status: string;
         isPinned: boolean;
         relatedProductIds: string[];
     }>;
@@ -46,6 +46,7 @@ export declare class PostController {
         slug: string;
         businessId: string;
         images: string[];
+        status: string;
         coverImage: string | null;
         focusKeyword: string | null;
         metaTitle: string | null;
@@ -54,7 +55,6 @@ export declare class PostController {
         ctaValue: string | null;
         imageAlt: string | null;
         contentType: string;
-        status: string;
         isPinned: boolean;
         relatedProductIds: string[];
     }[]>;
@@ -70,6 +70,7 @@ export declare class PostController {
         slug: string;
         businessId: string;
         images: string[];
+        status: string;
         coverImage: string | null;
         focusKeyword: string | null;
         metaTitle: string | null;
@@ -78,7 +79,6 @@ export declare class PostController {
         ctaValue: string | null;
         imageAlt: string | null;
         contentType: string;
-        status: string;
         isPinned: boolean;
         relatedProductIds: string[];
     }>;
@@ -94,6 +94,7 @@ export declare class PostController {
         slug: string;
         businessId: string;
         images: string[];
+        status: string;
         coverImage: string | null;
         focusKeyword: string | null;
         metaTitle: string | null;
@@ -102,7 +103,6 @@ export declare class PostController {
         ctaValue: string | null;
         imageAlt: string | null;
         contentType: string;
-        status: string;
         isPinned: boolean;
         relatedProductIds: string[];
     }>;
@@ -118,6 +118,7 @@ export declare class PostController {
         slug: string;
         businessId: string;
         images: string[];
+        status: string;
         coverImage: string | null;
         focusKeyword: string | null;
         metaTitle: string | null;
@@ -126,7 +127,6 @@ export declare class PostController {
         ctaValue: string | null;
         imageAlt: string | null;
         contentType: string;
-        status: string;
         isPinned: boolean;
         relatedProductIds: string[];
     }>;
@@ -142,6 +142,7 @@ export declare class PostController {
         slug: string;
         businessId: string;
         images: string[];
+        status: string;
         coverImage: string | null;
         focusKeyword: string | null;
         metaTitle: string | null;
@@ -150,7 +151,6 @@ export declare class PostController {
         ctaValue: string | null;
         imageAlt: string | null;
         contentType: string;
-        status: string;
         isPinned: boolean;
         relatedProductIds: string[];
     }[]>;
@@ -166,6 +166,7 @@ export declare class PostController {
         slug: string;
         businessId: string;
         images: string[];
+        status: string;
         coverImage: string | null;
         focusKeyword: string | null;
         metaTitle: string | null;
@@ -174,7 +175,6 @@ export declare class PostController {
         ctaValue: string | null;
         imageAlt: string | null;
         contentType: string;
-        status: string;
         isPinned: boolean;
         relatedProductIds: string[];
     }>;

@@ -111,7 +111,9 @@ Tasks:
 - [x] Database migration for product gallery (`images String[]` in `schema.prisma`)
 - [x] Secure multiple image upload REST handlers in backend and frontend client services
 - [x] Interactive multiple image gallery upload & live grid with hover-delete preview in form modal
+- [x] Unified Media Library selector integration for both Main Cover and Additional Gallery images in Product Catalogue forms
 - [x] Product active/inactive toggle switch synchronized with the database default state
+- [x] Resolved backend DTO validation error by transitioning imageUrl validation from @IsUrl() to @IsString() supporting relative local upload paths
 
 ## Phase 9: Dynamic Product Detail Page
 Status: Completed
@@ -184,7 +186,43 @@ Tasks:
 - [x] Suspend prerendering errors on useSearchParams pages via React `<Suspense>` boundaries.
 - [x] Verify 100% successful frontend static export compile and backend production build.
 
-## Phase 12: Post-MVP & Optimization
+## Phase 12: Public Catalog Order & Pakasir Checkout
+Status: Completed
+
+Tasks:
+- [x] Prisma database models `Order` and matching enums (`OrderStatus`, `PaymentStatus`, `PaymentMethod`) migration.
+- [x] Secure Order Controller and Service exposing public checkout `/api/v1/public/sites/:slug/orders` and status checkers.
+- [x] Secure signature checking for Pakasir Webhook controller `/api/v1/payments/webhook/pakasir` utilizing SHA256 hashes.
+- [x] Custom checkout `OrderModal` component with quantity controls, details inputs, and dynamic payment selectors.
+- [x] Integrated `OrderModal` triggers on public landing page cards and dynamic product details checkout buttons.
+- [x] Designed premium Order Status Page `/jagobisnis/[slug]/orders/[orderId]` featuring auto-updating countdown timers, flat snapshot parsing, and WhatsApp manual pre-filled redirects.
+- [x] Created Merchant Orders Dashboard Page `/dashboard/business/[id]/orders` displaying statistics, transaction filters, synchronized DB columns, and dual-status update dropdowns.
+- [x] Wired sidebar navigation link "Pesanan" (Orders) and dashboard shell page titles.
+- [x] Resolved Axios 404 error by mapping correct non-dashboard backend paths in `order.service.ts` and restarting backend in watch/dev mode.
+- [x] Fixed public order payload mapping (`customerAddress`), payment method validators (`MANUAL` vs `WHATSAPP`), and whitelisted `paymentChannel` in `CreatePublicOrderDto` to eliminate 100% of 400 Bad Request validation issues during checkout.
+- [x] Confirmed 100% successful frontend static export compile (Next.js 16) and backend NestJS production build with zero type check warnings.
+
+## Phase 13: Media Gallery (Galeri Media)
+Status: Completed
+
+Tasks:
+- [x] Declared the `Media` database model in `schema.prisma` with relations to `User` and `Business`.
+- [x] Synced Prisma database schema drift safely with PostgreSQL using `npx prisma db push`.
+- [x] Generated updated Prisma Client typings with `npx prisma generate`.
+- [x] Engineered dedicated secure NestJS Media Module: Controller routes `/api/v1/businesses/:businessId/media`, Service repository logic, and Pino logging.
+- [x] Enforced multi-tenant `businessId` query scoping and strict account permission deletion checks.
+- [x] Implemented a strict 500 uploaded assets quota limit verification per business in `media.service.ts`.
+- [x] Integrated multipart multer interceptor supporting image/video file types and max 50MB file size limit.
+- [x] Created frontend API client service `media.service.ts` for secure fetching, uploading, and deleting assets.
+- [x] Rerouted product media library picker `getMedia` to pull dynamically from the database central media collection.
+- [x] Created beautiful, high-fidelity business Media Gallery dashboard page `/dashboard/business/[id]/media/page.tsx` conforming strictly to `uiux.md` SaaS modern UMKM guidelines.
+- [x] Integrated storage capacity statistics cards with custom warm progress bars, grid/list view mode selectors, filter tags, and quick search.
+- [x] Connected dashboard sidebar navigation link "Media" and set up header titles in `dashboard-shell.tsx`.
+- [x] Fixed sidebar link navigation clickability and navbar consistency issues on `/media`, `/integrations`, `/social-posts`, and `/social-posts/create` pages by passing the correct `businessId` and fetching/passing user session objects to `<DashboardShell>`.
+- [x] Automatically logged product catalog image uploads in the database `Media` library by integrating a hook inside the backend `ProductController.uploadFile()` and `ProductService.createMedia()`.
+- [x] Confirmed 100% successful frontend static export compile and NestJS backend build with zero TypeScript warnings or compilation errors.
+
+## Phase 14: Post-MVP & Optimization
 Status: In Planning
 
 Tasks:

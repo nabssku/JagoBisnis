@@ -57,9 +57,12 @@ export const productService = {
   },
 
   async getMedia(businessId: string): Promise<{ name: string; url: string }[]> {
-    const response = await apiClient.get<{ name: string; url: string }[]>(
-      `/businesses/${businessId}/products/media`,
+    const response = await apiClient.get<any[]>(
+      `/businesses/${businessId}/media`,
     );
-    return response.data;
+    return response.data.map((item) => ({
+      name: item.name,
+      url: item.url,
+    }));
   },
 };

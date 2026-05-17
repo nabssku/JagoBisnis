@@ -98,6 +98,26 @@ let ProductService = class ProductService {
             throw new common_1.ForbiddenException('You do not have permission to perform this action');
         }
     }
+    async createMedia(userId, businessId, file) {
+        const mediaCount = await this.prisma.media.count({
+            where: { businessId },
+        });
+        if (mediaCount >= 500) {
+            throw new common_1.ConflictException('Batas maksimal penyimpanan media (500 file) telah tercapai.');
+        }
+        const url = `http://localhost:3001/uploads/${file.filename}`;
+        return this.prisma.media.create({
+            data: {
+                businessId,
+                uploadedById: userId,
+                url,
+                filename: file.filename,
+                name: file.originalname,
+                mimeType: file.mimetype,
+                size: file.size,
+            },
+        });
+    }
     generateSlug(name) {
         return name
             .toLowerCase()
