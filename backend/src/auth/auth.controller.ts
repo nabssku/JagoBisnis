@@ -77,4 +77,12 @@ export class AuthController {
   ) {
     return this.authService.updatePassword(req.user.id, dto);
   }
+
+  @Post('google')
+  @ApiOperation({ summary: 'Login or register via Google' })
+  @ApiResponse({ status: 200, description: 'Successfully authenticated via Google' })
+  @ApiResponse({ status: 400, description: 'Invalid Google access token' })
+  googleLogin(@Body('accessToken') accessToken: string) {
+    return this.authService.googleLogin(accessToken);
+  }
 }

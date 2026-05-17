@@ -54,5 +54,17 @@ export declare class AuthService {
         success: boolean;
         message: string;
     }>;
+    googleLogin(googleAccessToken: string): Promise<{
+        user: {
+            name: string;
+            email: string;
+            phone: string | null;
+            avatarUrl: string | null;
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+        };
+        accessToken: string;
+    }>;
     private generateToken;
 }

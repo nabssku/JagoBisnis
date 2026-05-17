@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -10,11 +10,59 @@ import { loginSchema, LoginDto } from '@/types/auth-dto';
 import { authService } from '@/services/auth.service';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { toast } from 'sonner';
+import { motion, AnimatePresence } from 'framer-motion';
+
+// Premium brand logo matching the requested Temmu style but using JagoBisnis
+const Logo = () => (
+  <div className="flex items-center gap-2">
+    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#FFB82B] shadow-sm">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="3.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="h-4.5 w-4.5 text-gray-900"
+      >
+        <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0z" />
+        <circle cx="12" cy="12" r="3" fill="currentColor" className="text-gray-900" />
+      </svg>
+    </div>
+    <span className="text-xl font-black tracking-tight text-gray-900 dark:text-white">
+      Jago<span className="text-[#FFB82B]">Bisnis</span>
+    </span>
+  </div>
+);
+
+// High-fidelity Google G Vector logo
+const GoogleIcon = () => (
+  <svg className="mr-2 h-5 w-5 flex-shrink-0" viewBox="0 0 24 24">
+    <path
+      fill="#4285F4"
+      d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v3.92h6.69c-.29 1.5-.1.3-1.12 3.01v2.53h1.8c1.05-.97 1.83-2.4 1.83-4.39z"
+    />
+    <path
+      fill="#34A853"
+      d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.87-3c-1.08.72-2.45 1.16-4.06 1.16-3.13 0-5.78-2.11-6.73-4.96H1.47v3.13C3.48 20.41 7.47 24 12 24z"
+    />
+    <path
+      fill="#FBBC05"
+      d="M5.27 14.29c-.25-.72-.39-1.49-.39-2.29s.14-1.57.39-2.29V6.57H1.47C.53 8.46 0 10.58 0 12.8s.53 4.34 1.47 6.23l3.8-2.92-.001-.82z"
+    />
+    <path
+      fill="#EA4335"
+      d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.47 0 3.48 3.59 1.47 7.57l3.8 2.92c.95-2.85 3.6-4.96 6.73-4.96z"
+    />
+  </svg>
+);
 
 export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const router = useRouter();
 
   const {
@@ -25,12 +73,42 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
+  // Handle Google Implicit OAuth Callback (Hash parameter parsing)
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash && hash.includes('access_token=')) {
+      setGoogleLoading(true);
+      const params = new URLSearchParams(hash.substring(1));
+      const accessToken = params.get('access_token');
+      if (accessToken) {
+        // Clear address bar cleanly
+        window.history.replaceState(null, '', window.location.pathname);
+        
+        authService.googleLogin(accessToken)
+          .then((res) => {
+            localStorage.setItem('accessToken', res.accessToken);
+            toast.success('Berhasil masuk menggunakan Google!');
+            router.push('/dashboard');
+          })
+          .catch((err: any) => {
+            const errorMsg = err.response?.data?.message || 'Gagal menyinkronkan dengan Google.';
+            setError(errorMsg);
+            toast.error(errorMsg);
+          })
+          .finally(() => {
+            setGoogleLoading(false);
+          });
+      }
+    }
+  }, [router]);
+
   const onSubmit = async (data: LoginDto) => {
     setIsLoading(true);
     setError(null);
     try {
       const response = await authService.login(data);
       localStorage.setItem('accessToken', response.accessToken);
+      toast.success('Selamat datang kembali!');
       router.push('/dashboard');
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
@@ -43,50 +121,168 @@ export default function LoginPage() {
     }
   };
 
+  const handleGoogleLogin = () => {
+    const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+
+    if (!clientId) {
+      // Automatic Elegant Developer Simulation mode
+      setGoogleLoading(true);
+      toast.info('Menginisialisasi Demo Google Sesi...', { duration: 1500 });
+      
+      setTimeout(() => {
+        authService.googleLogin('mock-google-token-' + Date.now())
+          .then((res) => {
+            localStorage.setItem('accessToken', res.accessToken);
+            toast.success('Berhasil masuk dengan Demo Google Account!');
+            router.push('/dashboard');
+          })
+          .catch((err: any) => {
+            const errorMsg = err.response?.data?.message || 'Demo Google Gagal.';
+            setError(errorMsg);
+            toast.error('Demo Google Gagal.');
+          })
+          .finally(() => {
+            setGoogleLoading(false);
+          });
+      }, 1200);
+      return;
+    }
+
+    // Google Implicit OAuth Redirect Flow
+    const redirectUri = window.location.origin + '/login';
+    const scope = 'openid profile email';
+    const responseType = 'token';
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=${responseType}&scope=${encodeURIComponent(scope)}`;
+    window.location.href = authUrl;
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Masuk ke JagoBisnis</CardTitle>
-          <CardDescription>
-            Kelola bisnis dan website Anda dengan mudah.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            {error && (
-              <div className="rounded-md bg-red-50 p-3 text-sm text-red-600">
-                {error}
+    <div className="flex min-h-screen items-center justify-center bg-white dark:bg-zinc-950 px-4 py-8 relative overflow-hidden">
+      {/* Visual background details */}
+      <div className="absolute top-0 left-0 w-80 h-80 bg-amber-200/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-80 h-80 bg-amber-300/10 rounded-full blur-3xl pointer-events-none" />
+
+      {/* Screen Loader when Google Auth is running */}
+      <AnimatePresence>
+        {googleLoading && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-sm z-50 flex flex-col items-center justify-center"
+          >
+            <div className="relative flex items-center justify-center">
+              <div className="h-16 w-16 animate-spin rounded-full border-4 border-zinc-200 border-t-[#FFB82B]" />
+              <div className="absolute h-8 w-8 rounded-full bg-[#FFB82B]/20 flex items-center justify-center">
+                <svg className="h-4.5 w-4.5 text-[#FFB82B] animate-pulse" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12.24 10.285V14.4h6.887c-.648 2.41-2.519 4.114-6.887 4.114-4.68 0-8.5-3.82-8.5-8.5s3.82-8.5 8.5-8.5c2.1 0 3.99.77 5.48 2.03l3.02-3.02C18.6 1.19 15.54 0 12 0 5.37 0 0 5.37 0 12s5.37 12 12 12c6.63 0 12-5.37 12-12 0-.85-.09-1.68-.26-2.485H12.24z" />
+                </svg>
               </div>
-            )}
-            <Input
-              label="Email"
-              type="email"
-              placeholder="john@example.com"
-              {...register('email')}
-              error={errors.email?.message}
-            />
-            <Input
-              label="Password"
-              type="password"
-              placeholder="••••••••"
-              {...register('password')}
-              error={errors.password?.message}
-            />
-            <Button type="submit" className="w-full" isLoading={isLoading}>
-              Masuk
-            </Button>
-          </form>
-        </CardContent>
-        <CardFooter className="flex justify-center">
-          <p className="text-sm text-gray-600">
-            Belum punya akun?{' '}
-            <Link href="/register" className="font-medium text-blue-600 hover:underline">
-              Daftar sekarang
-            </Link>
-          </p>
-        </CardFooter>
-      </Card>
+            </div>
+            <p className="mt-6 text-base font-semibold text-gray-900 dark:text-white animate-pulse">
+              Menghubungkan akun Google Anda...
+            </p>
+            <p className="mt-1 text-sm text-gray-500">
+              Mohon tunggu sebentar selagi kami menyiapkan dashboard Anda
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div className="w-full max-w-4xl bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-3xl shadow-xl overflow-hidden p-6 md:p-12">
+        <div className="grid grid-cols-1 md:grid-cols-11 gap-8 md:gap-12 items-center">
+          
+          {/* Left Column: Email Form */}
+          <div className="md:col-span-5 flex flex-col justify-center space-y-6">
+            <div className="flex flex-col space-y-2">
+              <Logo />
+              <h1 className="text-3xl font-black text-gray-900 dark:text-white pt-4 tracking-tight leading-tight">
+                Masuk ke JagoBisnis
+              </h1>
+              <p className="text-sm text-gray-500 dark:text-zinc-400">
+                Masukkan email Anda untuk mengakses akun.
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              {error && (
+                <div className="rounded-xl bg-red-50 dark:bg-red-950/30 p-3 text-xs font-medium text-red-600 dark:text-red-400 border border-red-100 dark:border-red-900/50">
+                  {error}
+                </div>
+              )}
+              
+              <div className="space-y-1">
+                <label className="text-[11px] font-extrabold tracking-wider text-gray-400 dark:text-zinc-500 uppercase block">
+                  Email
+                </label>
+                <Input
+                  type="email"
+                  placeholder="nama@usaha.com"
+                  className="rounded-xl h-11 border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-850 px-4 py-2.5 focus:border-[#FFB82B] focus:ring-2 focus:ring-[#FFB82B]/20 transition-all placeholder:text-gray-400"
+                  {...register('email')}
+                  error={errors.email?.message}
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[11px] font-extrabold tracking-wider text-gray-400 dark:text-zinc-500 uppercase block">
+                  Kata Sandi
+                </label>
+                <Input
+                  type="password"
+                  placeholder="Kata sandi"
+                  className="rounded-xl h-11 border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-850 px-4 py-2.5 focus:border-[#FFB82B] focus:ring-2 focus:ring-[#FFB82B]/20 transition-all placeholder:text-gray-400"
+                  {...register('password')}
+                  error={errors.password?.message}
+                />
+              </div>
+
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-[#FFB82B] hover:bg-[#F2AE24] text-gray-900 font-extrabold text-sm rounded-xl h-11 transition-all duration-200 shadow-sm border border-[#EAA21A] mt-2"
+                isLoading={isLoading}
+              >
+                Masuk
+              </Button>
+            </form>
+
+            <p className="text-center md:text-left text-xs text-gray-500 dark:text-zinc-400">
+              Belum punya akun?{' '}
+              <Link href="/register" className="font-bold text-[#FFB82B] hover:text-[#EAA21A] transition-colors">
+                Daftar sekarang
+              </Link>
+            </p>
+          </div>
+
+          {/* Middle: Subtle Divider */}
+          <div className="hidden md:flex md:col-span-1 justify-center h-full items-center">
+            <div className="w-[1px] h-48 bg-gray-100 dark:bg-zinc-800" />
+          </div>
+
+          {/* Right Column: Google Login */}
+          <div className="md:col-span-5 flex flex-col justify-center space-y-6 text-center md:text-left">
+            <div className="space-y-1.5">
+              <h3 className="text-base font-bold text-gray-800 dark:text-zinc-200">
+                Metode Lain
+              </h3>
+              <p className="text-xs text-gray-400 dark:text-zinc-500">
+                Gunakan akun Google Anda
+              </p>
+            </div>
+
+            <button
+              onClick={handleGoogleLogin}
+              type="button"
+              className="flex w-full items-center justify-center rounded-xl border border-gray-200 dark:border-zinc-850 bg-white dark:bg-zinc-900 px-4 py-3 text-sm font-semibold text-gray-700 dark:text-zinc-200 shadow-sm hover:bg-gray-50 dark:hover:bg-zinc-800/80 transition-all cursor-pointer h-11"
+            >
+              <GoogleIcon />
+              Masuk dengan Google
+            </button>
+          </div>
+
+        </div>
+      </div>
     </div>
   );
 }

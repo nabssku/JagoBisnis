@@ -41,6 +41,9 @@ let AuthController = class AuthController {
     updatePassword(req, dto) {
         return this.authService.updatePassword(req.user.id, dto);
     }
+    googleLogin(accessToken) {
+        return this.authService.googleLogin(accessToken);
+    }
 };
 exports.AuthController = AuthController;
 __decorate([
@@ -102,6 +105,16 @@ __decorate([
     __metadata("design:paramtypes", [Object, update_password_dto_1.UpdatePasswordDto]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "updatePassword", null);
+__decorate([
+    (0, common_1.Post)('google'),
+    (0, swagger_1.ApiOperation)({ summary: 'Login or register via Google' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Successfully authenticated via Google' }),
+    (0, swagger_1.ApiResponse)({ status: 400, description: 'Invalid Google access token' }),
+    __param(0, (0, common_1.Body)('accessToken')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "googleLogin", null);
 exports.AuthController = AuthController = __decorate([
     (0, swagger_1.ApiTags)('auth'),
     (0, common_1.Controller)('auth'),

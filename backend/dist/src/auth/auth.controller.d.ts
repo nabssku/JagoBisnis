@@ -64,4 +64,16 @@ export declare class AuthController {
         success: boolean;
         message: string;
     }>;
+    googleLogin(accessToken: string): Promise<{
+        user: {
+            name: string;
+            email: string;
+            phone: string | null;
+            avatarUrl: string | null;
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+        };
+        accessToken: string;
+    }>;
 }

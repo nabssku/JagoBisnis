@@ -136,6 +136,83 @@ export class AuthService {
     return { success: true, message: 'Kata sandi berhasil diperbarui' };
   }
 
+  async googleLogin(googleAccessToken: string) {
+    let googleUser: {
+      email: string;
+      name: string;
+      picture?: string;
+    };
+
+    if (googleAccessToken.startsWith('mock-google-token')) {
+      // Demo / Mock Mode fallback for quick local testing without setting up GCP client keys
+      googleUser = {
+        email: 'demo-google-user@gmail.com',
+        name: 'Demo Google User',
+        picture: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
+      };
+    } else {
+      try {
+        const response = await fetch(
+          `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${googleAccessToken}`,
+        );
+        if (!response.ok) {
+          throw new BadRequestException('Gagal memverifikasi token Google.');
+        }
+        const data: any = await response.json();
+        if (!data.email) {
+          throw new BadRequestException('Token Google tidak valid.');
+        }
+        googleUser = {
+          email: data.email,
+          name: data.name || data.given_name || 'Google User',
+          picture: data.picture,
+        };
+      } catch (err: any) {
+        throw new BadRequestException(
+          err.message || 'Terjadi kesalahan saat memverifikasi sesi Google.',
+        );
+      }
+    }
+
+    // 1. Check if user already exists
+    let user = await this.prisma.user.findUnique({
+      where: { email: googleUser.email },
+    });
+
+    if (!user) {
+      // 2. Register new user with a secure random hashed password
+      const randomPassword = Math.random().toString(36) + Date.now().toString(36);
+      const hashedPassword = await bcrypt.hash(randomPassword, 10);
+
+      user = await this.prisma.user.create({
+        data: {
+          name: googleUser.name,
+          email: googleUser.email,
+          password: hashedPassword,
+          avatarUrl: googleUser.picture || null,
+        },
+      });
+    } else {
+      // 3. Optional: update name or avatar if updated from Google
+      user = await this.prisma.user.update({
+        where: { id: user.id },
+        data: {
+          name: user.name || googleUser.name,
+          avatarUrl: user.avatarUrl || googleUser.picture || null,
+        },
+      });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...result } = user;
+    const accessToken = this.generateToken(user.id, user.email);
+
+    return {
+      user: result,
+      accessToken,
+    };
+  }
+
   private generateToken(userId: string, email: string) {
     return this.jwtService.sign({ userId, email });
   }

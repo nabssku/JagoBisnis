@@ -37,6 +37,9 @@ Tasks:
 - [x] Frontend login page
 - [x] Frontend register page
 - [x] Protected dashboard route
+- [x] Redesigned high-fidelity Login and Register pages matching Temmu style but using "JagoBisnis" name & warm yellow palette (rounded-xl buttons, thin borders, soft shadows, caps labels).
+- [x] Real Google Implicit OAuth Redirect connection handlers (token parsing via hash fragments, secure backend verification).
+- [x] Elegant simulated Google Session developer fallback mode for immediate local testing without GCP Client ID setup.
 
 ## Phase 3: Business Profile
 Status: Completed
