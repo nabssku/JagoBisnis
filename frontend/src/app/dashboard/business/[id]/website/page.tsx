@@ -233,6 +233,11 @@ export default function WebsiteBuilderPage() {
   const [previewMode, setPreviewMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [isLivePreviewOpen, setIsLivePreviewOpen] = useState(false);
   
+  // Drag and drop states
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const [draggedBlockType, setDraggedBlockType] = useState<string | null>(null);
+  
   // File upload pointer refs
   const logoUploadRef = useRef<HTMLInputElement>(null);
   const bgUploadRef = useRef<HTMLInputElement>(null);
@@ -359,6 +364,90 @@ export default function WebsiteBuilderPage() {
     [newSections[index + 1], newSections[index]] = [newSections[index], newSections[index + 1]];
     newSections.forEach((s, i) => s.order = i + 1);
     setSite({ ...site, sections: newSections });
+  };
+
+  // Drag and Drop Handlers
+  const handleDragStart = (e: React.DragEvent, index: number) => {
+    setDraggedIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+    e.currentTarget.classList.add('opacity-30', 'scale-[0.98]');
+  };
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    if (draggedBlockType) {
+      setDragOverIndex(index);
+      return;
+    }
+    if (draggedIndex === null || draggedIndex === index) return;
+    setDragOverIndex(index);
+  };
+
+  const handleDragLeave = () => {
+    setDragOverIndex(null);
+  };
+
+  const handleDrop = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    if (!site) return;
+
+    // 1. Dropping a brand new block from left sidebar
+    if (draggedBlockType) {
+      const defaultBlock = AVAILABLE_BLOCKS.find(b => b.type === draggedBlockType);
+      if (!defaultBlock) return;
+
+      const newSection: Section = {
+        id: `${draggedBlockType}-${Date.now()}`,
+        type: draggedBlockType as any,
+        order: index + 1,
+        content: JSON.parse(JSON.stringify(defaultBlock.defaultContent))
+      };
+
+      const newSections = [...site.sections].sort((a, b) => a.order - b.order);
+      newSections.splice(index, 0, newSection);
+      newSections.forEach((s, i) => s.order = i + 1);
+
+      setSite({ ...site, sections: newSections });
+      setActiveSectionId(newSection.id);
+      setActiveTab('block');
+      setDraggedBlockType(null);
+      setDragOverIndex(null);
+      toast.success(`Blok ${defaultBlock.name} berhasil ditambahkan!`);
+      return;
+    }
+
+    // 2. Reordering existing canvas blocks
+    if (draggedIndex !== null && draggedIndex !== index) {
+      const newSections = [...site.sections].sort((a, b) => a.order - b.order);
+      const [draggedItem] = newSections.splice(draggedIndex, 1);
+      newSections.splice(index, 0, draggedItem);
+      newSections.forEach((s, i) => s.order = i + 1);
+
+      setSite({ ...site, sections: newSections });
+      setActiveSectionId(draggedItem.id);
+      setDraggedIndex(null);
+      setDragOverIndex(null);
+      toast.success('Posisi blok berhasil diubah!');
+    }
+  };
+
+  const handleDragEnd = (e: React.DragEvent) => {
+    e.currentTarget.classList.remove('opacity-30', 'scale-[0.98]');
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+  };
+
+  // Sidebar drag trigger handlers
+  const handleAvailableBlockDragStart = (e: React.DragEvent, type: string) => {
+    setDraggedBlockType(type);
+    e.dataTransfer.effectAllowed = 'copyMove';
+    e.currentTarget.classList.add('opacity-45', 'border-primary/60');
+  };
+
+  const handleAvailableBlockDragEnd = (e: React.DragEvent) => {
+    e.currentTarget.classList.remove('opacity-45', 'border-primary/60');
+    setDraggedBlockType(null);
+    setDragOverIndex(null);
   };
 
   const handleDeleteSection = (id: string) => {
@@ -857,7 +946,10 @@ export default function WebsiteBuilderPage() {
                 <button
                   key={block.type}
                   onClick={() => handleAddSection(block.type)}
-                  className="w-full text-left p-3 rounded-xl border border-border dark:border-zinc-850 hover:border-primary/50 dark:hover:border-amber-400/50 bg-white dark:bg-zinc-900 hover:bg-gray-50/50 dark:hover:bg-zinc-850/50 transition-all shadow-sm hover:scale-[1.01] active:scale-95 group flex items-start gap-3"
+                  draggable
+                  onDragStart={(e) => handleAvailableBlockDragStart(e, block.type)}
+                  onDragEnd={handleAvailableBlockDragEnd}
+                  className="w-full text-left p-3 rounded-xl border border-border dark:border-zinc-850 hover:border-primary/50 dark:hover:border-amber-400/50 bg-white dark:bg-zinc-900 hover:bg-gray-50/50 dark:hover:bg-zinc-850/50 transition-all shadow-sm hover:scale-[1.01] active:scale-95 group flex items-start gap-3 cursor-grab active:cursor-grabbing"
                 >
                   <div className="h-8 w-8 shrink-0 rounded-lg flex items-center justify-center bg-gray-50 dark:bg-zinc-850 border dark:border-zinc-800 shadow-inner group-hover:bg-primary/5 dark:group-hover:bg-amber-400/5 group-hover:text-primary dark:group-hover:text-amber-400 transition-colors">
                     <Icon className="h-4 w-4 text-gray-500 dark:text-zinc-400 group-hover:text-primary dark:group-hover:text-amber-400 transition-colors" />
@@ -893,18 +985,43 @@ export default function WebsiteBuilderPage() {
           {/* Visual Canvas Stack */}
           <div className="w-full max-w-xl flex flex-col gap-6 pt-2 pb-16">
             {site.sections.length === 0 ? (
-              <div className="py-24 text-center bg-white dark:bg-zinc-900 border border-dashed border-border dark:border-zinc-800 rounded-3xl p-8 flex flex-col items-center justify-center gap-4">
+              <div 
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  e.currentTarget.classList.add('border-primary/50', 'bg-primary/5', 'scale-[1.01]');
+                }}
+                onDragLeave={(e) => {
+                  e.currentTarget.classList.remove('border-primary/50', 'bg-primary/5', 'scale-[1.01]');
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  e.currentTarget.classList.remove('border-primary/50', 'bg-primary/5', 'scale-[1.01]');
+                  if (draggedBlockType) {
+                    handleAddSection(draggedBlockType);
+                  }
+                }}
+                className="py-24 text-center bg-white dark:bg-zinc-900 border border-dashed border-border dark:border-zinc-800 rounded-3xl p-8 flex flex-col items-center justify-center gap-4 transition-all duration-200"
+              >
                 <Layout className="h-12 w-12 text-muted-foreground/30 animate-bounce" />
                 <div className="space-y-1">
                   <p className="font-bold text-sm text-gray-900 dark:text-white">Kanvas Kosong</p>
-                  <p className="text-xs text-muted-foreground max-w-xs mx-auto">Tambahkan blok dari menu sebelah kiri untuk menyusun desain landing page bisnis Anda.</p>
+                  <p className="text-xs text-muted-foreground max-w-xs mx-auto">Tambahkan atau Tarik (Drag & Drop) blok dari menu sebelah kiri ke sini untuk menyusun desain.</p>
                 </div>
               </div>
             ) : (
               [...site.sections].sort((a, b) => a.order - b.order).map((section, idx) => {
                 const isActive = activeSectionId === section.id;
                 return (
-                  <div key={section.id} className="relative w-full group">
+                  <div 
+                    key={section.id} 
+                    id={`section-card-${section.id}`}
+                    className="relative w-full group transition-all duration-200"
+                    onDragStart={(e) => handleDragStart(e, idx)}
+                    onDragOver={(e) => handleDragOver(e, idx)}
+                    onDragLeave={handleDragLeave}
+                    onDrop={(e) => handleDrop(e, idx)}
+                    onDragEnd={(e) => { handleDragEnd(e); e.currentTarget.setAttribute('draggable', 'false'); }}
+                  >
                     {/* Floating Side Action Controls on Hover/Active */}
                     {isActive && (
                       <div className="absolute left-[-42px] top-1/2 -translate-y-1/2 flex flex-col gap-1.5 z-20 animate-in fade-in slide-in-from-left-2 duration-200">
@@ -917,7 +1034,17 @@ export default function WebsiteBuilderPage() {
                           <ChevronUp className="h-4.5 w-4.5 stroke-[2.5]" />
                         </button>
                         
-                        <div className="h-8.5 w-8.5 bg-white dark:bg-zinc-900 text-zinc-400 dark:text-zinc-500 rounded-xl flex items-center justify-center shadow-md border border-border/80 dark:border-zinc-800 cursor-grab active:cursor-grabbing hover:scale-105 transition-all">
+                        <div 
+                          onMouseDown={() => {
+                            const el = document.getElementById(`section-card-${section.id}`);
+                            if (el) el.setAttribute('draggable', 'true');
+                          }}
+                          onMouseUp={() => {
+                            const el = document.getElementById(`section-card-${section.id}`);
+                            if (el) el.setAttribute('draggable', 'false');
+                          }}
+                          className="h-8.5 w-8.5 bg-white dark:bg-zinc-900 text-zinc-400 dark:text-zinc-500 rounded-xl flex items-center justify-center shadow-md border border-border/80 dark:border-zinc-800 cursor-grab active:cursor-grabbing hover:scale-105 transition-all"
+                        >
                           <svg width="10" height="14" viewBox="0 0 10 14" fill="none" stroke="currentColor" strokeWidth="2.5" className="opacity-95 text-zinc-400 dark:text-zinc-500">
                             <circle cx="3" cy="3" r="1.2" fill="currentColor" stroke="none" />
                             <circle cx="7" cy="3" r="1.2" fill="currentColor" stroke="none" />
@@ -949,7 +1076,8 @@ export default function WebsiteBuilderPage() {
                         "w-full rounded-none border transition-all cursor-pointer relative select-none p-1.5",
                         isActive 
                           ? "border-amber-500 dark:border-amber-400 bg-amber-50/10 dark:bg-amber-950/5" 
-                          : "border-transparent bg-transparent hover:border-gray-200 dark:hover:border-zinc-800/60"
+                          : "border-transparent bg-transparent hover:border-gray-200 dark:hover:border-zinc-800/60",
+                        dragOverIndex === idx && "border-dashed border-2 border-amber-500 dark:border-amber-400 scale-[1.01] bg-amber-500/5 dark:bg-amber-400/5"
                       )}
                     >
                       {/* Labeled Top Ribbon */}
