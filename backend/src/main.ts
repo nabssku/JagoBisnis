@@ -26,8 +26,14 @@ async function bootstrap() {
   // Enable CORS
   const frontendUrl = process.env.FRONTEND_URL;
   const allowedOrigins = frontendUrl
-    ? frontendUrl.split(',').map((url) => url.trim())
-    : ['http://localhost:3000', 'http://127.0.0.1:3000'];
+    ? frontendUrl.split(',').map((url) => url.trim().replace(/^['"]|['"]$/g, '').replace(/\/$/, ''))
+    : [
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+        'https://jagobisnis.vercel.app',
+        'https://www.jago-bisnis.my.id',
+        'https://jago-bisnis.my.id',
+      ];
 
   app.enableCors({
     origin: (origin, callback) => {

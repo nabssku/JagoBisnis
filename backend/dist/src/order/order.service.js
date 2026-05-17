@@ -75,7 +75,8 @@ let OrderService = OrderService_1 = class OrderService {
             paymentStatus = client_1.PaymentStatus.PENDING;
             pakasirOrderId = orderId;
             pakasirPaymentMethod = 'QRIS';
-            const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+            const rawFrontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+            const frontendUrl = rawFrontendUrl.split(',')[0].trim().replace(/^['"]|['"]$/g, '');
             const redirectUrl = `${frontendUrl}/jago/${siteSlug}/orders/${orderId}`;
             pakasirPaymentUrl = this.pakasirCheckout.generateCheckoutUrl(pakasirSlug, subtotal, orderId, redirectUrl);
         }

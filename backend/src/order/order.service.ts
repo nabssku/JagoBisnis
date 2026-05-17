@@ -95,7 +95,8 @@ export class OrderService {
       pakasirPaymentMethod = 'QRIS';
 
       // Generate Frontend redirect status page
-      const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+      const rawFrontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+      const frontendUrl = rawFrontendUrl.split(',')[0].trim().replace(/^['"]|['"]$/g, '');
       const redirectUrl = `${frontendUrl}/jago/${siteSlug}/orders/${orderId}`;
 
       // Call Pakasir Checkout provider to construct redirect URL

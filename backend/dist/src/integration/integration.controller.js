@@ -90,7 +90,8 @@ let IntegrationController = class IntegrationController {
         return this.integrationService.getInstagramConnectUrl(req.user.id, businessId);
     }
     async instagramCallback(code, state, res) {
-        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+        const rawFrontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+        const frontendUrl = rawFrontendUrl.split(',')[0].trim().replace(/^['"]|['"]$/g, '');
         try {
             const { businessId } = await this.integrationService.handleInstagramCallback(code, state);
             return res.redirect(`${frontendUrl}/dashboard/business/${businessId}/integrations?provider=instagram&status=success`);
@@ -103,7 +104,8 @@ let IntegrationController = class IntegrationController {
         return this.integrationService.getThreadsConnectUrl(req.user.id, businessId);
     }
     async threadsCallback(code, state, res) {
-        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+        const rawFrontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+        const frontendUrl = rawFrontendUrl.split(',')[0].trim().replace(/^['"]|['"]$/g, '');
         try {
             const { businessId } = await this.integrationService.handleThreadsCallback(code, state);
             return res.redirect(`${frontendUrl}/dashboard/business/${businessId}/integrations?provider=threads&status=success`);

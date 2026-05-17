@@ -164,7 +164,8 @@ export class IntegrationController {
     @Query('state') state: string,
     @Res() res: express.Response,
   ) {
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    const rawFrontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    const frontendUrl = rawFrontendUrl.split(',')[0].trim().replace(/^['"]|['"]$/g, '');
     try {
       const { businessId } = await this.integrationService.handleInstagramCallback(code, state);
       return res.redirect(
@@ -197,7 +198,8 @@ export class IntegrationController {
     @Query('state') state: string,
     @Res() res: express.Response,
   ) {
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    const rawFrontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    const frontendUrl = rawFrontendUrl.split(',')[0].trim().replace(/^['"]|['"]$/g, '');
     try {
       const { businessId } = await this.integrationService.handleThreadsCallback(code, state);
       return res.redirect(
