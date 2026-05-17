@@ -11,24 +11,21 @@ interface WebsitePreviewProps {
 
 import { SectionRenderer } from './section-renderer';
 import { Globe, Store } from 'lucide-react';
-
-interface WebsitePreviewProps {
-  site: Site;
-  products?: Product[];
-}
+import { Button } from '@/components/ui/button';
 
 export const WebsitePreview: React.FC<WebsitePreviewProps> = ({ site, products = [] }) => {
   const { theme, sections } = site;
 
   return (
     <div 
-      className="w-full min-h-screen bg-white"
+      className="w-full min-h-screen bg-white dark:bg-[#0B0F19] text-gray-900 dark:text-white transition-colors duration-200"
       style={{ 
-        fontFamily: theme.font 
+        fontFamily: theme.font,
+        color: theme.textColor
       }}
     >
       {/* Navigation */}
-      <nav className="p-6 flex justify-between items-center border-b border-gray-100 bg-white/80 backdrop-blur-md sticky top-0 z-[50]">
+      <nav className="p-6 flex justify-between items-center border-b border-gray-100 dark:border-zinc-900 bg-white/70 dark:bg-zinc-950/70 sticky top-0 z-[50] backdrop-blur-xl transition-colors duration-200">
         <div className="flex items-center gap-2">
           <div className="h-8 w-8 rounded-lg flex items-center justify-center text-white" style={{ backgroundColor: theme.primaryColor }}>
             <Globe className="h-5 w-5" />
@@ -37,15 +34,40 @@ export const WebsitePreview: React.FC<WebsitePreviewProps> = ({ site, products =
             {site.title}
           </span>
         </div>
-        <div className="hidden md:flex gap-8 text-[10px] font-black uppercase tracking-[0.2em]">
-          {sections.map(s => (
-            <a key={s.id} href={`#${s.id}`} className="hover:opacity-50 transition-all relative group">
-              {s.type}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 transition-all group-hover:w-full" style={{ backgroundColor: theme.primaryColor }} />
-            </a>
-          ))}
+        <div className="hidden md:flex gap-10 text-[10px] font-black uppercase tracking-[0.2em]">
+          {sections.map(s => {
+            const getSectionLabel = (type: string) => {
+              switch (type) {
+                case 'hero': return 'Beranda';
+                case 'about': return 'Tentang Kami';
+                case 'products': return 'Layanan & Produk';
+                case 'contact': return 'Hubungi';
+                default: return type;
+              }
+            };
+            return (
+              <a key={s.id} href={`#${s.id}`} className="hover:opacity-50 transition-all relative group" style={{ color: theme.textColor }}>
+                {getSectionLabel(s.type)}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 transition-all group-hover:w-full" style={{ backgroundColor: theme.primaryColor }} />
+              </a>
+            );
+          })}
         </div>
+        <Button 
+          onClick={() => {
+            const contactSection = document.getElementById('contact');
+            if (contactSection) {
+              contactSection.scrollIntoView({ behavior: 'smooth' });
+            }
+          }}
+          size="sm" 
+          className="rounded-full px-6 font-bold text-white text-xs h-9" 
+          style={{ backgroundColor: theme.primaryColor }}
+        >
+          Hubungi
+        </Button>
       </nav>
+
 
       {/* Sections Renderer */}
       <div className="flex flex-col">
