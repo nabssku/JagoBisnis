@@ -148,7 +148,7 @@ export default function PublicWebsitePage() {
         </div>
         
         <div className="hidden md:flex gap-6 text-xs font-bold tracking-wider uppercase">
-          {sections.sort((a, b) => a.order - b.order).map(s => {
+          {[...sections].sort((a, b) => a.order - b.order).map(s => {
             const getSectionLabel = (type: string) => {
               switch (type) {
                 case 'hero': return 'Beranda';
@@ -186,7 +186,7 @@ export default function PublicWebsitePage() {
 
       {/* Sections Renderer */}
       <main className="flex flex-col">
-        {sections.sort((a, b) => a.order - b.order).map((section, index) => (
+        {[...sections].sort((a, b) => a.order - b.order).map((section, index) => (
           <SectionRenderer 
             key={section.id} 
             section={section} 

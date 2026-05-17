@@ -145,6 +145,7 @@ Tasks:
 - [x] Middle Canvas Layout Overhaul: Labeled top block ribbons showing lock state symbol (`🔒`) for HERO and trash action icons for deletable sections
 - [x] Middle Canvas Layout Overhaul: Warm golden/yellow active highlight border enclosing the selected canvas section container
 - [x] Tentang Kami Redesign: 2-column layout and premium 3-character fashion shop SVG illustration synchronized between Public Site Renderer and visual canvas mockup
+- [x] Ordering Sync Fix: Eliminated redundant CSS flexbox order override in SectionRenderer and implemented non-mutating sort on preview, public, and editor canvas
 
 ## Phase 11: Post-MVP & Optimization
 Status: In Planning

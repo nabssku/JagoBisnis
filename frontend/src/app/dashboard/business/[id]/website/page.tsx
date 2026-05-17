@@ -883,7 +883,7 @@ export default function WebsiteBuilderPage() {
                 </div>
               </div>
             ) : (
-              site.sections.sort((a, b) => a.order - b.order).map((section, idx) => {
+              [...site.sections].sort((a, b) => a.order - b.order).map((section, idx) => {
                 const isActive = activeSectionId === section.id;
                 return (
                   <div key={section.id} className="relative w-full group">

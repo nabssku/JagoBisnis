@@ -69,7 +69,7 @@ export const WebsitePreview: React.FC<WebsitePreviewProps> = ({ site, products =
         </div>
         
         <div className="hidden md:flex gap-6 text-xs font-bold tracking-wider uppercase">
-          {sections.sort((a, b) => a.order - b.order).map(s => {
+          {[...sections].sort((a, b) => a.order - b.order).map(s => {
             const getSectionLabel = (type: string) => {
               switch (type) {
                 case 'hero': return 'Beranda';
@@ -107,7 +107,7 @@ export const WebsitePreview: React.FC<WebsitePreviewProps> = ({ site, products =
 
       {/* Sections Renderer Stack */}
       <div className="flex flex-col">
-        {sections.sort((a, b) => a.order - b.order).map((section, index) => (
+        {[...sections].sort((a, b) => a.order - b.order).map((section, index) => (
           <SectionRenderer 
             key={section.id} 
             section={section} 

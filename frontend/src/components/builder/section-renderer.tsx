@@ -274,7 +274,7 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
       const paragraphs = desc.split('\n\n');
 
       return (
-        <section id={section.id} className="py-24 overflow-hidden bg-white dark:bg-zinc-950 transition-colors" style={{ order: section.order }}>
+        <section id={section.id} className="py-24 overflow-hidden bg-white dark:bg-zinc-950 transition-colors">
           <div className="container max-w-6xl mx-auto px-4 md:px-8">
             <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
               <motion.div 
