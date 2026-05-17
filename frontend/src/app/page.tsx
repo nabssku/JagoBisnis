@@ -168,7 +168,7 @@ export default function LandingPage() {
                       <div className="h-3 w-3 rounded-full bg-green-500/80" />
                     </div>
                     <div className="rounded-lg bg-zinc-950 px-6 py-1 text-[10px] font-mono text-zinc-500 tracking-wider">
-                      jago-bisnis.my.id/jago/kopi-sedap
+                      jago-bisnis.my.id/jagobisnis/kopi-sedap
                     </div>
                     <Globe className="h-4 w-4 text-zinc-600" />
                   </div>
