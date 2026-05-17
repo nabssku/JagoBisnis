@@ -9,11 +9,11 @@ export declare class OrderService {
     constructor(prisma: PrismaService, pakasirCheckout: PakasirCheckoutProvider);
     createPublicOrder(siteSlug: string, dto: CreatePublicOrderDto): Promise<{
         product: {
-            description: string | null;
-            name: string;
             id: string;
+            name: string;
             createdAt: Date;
             updatedAt: Date;
+            description: string | null;
             slug: string;
             category: string | null;
             businessId: string;
@@ -66,11 +66,11 @@ export declare class OrderService {
     }>;
     getBusinessOrders(businessId: string, userId: string): Promise<({
         product: {
-            description: string | null;
-            name: string;
             id: string;
+            name: string;
             createdAt: Date;
             updatedAt: Date;
+            description: string | null;
             slug: string;
             category: string | null;
             businessId: string;
@@ -105,11 +105,11 @@ export declare class OrderService {
     })[]>;
     getBusinessOrderDetail(businessId: string, orderId: string, userId: string): Promise<{
         product: {
-            description: string | null;
-            name: string;
             id: string;
+            name: string;
             createdAt: Date;
             updatedAt: Date;
+            description: string | null;
             slug: string;
             category: string | null;
             businessId: string;
@@ -144,11 +144,11 @@ export declare class OrderService {
     }>;
     updateBusinessOrderStatus(businessId: string, orderId: string, userId: string, dto: UpdateOrderStatusDto): Promise<{
         product: {
-            description: string | null;
-            name: string;
             id: string;
+            name: string;
             createdAt: Date;
             updatedAt: Date;
+            description: string | null;
             slug: string;
             category: string | null;
             businessId: string;

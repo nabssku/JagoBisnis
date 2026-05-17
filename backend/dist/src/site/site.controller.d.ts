@@ -13,10 +13,10 @@ export declare class SiteController {
     private readonly siteService;
     constructor(siteService: SiteService);
     getSite(businessId: string, req: RequestWithUser): Promise<{
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         slug: string;
         businessId: string;
         theme: import("@prisma/client/runtime/library").JsonValue;
@@ -25,10 +25,10 @@ export declare class SiteController {
         publishedAt: Date | null;
     }>;
     createSite(businessId: string, dto: CreateSiteDto, req: RequestWithUser): Promise<{
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         slug: string;
         businessId: string;
         theme: import("@prisma/client/runtime/library").JsonValue;
@@ -37,10 +37,10 @@ export declare class SiteController {
         publishedAt: Date | null;
     }>;
     updateSite(businessId: string, dto: UpdateSiteDto, req: RequestWithUser): Promise<{
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         slug: string;
         businessId: string;
         theme: import("@prisma/client/runtime/library").JsonValue;
@@ -49,10 +49,10 @@ export declare class SiteController {
         publishedAt: Date | null;
     }>;
     updateTheme(businessId: string, dto: UpdateSiteThemeDto, req: RequestWithUser): Promise<{
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         slug: string;
         businessId: string;
         theme: import("@prisma/client/runtime/library").JsonValue;
@@ -61,10 +61,10 @@ export declare class SiteController {
         publishedAt: Date | null;
     }>;
     updateSections(businessId: string, dto: UpdateSiteSectionsDto, req: RequestWithUser): Promise<{
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         slug: string;
         businessId: string;
         theme: import("@prisma/client/runtime/library").JsonValue;
@@ -73,10 +73,10 @@ export declare class SiteController {
         publishedAt: Date | null;
     }>;
     publish(businessId: string, req: RequestWithUser): Promise<{
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         slug: string;
         businessId: string;
         theme: import("@prisma/client/runtime/library").JsonValue;
@@ -85,10 +85,10 @@ export declare class SiteController {
         publishedAt: Date | null;
     }>;
     unpublish(businessId: string, req: RequestWithUser): Promise<{
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         slug: string;
         businessId: string;
         theme: import("@prisma/client/runtime/library").JsonValue;

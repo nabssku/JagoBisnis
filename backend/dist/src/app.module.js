@@ -22,6 +22,7 @@ const social_publishing_module_1 = require("./social-publishing/social-publishin
 const order_module_1 = require("./order/order.module");
 const payment_module_1 = require("./payment/payment.module");
 const media_module_1 = require("./media/media.module");
+const superadmin_module_1 = require("./superadmin/superadmin.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -45,6 +46,7 @@ exports.AppModule = AppModule = __decorate([
             order_module_1.OrderModule,
             payment_module_1.PaymentModule,
             media_module_1.MediaModule,
+            superadmin_module_1.SuperAdminModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService, prisma_service_1.PrismaService],

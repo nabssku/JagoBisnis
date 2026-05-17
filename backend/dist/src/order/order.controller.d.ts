@@ -12,11 +12,11 @@ export declare class OrderController {
     constructor(orderService: OrderService);
     createPublicOrder(slug: string, dto: CreatePublicOrderDto): Promise<{
         product: {
-            description: string | null;
-            name: string;
             id: string;
+            name: string;
             createdAt: Date;
             updatedAt: Date;
+            description: string | null;
             slug: string;
             category: string | null;
             businessId: string;
@@ -69,11 +69,11 @@ export declare class OrderController {
     }>;
     getBusinessOrders(businessId: string, req: RequestWithUser): Promise<({
         product: {
-            description: string | null;
-            name: string;
             id: string;
+            name: string;
             createdAt: Date;
             updatedAt: Date;
+            description: string | null;
             slug: string;
             category: string | null;
             businessId: string;
@@ -108,11 +108,11 @@ export declare class OrderController {
     })[]>;
     getBusinessOrderDetail(businessId: string, orderId: string, req: RequestWithUser): Promise<{
         product: {
-            description: string | null;
-            name: string;
             id: string;
+            name: string;
             createdAt: Date;
             updatedAt: Date;
+            description: string | null;
             slug: string;
             category: string | null;
             businessId: string;
@@ -147,11 +147,11 @@ export declare class OrderController {
     }>;
     updateBusinessOrderStatus(businessId: string, orderId: string, req: RequestWithUser, dto: UpdateOrderStatusDto): Promise<{
         product: {
-            description: string | null;
-            name: string;
             id: string;
+            name: string;
             createdAt: Date;
             updatedAt: Date;
+            description: string | null;
             slug: string;
             category: string | null;
             businessId: string;

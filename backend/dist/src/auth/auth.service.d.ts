@@ -10,11 +10,12 @@ export declare class AuthService {
     constructor(prisma: PrismaService, jwtService: JwtService);
     register(dto: RegisterDto): Promise<{
         user: {
-            name: string;
-            email: string;
-            phone: string | null;
-            avatarUrl: string | null;
             id: string;
+            email: string;
+            name: string;
+            avatarUrl: string | null;
+            phone: string | null;
+            role: string;
             createdAt: Date;
             updatedAt: Date;
         };
@@ -22,31 +23,34 @@ export declare class AuthService {
     }>;
     login(dto: LoginDto): Promise<{
         user: {
-            name: string;
-            email: string;
-            phone: string | null;
-            avatarUrl: string | null;
             id: string;
+            email: string;
+            name: string;
+            avatarUrl: string | null;
+            phone: string | null;
+            role: string;
             createdAt: Date;
             updatedAt: Date;
         };
         accessToken: string;
     }>;
     getMe(userId: string): Promise<{
-        name: string;
-        email: string;
-        phone: string | null;
-        avatarUrl: string | null;
         id: string;
+        email: string;
+        name: string;
+        avatarUrl: string | null;
+        phone: string | null;
+        role: string;
         createdAt: Date;
         updatedAt: Date;
     }>;
     updateProfile(userId: string, dto: UpdateProfileDto): Promise<{
-        name: string;
-        email: string;
-        phone: string | null;
-        avatarUrl: string | null;
         id: string;
+        email: string;
+        name: string;
+        avatarUrl: string | null;
+        phone: string | null;
+        role: string;
         createdAt: Date;
         updatedAt: Date;
     }>;
@@ -56,11 +60,12 @@ export declare class AuthService {
     }>;
     googleLogin(googleAccessToken: string): Promise<{
         user: {
-            name: string;
-            email: string;
-            phone: string | null;
-            avatarUrl: string | null;
             id: string;
+            email: string;
+            name: string;
+            avatarUrl: string | null;
+            phone: string | null;
+            role: string;
             createdAt: Date;
             updatedAt: Date;
         };

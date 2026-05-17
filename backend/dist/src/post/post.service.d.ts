@@ -6,10 +6,10 @@ export declare class PostService {
     constructor(prisma: PrismaService);
     create(userId: string, businessId: string, dto: CreatePostDto): Promise<{
         views: number;
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         tags: string[];
         summary: string | null;
         content: string;
@@ -30,10 +30,10 @@ export declare class PostService {
     }>;
     findAll(userId: string, businessId: string): Promise<{
         views: number;
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         tags: string[];
         summary: string | null;
         content: string;
@@ -54,10 +54,10 @@ export declare class PostService {
     }[]>;
     findOne(userId: string, businessId: string, id: string): Promise<{
         views: number;
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         tags: string[];
         summary: string | null;
         content: string;
@@ -78,10 +78,10 @@ export declare class PostService {
     }>;
     update(userId: string, businessId: string, id: string, dto: UpdatePostDto): Promise<{
         views: number;
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         tags: string[];
         summary: string | null;
         content: string;
@@ -102,10 +102,10 @@ export declare class PostService {
     }>;
     remove(userId: string, businessId: string, id: string): Promise<{
         views: number;
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         tags: string[];
         summary: string | null;
         content: string;
@@ -126,10 +126,10 @@ export declare class PostService {
     }>;
     findPublicPosts(businessSlug: string): Promise<{
         views: number;
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         tags: string[];
         summary: string | null;
         content: string;
@@ -150,10 +150,10 @@ export declare class PostService {
     }[]>;
     findPublicPostBySlug(businessSlug: string, postSlug: string): Promise<{
         views: number;
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         tags: string[];
         summary: string | null;
         content: string;

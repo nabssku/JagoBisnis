@@ -11,12 +11,12 @@ export declare class BusinessController {
     private readonly businessService;
     constructor(businessService: BusinessService);
     create(req: RequestWithUser, dto: CreateBusinessDto): Promise<{
-        description: string | null;
+        id: string;
         name: string;
         phone: string | null;
-        id: string;
         createdAt: Date;
         updatedAt: Date;
+        description: string | null;
         slug: string;
         logoUrl: string | null;
         category: string | null;
@@ -27,48 +27,48 @@ export declare class BusinessController {
             role: import("@prisma/client").$Enums.Role;
         }[];
     } & {
-        description: string | null;
+        id: string;
         name: string;
         phone: string | null;
-        id: string;
         createdAt: Date;
         updatedAt: Date;
+        description: string | null;
         slug: string;
         logoUrl: string | null;
         category: string | null;
         address: string | null;
     })[]>;
     findOne(req: RequestWithUser, id: string): Promise<{
-        description: string | null;
+        id: string;
         name: string;
         phone: string | null;
-        id: string;
         createdAt: Date;
         updatedAt: Date;
+        description: string | null;
         slug: string;
         logoUrl: string | null;
         category: string | null;
         address: string | null;
     }>;
     update(req: RequestWithUser, id: string, dto: UpdateBusinessDto): Promise<{
-        description: string | null;
+        id: string;
         name: string;
         phone: string | null;
-        id: string;
         createdAt: Date;
         updatedAt: Date;
+        description: string | null;
         slug: string;
         logoUrl: string | null;
         category: string | null;
         address: string | null;
     }>;
     remove(req: RequestWithUser, id: string): Promise<{
-        description: string | null;
+        id: string;
         name: string;
         phone: string | null;
-        id: string;
         createdAt: Date;
         updatedAt: Date;
+        description: string | null;
         slug: string;
         logoUrl: string | null;
         category: string | null;

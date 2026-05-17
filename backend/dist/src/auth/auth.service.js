@@ -70,7 +70,7 @@ let AuthService = class AuthService {
             },
         });
         const { password, ...result } = user;
-        const accessToken = this.generateToken(user.id, user.email);
+        const accessToken = this.generateToken(user.id, user.email, user.role);
         return {
             user: result,
             accessToken,
@@ -88,7 +88,7 @@ let AuthService = class AuthService {
             throw new common_1.UnauthorizedException('Invalid credentials');
         }
         const { password, ...result } = user;
-        const accessToken = this.generateToken(user.id, user.email);
+        const accessToken = this.generateToken(user.id, user.email, user.role);
         return {
             user: result,
             accessToken,
@@ -197,14 +197,14 @@ let AuthService = class AuthService {
             });
         }
         const { password, ...result } = user;
-        const accessToken = this.generateToken(user.id, user.email);
+        const accessToken = this.generateToken(user.id, user.email, user.role);
         return {
             user: result,
             accessToken,
         };
     }
-    generateToken(userId, email) {
-        return this.jwtService.sign({ userId, email });
+    generateToken(userId, email, role) {
+        return this.jwtService.sign({ userId, email, role });
     }
 };
 exports.AuthService = AuthService;

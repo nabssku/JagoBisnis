@@ -13,11 +13,11 @@ export declare class PublicSiteController {
         };
         business: {
             Product: {
-                description: string | null;
-                name: string;
                 id: string;
+                name: string;
                 createdAt: Date;
                 updatedAt: Date;
+                description: string | null;
                 slug: string;
                 category: string | null;
                 businessId: string;
@@ -28,21 +28,21 @@ export declare class PublicSiteController {
                 isActive: boolean;
             }[];
         } & {
-            description: string | null;
+            id: string;
             name: string;
             phone: string | null;
-            id: string;
             createdAt: Date;
             updatedAt: Date;
+            description: string | null;
             slug: string;
             logoUrl: string | null;
             category: string | null;
             address: string | null;
         };
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         slug: string;
         businessId: string;
         theme: import("@prisma/client/runtime/library").JsonValue;

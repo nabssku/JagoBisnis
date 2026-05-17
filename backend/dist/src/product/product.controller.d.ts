@@ -18,11 +18,11 @@ export declare class ProductController {
         url: string;
     }[];
     create(req: RequestWithUser, businessId: string, dto: CreateProductDto): Promise<{
-        description: string | null;
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
+        description: string | null;
         slug: string;
         category: string | null;
         businessId: string;
@@ -33,11 +33,11 @@ export declare class ProductController {
         isActive: boolean;
     }>;
     findAll(req: RequestWithUser, businessId: string): Promise<{
-        description: string | null;
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
+        description: string | null;
         slug: string;
         category: string | null;
         businessId: string;
@@ -48,11 +48,11 @@ export declare class ProductController {
         isActive: boolean;
     }[]>;
     findOne(req: RequestWithUser, businessId: string, productId: string): Promise<{
-        description: string | null;
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
+        description: string | null;
         slug: string;
         category: string | null;
         businessId: string;
@@ -63,11 +63,11 @@ export declare class ProductController {
         isActive: boolean;
     }>;
     update(req: RequestWithUser, businessId: string, productId: string, dto: UpdateProductDto): Promise<{
-        description: string | null;
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
+        description: string | null;
         slug: string;
         category: string | null;
         businessId: string;
@@ -78,11 +78,11 @@ export declare class ProductController {
         isActive: boolean;
     }>;
     remove(req: RequestWithUser, businessId: string, productId: string): Promise<{
-        description: string | null;
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
+        description: string | null;
         slug: string;
         category: string | null;
         businessId: string;

@@ -12,10 +12,10 @@ export declare class PostController {
     constructor(postService: PostService);
     create(req: RequestWithUser, businessId: string, dto: CreatePostDto): Promise<{
         views: number;
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         tags: string[];
         summary: string | null;
         content: string;
@@ -36,10 +36,10 @@ export declare class PostController {
     }>;
     findAll(req: RequestWithUser, businessId: string): Promise<{
         views: number;
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         tags: string[];
         summary: string | null;
         content: string;
@@ -60,10 +60,10 @@ export declare class PostController {
     }[]>;
     findOne(req: RequestWithUser, businessId: string, productId: string): Promise<{
         views: number;
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         tags: string[];
         summary: string | null;
         content: string;
@@ -84,10 +84,10 @@ export declare class PostController {
     }>;
     update(req: RequestWithUser, businessId: string, postId: string, dto: UpdatePostDto): Promise<{
         views: number;
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         tags: string[];
         summary: string | null;
         content: string;
@@ -108,10 +108,10 @@ export declare class PostController {
     }>;
     remove(req: RequestWithUser, businessId: string, postId: string): Promise<{
         views: number;
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         tags: string[];
         summary: string | null;
         content: string;
@@ -132,10 +132,10 @@ export declare class PostController {
     }>;
     getPublicPosts(businessSlug: string): Promise<{
         views: number;
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         tags: string[];
         summary: string | null;
         content: string;
@@ -156,10 +156,10 @@ export declare class PostController {
     }[]>;
     getPublicPost(businessSlug: string, postSlug: string): Promise<{
         views: number;
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         tags: string[];
         summary: string | null;
         content: string;

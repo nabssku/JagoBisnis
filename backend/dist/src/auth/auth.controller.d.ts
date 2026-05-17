@@ -8,11 +8,12 @@ export declare class AuthController {
     constructor(authService: AuthService);
     register(dto: RegisterDto): Promise<{
         user: {
-            name: string;
-            email: string;
-            phone: string | null;
-            avatarUrl: string | null;
             id: string;
+            email: string;
+            name: string;
+            avatarUrl: string | null;
+            phone: string | null;
+            role: string;
             createdAt: Date;
             updatedAt: Date;
         };
@@ -20,11 +21,12 @@ export declare class AuthController {
     }>;
     login(dto: LoginDto): Promise<{
         user: {
-            name: string;
-            email: string;
-            phone: string | null;
-            avatarUrl: string | null;
             id: string;
+            email: string;
+            name: string;
+            avatarUrl: string | null;
+            phone: string | null;
+            role: string;
             createdAt: Date;
             updatedAt: Date;
         };
@@ -35,11 +37,12 @@ export declare class AuthController {
             id: string;
         };
     }): Promise<{
-        name: string;
-        email: string;
-        phone: string | null;
-        avatarUrl: string | null;
         id: string;
+        email: string;
+        name: string;
+        avatarUrl: string | null;
+        phone: string | null;
+        role: string;
         createdAt: Date;
         updatedAt: Date;
     }>;
@@ -48,11 +51,12 @@ export declare class AuthController {
             id: string;
         };
     }, dto: UpdateProfileDto): Promise<{
-        name: string;
-        email: string;
-        phone: string | null;
-        avatarUrl: string | null;
         id: string;
+        email: string;
+        name: string;
+        avatarUrl: string | null;
+        phone: string | null;
+        role: string;
         createdAt: Date;
         updatedAt: Date;
     }>;
@@ -66,11 +70,12 @@ export declare class AuthController {
     }>;
     googleLogin(accessToken: string): Promise<{
         user: {
-            name: string;
-            email: string;
-            phone: string | null;
-            avatarUrl: string | null;
             id: string;
+            email: string;
+            name: string;
+            avatarUrl: string | null;
+            phone: string | null;
+            role: string;
             createdAt: Date;
             updatedAt: Date;
         };

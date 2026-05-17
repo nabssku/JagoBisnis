@@ -5,11 +5,11 @@ export declare class ProductService {
     private prisma;
     constructor(prisma: PrismaService);
     create(userId: string, businessId: string, dto: CreateProductDto): Promise<{
-        description: string | null;
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
+        description: string | null;
         slug: string;
         category: string | null;
         businessId: string;
@@ -20,11 +20,11 @@ export declare class ProductService {
         isActive: boolean;
     }>;
     findAll(userId: string, businessId: string): Promise<{
-        description: string | null;
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
+        description: string | null;
         slug: string;
         category: string | null;
         businessId: string;
@@ -35,11 +35,11 @@ export declare class ProductService {
         isActive: boolean;
     }[]>;
     findOne(userId: string, businessId: string, id: string): Promise<{
-        description: string | null;
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
+        description: string | null;
         slug: string;
         category: string | null;
         businessId: string;
@@ -50,11 +50,11 @@ export declare class ProductService {
         isActive: boolean;
     }>;
     update(userId: string, businessId: string, id: string, dto: UpdateProductDto): Promise<{
-        description: string | null;
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
+        description: string | null;
         slug: string;
         category: string | null;
         businessId: string;
@@ -65,11 +65,11 @@ export declare class ProductService {
         isActive: boolean;
     }>;
     remove(userId: string, businessId: string, id: string): Promise<{
-        description: string | null;
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
+        description: string | null;
         slug: string;
         category: string | null;
         businessId: string;
@@ -82,8 +82,8 @@ export declare class ProductService {
     private checkAccess;
     private checkPermission;
     createMedia(userId: string, businessId: string, file: any): Promise<{
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         businessId: string;

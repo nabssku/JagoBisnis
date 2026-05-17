@@ -5,13 +5,13 @@ export declare class MediaService {
     constructor(prisma: PrismaService);
     findAll(businessId: string): Promise<({
         uploadedBy: {
-            name: string;
-            email: string;
             id: string;
+            email: string;
+            name: string;
         };
     } & {
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         businessId: string;
@@ -28,12 +28,12 @@ export declare class MediaService {
         size: number;
     }): Promise<{
         uploadedBy: {
-            name: string;
             id: string;
+            name: string;
         };
     } & {
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         businessId: string;
@@ -44,8 +44,8 @@ export declare class MediaService {
         uploadedById: string;
     }>;
     remove(businessId: string, mediaId: string): Promise<{
-        name: string;
         id: string;
+        name: string;
         createdAt: Date;
         updatedAt: Date;
         businessId: string;

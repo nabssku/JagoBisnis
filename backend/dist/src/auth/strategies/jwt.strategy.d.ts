@@ -10,12 +10,13 @@ export declare class JwtStrategy extends JwtStrategy_base {
         userId: string;
         email: string;
     }): Promise<{
-        name: string;
-        email: string;
-        password: string;
-        phone: string | null;
-        avatarUrl: string | null;
         id: string;
+        email: string;
+        name: string;
+        password: string;
+        avatarUrl: string | null;
+        phone: string | null;
+        role: string;
         createdAt: Date;
         updatedAt: Date;
     }>;

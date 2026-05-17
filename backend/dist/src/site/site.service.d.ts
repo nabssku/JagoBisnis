@@ -7,10 +7,10 @@ export declare class SiteService {
     private readonly defaultTheme;
     private readonly defaultSections;
     getByBusinessId(businessId: string, userId: string): Promise<{
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         slug: string;
         businessId: string;
         theme: import("@prisma/client/runtime/library").JsonValue;
@@ -19,10 +19,10 @@ export declare class SiteService {
         publishedAt: Date | null;
     }>;
     create(businessId: string, userId: string, dto: CreateSiteDto): Promise<{
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         slug: string;
         businessId: string;
         theme: import("@prisma/client/runtime/library").JsonValue;
@@ -31,10 +31,10 @@ export declare class SiteService {
         publishedAt: Date | null;
     }>;
     update(businessId: string, userId: string, dto: UpdateSiteDto): Promise<{
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         slug: string;
         businessId: string;
         theme: import("@prisma/client/runtime/library").JsonValue;
@@ -43,10 +43,10 @@ export declare class SiteService {
         publishedAt: Date | null;
     }>;
     updateTheme(businessId: string, userId: string, theme: any): Promise<{
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         slug: string;
         businessId: string;
         theme: import("@prisma/client/runtime/library").JsonValue;
@@ -55,10 +55,10 @@ export declare class SiteService {
         publishedAt: Date | null;
     }>;
     updateSections(businessId: string, userId: string, sections: any[]): Promise<{
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         slug: string;
         businessId: string;
         theme: import("@prisma/client/runtime/library").JsonValue;
@@ -67,10 +67,10 @@ export declare class SiteService {
         publishedAt: Date | null;
     }>;
     publish(businessId: string, userId: string): Promise<{
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         slug: string;
         businessId: string;
         theme: import("@prisma/client/runtime/library").JsonValue;
@@ -79,10 +79,10 @@ export declare class SiteService {
         publishedAt: Date | null;
     }>;
     unpublish(businessId: string, userId: string): Promise<{
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         slug: string;
         businessId: string;
         theme: import("@prisma/client/runtime/library").JsonValue;
@@ -101,11 +101,11 @@ export declare class SiteService {
         };
         business: {
             Product: {
-                description: string | null;
-                name: string;
                 id: string;
+                name: string;
                 createdAt: Date;
                 updatedAt: Date;
+                description: string | null;
                 slug: string;
                 category: string | null;
                 businessId: string;
@@ -116,21 +116,21 @@ export declare class SiteService {
                 isActive: boolean;
             }[];
         } & {
-            description: string | null;
+            id: string;
             name: string;
             phone: string | null;
-            id: string;
             createdAt: Date;
             updatedAt: Date;
+            description: string | null;
             slug: string;
             logoUrl: string | null;
             category: string | null;
             address: string | null;
         };
-        title: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        title: string;
         slug: string;
         businessId: string;
         theme: import("@prisma/client/runtime/library").JsonValue;
