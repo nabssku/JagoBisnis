@@ -157,23 +157,23 @@ export default function DashboardPage() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1 }}
-            className="flex flex-col justify-between rounded-[2.5rem] bg-white p-10 border border-gray-100 shadow-xl"
+            className="flex flex-col justify-between rounded-[2.5rem] bg-white dark:bg-zinc-900 p-10 border border-gray-100 dark:border-zinc-800 shadow-xl"
           >
             <div className="space-y-6">
               <div className="flex items-center gap-3">
-                <div className="h-12 w-12 rounded-xl bg-blue-50 flex items-center justify-center">
-                  <Share2 className="h-6 w-6 text-blue-600" />
+                <div className="h-12 w-12 rounded-xl bg-blue-50 dark:bg-blue-950/30 flex items-center justify-center">
+                  <Share2 className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 </div>
-                <span className="text-2xl font-black tracking-tighter text-blue-600 italic">xendit</span>
+                <span className="text-2xl font-black tracking-tighter text-blue-600 dark:text-blue-400 italic">xendit</span>
               </div>
               <div className="space-y-2">
-                <h3 className="text-xl font-black tracking-tight text-gray-900">Mulai Berjualan Sekarang</h3>
-                <p className="text-sm font-medium text-gray-500 leading-relaxed">
+                <h3 className="text-xl font-black tracking-tight text-gray-900 dark:text-white">Mulai Berjualan Sekarang</h3>
+                <p className="text-sm font-medium text-gray-500 dark:text-zinc-400 leading-relaxed">
                   Integrasi dengan Xendit agar dapat menerima pembayaran penjualan.
                 </p>
               </div>
             </div>
-            <Button className="w-full h-12 rounded-xl bg-[#0066FF] font-black text-white hover:bg-blue-700 shadow-lg shadow-blue-200 transition-all hover:scale-[1.02]">
+            <Button className="w-full h-12 rounded-xl bg-[#0066FF] font-black text-white hover:bg-blue-700 shadow-lg shadow-blue-200 dark:shadow-none transition-all hover:scale-[1.02]">
               Hubungkan Xendit
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
@@ -183,8 +183,8 @@ export default function DashboardPage() {
         {/* Activity Summary Section */}
         <div className="space-y-6">
           <div className="flex items-center gap-4">
-            <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 whitespace-nowrap">Ringkasan Aktivitas</h2>
-            <div className="h-px w-full bg-gray-100" />
+            <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 dark:text-zinc-500 whitespace-nowrap">Ringkasan Aktivitas</h2>
+            <div className="h-px w-full bg-gray-100 dark:bg-zinc-800" />
           </div>
           
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -194,14 +194,14 @@ export default function DashboardPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 + i * 0.1 }}
-                className="group rounded-[2rem] bg-white p-8 border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                className="group rounded-[2rem] bg-white dark:bg-zinc-900 p-8 border border-gray-100 dark:border-zinc-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
               >
-                <div className="h-12 w-12 rounded-2xl bg-gray-50 flex items-center justify-center mb-6 transition-colors group-hover:bg-gray-100">
+                <div className="h-12 w-12 rounded-2xl bg-gray-50 dark:bg-zinc-800 flex items-center justify-center mb-6 transition-colors group-hover:bg-gray-100 dark:group-hover:bg-zinc-700">
                   <stat.icon className={cn("h-5 w-5", stat.color)} />
                 </div>
                 <div className="space-y-1">
-                  <p className="text-4xl font-black tracking-tighter text-gray-900">{stat.value}</p>
-                  <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">{stat.label}</p>
+                  <p className="text-4xl font-black tracking-tighter text-gray-900 dark:text-white">{stat.value}</p>
+                  <p className="text-xs font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-widest">{stat.label}</p>
                 </div>
               </motion.div>
             ))}
@@ -241,22 +241,22 @@ export default function DashboardPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
-            className="lg:col-span-2 rounded-[2.5rem] bg-white p-10 border border-gray-100 shadow-xl flex items-center gap-10"
+            className="lg:col-span-2 rounded-[2.5rem] bg-white dark:bg-zinc-900 p-10 border border-gray-100 dark:border-zinc-800 shadow-xl flex items-center gap-10"
           >
-            <div className="h-24 w-24 rounded-3xl bg-green-50 flex items-center justify-center shrink-0">
-              <MessageSquare className="h-12 w-12 text-green-600" />
+            <div className="h-24 w-24 rounded-3xl bg-green-50 dark:bg-green-950/20 flex items-center justify-center shrink-0">
+              <MessageSquare className="h-12 w-12 text-green-600 dark:text-green-400" />
             </div>
             <div className="flex-1 space-y-6">
               <div className="space-y-1">
-                <h3 className="text-2xl font-black tracking-tight text-gray-900">Komunitas WhatsApp JagoBisnis</h3>
-                <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">Gabung Sekarang</p>
+                <h3 className="text-2xl font-black tracking-tight text-gray-900 dark:text-white">Komunitas WhatsApp JagoBisnis</h3>
+                <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-zinc-500">Gabung Sekarang</p>
               </div>
-              <p className="text-sm font-medium text-gray-500 leading-relaxed max-w-md">
+              <p className="text-sm font-medium text-gray-500 dark:text-zinc-400 leading-relaxed max-w-md">
                 Terhubung dengan ribuan pelaku UMKM lain. Dapatkan tips, info promo, dan dukungan langsung.
               </p>
             </div>
-            <div className="h-24 w-24 rounded-2xl border-2 border-gray-100 p-2 shrink-0">
-              <QrCode className="h-full w-full text-gray-300" />
+            <div className="h-24 w-24 rounded-2xl border-2 border-gray-100 dark:border-zinc-800 p-2 shrink-0 bg-white dark:bg-zinc-800">
+              <QrCode className="h-full w-full text-gray-300 dark:text-zinc-500" />
             </div>
           </motion.div>
         </div>

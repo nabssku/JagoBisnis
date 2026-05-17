@@ -119,47 +119,47 @@ export default function BusinessSettingsPage() {
         className="max-w-4xl mx-auto space-y-8"
       >
         <div className="space-y-1">
-          <h1 className="text-4xl font-black tracking-tight text-gray-900">Profil Usaha</h1>
-          <p className="text-sm font-medium text-gray-400">Atur informasi dasar bisnis Anda untuk ditampilkan di website.</p>
+          <h1 className="text-4xl font-black tracking-tight text-gray-900 dark:text-white">Profil Usaha</h1>
+          <p className="text-sm font-medium text-gray-400 dark:text-zinc-400">Atur informasi dasar bisnis Anda untuk ditampilkan di website.</p>
         </div>
 
         <div className="grid gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2 space-y-8">
-            <Card className="overflow-hidden border-gray-100 shadow-xl rounded-[2.5rem]">
+            <Card className="overflow-hidden border-gray-100 dark:border-zinc-800/80 shadow-xl rounded-[2.5rem] bg-white dark:bg-zinc-900">
               <CardHeader className="p-10 pb-0">
                 <div className="flex items-center gap-3 mb-2">
-                  <Info className="h-5 w-5 text-gray-400" />
-                  <CardTitle className="text-xl font-black text-gray-900">Informasi Dasar</CardTitle>
+                  <Info className="h-5 w-5 text-gray-400 dark:text-zinc-500" />
+                  <CardTitle className="text-xl font-black text-gray-900 dark:text-white">Informasi Dasar</CardTitle>
                 </div>
-                <CardDescription className="text-sm font-medium text-gray-400">Informasi ini akan muncul di bagian Hero dan About website Anda.</CardDescription>
+                <CardDescription className="text-sm font-medium text-gray-400 dark:text-zinc-500">Informasi ini akan muncul di bagian Hero dan About website Anda.</CardDescription>
               </CardHeader>
               <CardContent className="p-10 space-y-8">
                 <form id="settings-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                   {error && (
-                    <div className="rounded-2xl bg-red-50 p-4 text-sm font-bold text-red-600 border border-red-100">
+                    <div className="rounded-2xl bg-red-50 dark:bg-red-950/20 p-4 text-sm font-bold text-red-600 dark:text-red-400 border border-red-100 dark:border-red-900/50">
                       {error}
                     </div>
                   )}
                   
                   <div className="grid gap-6 md:grid-cols-2">
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 flex items-center gap-2">
+                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-zinc-500 flex items-center gap-2">
                         <Type className="h-3 w-3" /> Nama Bisnis
                       </label>
                       <Input
                         placeholder="Contoh: Kedai Kopi Jago"
-                        className="h-12 rounded-xl border-gray-100 bg-gray-50/50 focus:bg-white transition-all font-bold"
+                        className="h-12 rounded-xl border-gray-100 dark:border-zinc-800 bg-gray-50/50 dark:bg-zinc-800/50 focus:bg-white dark:focus:bg-zinc-800 transition-all font-bold text-gray-900 dark:text-white"
                         {...register('name')}
                         error={errors.name?.message}
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 flex items-center gap-2">
+                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-zinc-500 flex items-center gap-2">
                         <Tag className="h-3 w-3" /> Slug Website
                       </label>
                       <Input
                         placeholder="kopi-jago"
-                        className="h-12 rounded-xl border-gray-100 bg-gray-50/50 focus:bg-white transition-all font-bold text-primary"
+                        className="h-12 rounded-xl border-gray-100 dark:border-zinc-800 bg-gray-50/50 dark:bg-zinc-800/50 focus:bg-white dark:focus:bg-zinc-800 transition-all font-bold text-primary dark:text-amber-400"
                         {...register('slug')}
                         error={errors.slug?.message}
                       />
@@ -168,23 +168,23 @@ export default function BusinessSettingsPage() {
 
                   <div className="grid gap-6 md:grid-cols-2">
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 flex items-center gap-2">
+                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-zinc-500 flex items-center gap-2">
                         <Tag className="h-3 w-3" /> Kategori
                       </label>
                       <Input
                         placeholder="Contoh: Kuliner"
-                        className="h-12 rounded-xl border-gray-100 bg-gray-50/50 focus:bg-white transition-all font-bold"
+                        className="h-12 rounded-xl border-gray-100 dark:border-zinc-800 bg-gray-50/50 dark:bg-zinc-800/50 focus:bg-white dark:focus:bg-zinc-800 transition-all font-bold text-gray-900 dark:text-white"
                         {...register('category')}
                         error={errors.category?.message}
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 flex items-center gap-2">
+                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-zinc-500 flex items-center gap-2">
                         <Phone className="h-3 w-3" /> No. Telepon (WhatsApp)
                       </label>
                       <Input
                         placeholder="08123456789"
-                        className="h-12 rounded-xl border-gray-100 bg-gray-50/50 focus:bg-white transition-all font-bold"
+                        className="h-12 rounded-xl border-gray-100 dark:border-zinc-800 bg-gray-50/50 dark:bg-zinc-800/50 focus:bg-white dark:focus:bg-zinc-800 transition-all font-bold text-gray-900 dark:text-white"
                         {...register('phone')}
                         error={errors.phone?.message}
                       />
@@ -192,34 +192,34 @@ export default function BusinessSettingsPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 flex items-center gap-2">
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-zinc-500 flex items-center gap-2">
                       <MapPin className="h-3 w-3" /> Alamat Fisik
                     </label>
                     <Input
                       placeholder="Alamat lengkap usaha Anda"
-                      className="h-12 rounded-xl border-gray-100 bg-gray-50/50 focus:bg-white transition-all font-bold"
+                      className="h-12 rounded-xl border-gray-100 dark:border-zinc-800 bg-gray-50/50 dark:bg-zinc-800/50 focus:bg-white dark:focus:bg-zinc-800 transition-all font-bold text-gray-900 dark:text-white"
                       {...register('address')}
                       error={errors.address?.message}
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 flex items-center gap-2">
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-zinc-500 flex items-center gap-2">
                       <FileText className="h-3 w-3" /> Deskripsi Singkat
                     </label>
                     <textarea
                       placeholder="Ceritakan sedikit tentang bisnis Anda..."
-                      className="flex min-h-[120px] w-full rounded-2xl border border-gray-100 bg-gray-50/50 px-4 py-3 text-sm font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                      className="flex min-h-[120px] w-full rounded-2xl border border-gray-100 dark:border-zinc-800 bg-gray-50/50 dark:bg-zinc-800/50 px-4 py-3 text-sm font-medium focus:bg-white dark:focus:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-zinc-500"
                       {...register('description')}
                     />
                   </div>
                 </form>
               </CardContent>
-              <CardFooter className="p-10 bg-gray-50/50 border-t border-gray-100">
+              <CardFooter className="p-10 bg-gray-50/50 dark:bg-zinc-900/50 border-t border-gray-100 dark:border-zinc-800/80">
                 <Button 
                   type="submit" 
                   form="settings-form"
-                  className="w-full h-14 rounded-2xl bg-gray-900 font-black text-white hover:bg-gray-800 shadow-xl transition-all hover:scale-[1.02]" 
+                  className="w-full h-14 rounded-2xl bg-gray-900 dark:bg-zinc-100 font-black text-white dark:text-zinc-900 hover:bg-gray-800 dark:hover:bg-zinc-200 shadow-xl transition-all hover:scale-[1.02]" 
                   isLoading={isSaving}
                 >
                   <Save className="mr-2 h-5 w-5" />
@@ -231,7 +231,7 @@ export default function BusinessSettingsPage() {
 
           <div className="space-y-8">
             {/* Preview Hint Card */}
-            <Card className="overflow-hidden border-gray-100 shadow-xl rounded-[2.5rem] bg-[#1F2937] text-white">
+            <Card className="overflow-hidden border-gray-100 dark:border-zinc-800/80 shadow-xl rounded-[2.5rem] bg-[#1F2937] text-white">
               <CardContent className="p-8 space-y-6">
                 <div className="h-12 w-12 rounded-2xl bg-white/10 flex items-center justify-center">
                   <Globe className="h-6 w-6 text-amber-400" />
@@ -247,15 +247,15 @@ export default function BusinessSettingsPage() {
             </Card>
 
             {/* Danger Zone */}
-            <Card className="overflow-hidden border-red-100 shadow-xl rounded-[2.5rem]">
+            <Card className="overflow-hidden border-red-100 dark:border-red-950/80 shadow-xl rounded-[2.5rem] bg-white dark:bg-zinc-900">
               <CardHeader className="p-8 pb-0">
-                <CardTitle className="text-lg font-black text-red-600">Zona Bahaya</CardTitle>
-                <CardDescription className="text-xs font-medium text-gray-400">Tindakan ini tidak dapat dibatalkan.</CardDescription>
+                <CardTitle className="text-lg font-black text-red-600 dark:text-red-500">Zona Bahaya</CardTitle>
+                <CardDescription className="text-xs font-medium text-gray-400 dark:text-zinc-500">Tindakan ini tidak dapat dibatalkan.</CardDescription>
               </CardHeader>
               <CardContent className="p-8">
                 <Button 
                   variant="ghost" 
-                  className="w-full h-12 rounded-xl text-red-500 hover:bg-red-50 font-bold justify-start"
+                  className="w-full h-12 rounded-xl text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 font-bold justify-start"
                   onClick={() => setIsModalOpen(true)}
                 >
                   <Trash2 className="h-4 w-4 mr-2" />

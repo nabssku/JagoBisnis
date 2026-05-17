@@ -76,7 +76,7 @@ export const SectionListEditor: React.FC<SectionListEditorProps> = ({ sections, 
     <div className="space-y-6">
       <div className="flex items-center gap-2 mb-2">
         <Layout className="h-4 w-4 text-primary" />
-        <h3 className="text-sm font-bold text-gray-900 uppercase tracking-tight">Struktur Halaman</h3>
+        <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight">Struktur Halaman</h3>
       </div>
       
       <div className="space-y-3">
@@ -88,29 +88,29 @@ export const SectionListEditor: React.FC<SectionListEditorProps> = ({ sections, 
             <div 
               key={section.id} 
               className={cn(
-                "rounded-xl border bg-white transition-all overflow-hidden",
-                isEditing ? "border-primary shadow-lg ring-1 ring-primary/20" : "border-border hover:border-primary/40 shadow-sm"
+                "rounded-xl border bg-white dark:bg-zinc-900 transition-all overflow-hidden",
+                isEditing ? "border-primary dark:border-amber-400 shadow-lg ring-1 ring-primary/20 dark:ring-amber-400/20" : "border-border dark:border-zinc-850 hover:border-primary/40 shadow-sm"
               )}
             >
               <div className={cn(
                 "flex items-center justify-between px-3 py-2.5",
-                isEditing ? "bg-primary/5" : "bg-muted/30"
+                isEditing ? "bg-primary/5 dark:bg-zinc-800" : "bg-muted/30 dark:bg-zinc-950/40"
               )}>
                 <div className="flex items-center gap-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white border shadow-sm">
-                    <Icon className="h-4 w-4 text-primary" />
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white dark:bg-zinc-900 border dark:border-zinc-800 shadow-sm">
+                    <Icon className="h-4 w-4 text-primary dark:text-amber-400" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest leading-none mb-1">
+                    <p className="text-[10px] font-bold text-muted-foreground dark:text-zinc-500 uppercase tracking-widest leading-none mb-1">
                       Seksyen {index + 1}
                     </p>
-                    <p className="text-xs font-bold text-foreground capitalize leading-none">
+                    <p className="text-xs font-bold text-foreground dark:text-white capitalize leading-none">
                       {section.type}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-1">
-                  <div className="flex items-center mr-2 border-r pr-2 gap-1">
+                  <div className="flex items-center mr-2 border-r dark:border-zinc-800 pr-2 gap-1">
                     <Button 
                       variant="ghost" 
                       size="icon" 
@@ -136,7 +136,7 @@ export const SectionListEditor: React.FC<SectionListEditorProps> = ({ sections, 
                     className="h-8 w-8 rounded-lg"
                     onClick={() => setEditingId(isEditing ? null : section.id)}
                   >
-                    <Edit2 className={cn("h-4 w-4", isEditing ? "text-white" : "text-muted-foreground")} />
+                    <Edit2 className={cn("h-4 w-4", isEditing ? "text-white dark:text-zinc-900" : "text-muted-foreground dark:text-zinc-400")} />
                   </Button>
                 </div>
               </div>
@@ -150,7 +150,7 @@ export const SectionListEditor: React.FC<SectionListEditorProps> = ({ sections, 
                     transition={{ duration: 0.2 }}
                     className="overflow-hidden"
                   >
-                    <div className="p-4 border-t border-border bg-white">
+                    <div className="p-4 border-t border-border dark:border-zinc-800 bg-white dark:bg-zinc-900">
                       {renderEditor(section)}
                     </div>
                   </motion.div>
@@ -162,4 +162,5 @@ export const SectionListEditor: React.FC<SectionListEditorProps> = ({ sections, 
       </div>
     </div>
   );
-};
+}
+;

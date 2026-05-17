@@ -26,9 +26,9 @@ export const ProductsSectionEditor: React.FC<ProductsSectionEditorProps> = ({ co
           id="showProducts"
           checked={content.showProducts}
           onChange={(e) => handleChange('showProducts', e.target.checked)}
-          className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+          className="h-4 w-4 rounded border-gray-300 dark:border-zinc-800 text-blue-600 focus:ring-blue-500 bg-white dark:bg-zinc-900"
         />
-        <label htmlFor="showProducts" className="text-sm font-medium text-gray-700">Tampilkan Produk dari Katalog</label>
+        <label htmlFor="showProducts" className="text-sm font-medium text-gray-700 dark:text-zinc-300">Tampilkan Produk dari Katalog</label>
       </div>
     </div>
   );

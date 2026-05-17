@@ -95,6 +95,7 @@ Tasks:
 - [x] Skeleton loading & Empty states
 - [x] Toast notifications (Sonner)
 - [x] Synchronized Dashboard & Preview aesthetics
+- [x] Dark Mode support & toggle logic (light/dark/system)
 
 ## Phase 8: Post-MVP & Optimization
 Status: In Planning

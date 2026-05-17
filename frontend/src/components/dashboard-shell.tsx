@@ -30,31 +30,31 @@ export function DashboardShell({ children, businessId, user }: DashboardShellPro
   };
 
   return (
-    <div className="flex min-h-screen bg-[#F9FAFB] font-sans">
+    <div className="flex min-h-screen bg-[#F9FAFB] dark:bg-zinc-950 font-sans transition-colors duration-200">
       <Sidebar businessId={businessId} />
       
       <div className="flex flex-1 flex-col min-w-0">
-        <header className="sticky top-0 z-20 flex h-20 shrink-0 items-center justify-between border-b bg-white/80 backdrop-blur-md px-10">
-          <h1 className="text-xl font-black tracking-tight text-gray-900">
+        <header className="sticky top-0 z-20 flex h-20 shrink-0 items-center justify-between border-b border-gray-100 dark:border-zinc-900 bg-white/80 dark:bg-[#0B0F19]/80 backdrop-blur-md px-10">
+          <h1 className="text-xl font-black tracking-tight text-gray-900 dark:text-white">
             {getPageTitle()}
           </h1>
           
           <div className="flex items-center gap-6">
             {/* User ID Tag */}
-            <div className="hidden sm:flex items-center gap-4 border-r pr-6 border-gray-100">
+            <div className="hidden sm:flex items-center gap-4 border-r pr-6 border-gray-100 dark:border-zinc-900">
               <div className="flex flex-col items-end">
-                <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">ID User</span>
-                <span className="text-xs font-black text-gray-900 font-mono">{user?.id?.slice(0, 8) || '24_357_Jago'}</span>
+                <span className="text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-zinc-500">ID User</span>
+                <span className="text-xs font-black text-gray-900 dark:text-white font-mono">{user?.id?.slice(0, 8) || '24_357_Jago'}</span>
               </div>
             </div>
             
             {/* Profile Dropdown Placeholder */}
             <div className="flex items-center gap-4 group cursor-pointer" onClick={handleLogout}>
               <div className="flex flex-col items-end">
-                <span className="text-xs font-black text-gray-900 group-hover:text-amber-500 transition-colors">{user?.name}</span>
-                <span className="text-[10px] font-medium text-gray-400">{user?.email}</span>
+                <span className="text-xs font-black text-gray-900 dark:text-white group-hover:text-amber-500 transition-colors">{user?.name}</span>
+                <span className="text-[10px] font-medium text-gray-400 dark:text-zinc-500">{user?.email}</span>
               </div>
-              <div className="h-10 w-10 rounded-full border-2 border-white bg-gray-100 shadow-sm flex items-center justify-center overflow-hidden transition-all group-hover:scale-105 group-hover:border-amber-100">
+              <div className="h-10 w-10 rounded-full border-2 border-white dark:border-zinc-900 bg-gray-100 dark:bg-zinc-800 shadow-sm flex items-center justify-center overflow-hidden transition-all group-hover:scale-105 group-hover:border-amber-100">
                 <div className="h-full w-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center text-white font-black text-sm">
                   {user?.name?.charAt(0) || 'U'}
                 </div>

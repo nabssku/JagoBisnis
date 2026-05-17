@@ -30,7 +30,7 @@ export const ThemeEditor: React.FC<ThemeEditorProps> = ({ theme, onChange }) => 
     <div className="space-y-6">
       <div className="flex items-center gap-2 mb-2">
         <Palette className="h-4 w-4 text-primary" />
-        <h3 className="text-sm font-bold text-gray-900 uppercase tracking-tight">Desain Website</h3>
+        <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-tight">Desain Website</h3>
       </div>
       
       <div className="space-y-4">
@@ -44,7 +44,7 @@ export const ThemeEditor: React.FC<ThemeEditorProps> = ({ theme, onChange }) => 
           </div>
           <div className="flex gap-2">
             <div 
-              className="h-10 w-10 rounded-lg border shadow-sm shrink-0 overflow-hidden relative"
+              className="h-10 w-10 rounded-lg border border-gray-200 dark:border-zinc-800 shadow-sm shrink-0 overflow-hidden relative"
               style={{ backgroundColor: theme.primaryColor }}
             >
               <input 
@@ -76,7 +76,7 @@ export const ThemeEditor: React.FC<ThemeEditorProps> = ({ theme, onChange }) => 
                   "flex items-center justify-between px-3 py-2 rounded-lg border text-sm transition-all",
                   theme.font === f.value 
                     ? "border-primary bg-primary/5 text-primary ring-1 ring-primary" 
-                    : "border-border hover:border-primary/50 hover:bg-muted"
+                    : "border-border dark:border-zinc-800 hover:border-primary/50 hover:bg-muted dark:hover:bg-zinc-800 text-gray-900 dark:text-zinc-300 hover:text-primary dark:hover:text-white"
                 )}
                 style={{ fontFamily: f.value }}
               >
@@ -90,12 +90,12 @@ export const ThemeEditor: React.FC<ThemeEditorProps> = ({ theme, onChange }) => 
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
             <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-2">
-              <div className="h-3 w-3 rounded-sm border border-border bg-white" />
+              <div className="h-3 w-3 rounded-sm border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900" />
               Latar
             </label>
             <div className="flex gap-2">
               <div 
-                className="h-10 w-full rounded-lg border shadow-sm relative overflow-hidden"
+                className="h-10 w-full rounded-lg border border-gray-200 dark:border-zinc-800 shadow-sm relative overflow-hidden"
                 style={{ backgroundColor: theme.backgroundColor }}
               >
                 <input 
@@ -114,7 +114,7 @@ export const ThemeEditor: React.FC<ThemeEditorProps> = ({ theme, onChange }) => 
             </label>
             <div className="flex gap-2">
               <div 
-                className="h-10 w-full rounded-lg border shadow-sm relative overflow-hidden"
+                className="h-10 w-full rounded-lg border border-gray-200 dark:border-zinc-800 shadow-sm relative overflow-hidden"
                 style={{ backgroundColor: theme.textColor }}
               >
                 <input 
@@ -130,4 +130,5 @@ export const ThemeEditor: React.FC<ThemeEditorProps> = ({ theme, onChange }) => 
       </div>
     </div>
   );
-};
+}
+;
