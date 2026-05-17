@@ -569,18 +569,56 @@ export default function WebsiteBuilderPage() {
 
       case 'about': {
         const title = section.content.title || 'Tentang Kami';
-        const desc = section.content.description || 'Kami adalah sebuah toko baju yang melayani pada offline store dan online store pada Shopee dan Tokopedia dengan merek Onderstroom. Kami berkomitmen untuk menyediakan pakaian yang nyaman, stylish, dan berkualitas tinggi untuk pelanggan kami.';
+        const desc = section.content.description || 'Kami adalah sebuah toko baju yang melayani pada offline store dan online store pada Shopee dan Tokopedia dengan merek Onderstroom.\n\nKami berkomitmen untuk menyediakan pakaian yang nyaman, stylish, dan berkualitas tinggi untuk pelanggan kami.';
+        const paragraphs = desc.split('\n\n');
+        const primaryColor = site.theme?.primaryColor || '#2563eb';
+        
         return (
           <div className="w-full bg-white dark:bg-zinc-900 border border-zinc-150 dark:border-zinc-800/80 rounded-none p-6 text-left shadow-sm">
             <div className="grid grid-cols-12 gap-6 items-center">
-              <div className="col-span-7 space-y-3.5">
+              <div className="col-span-7 space-y-3">
                 <h4 className="text-sm font-black text-gray-800 dark:text-zinc-100 tracking-tight">{title}</h4>
-                <p className="text-[10px] text-muted-foreground font-medium leading-relaxed">
-                  {desc}
-                </p>
+                <div className="text-[9px] text-muted-foreground font-medium leading-relaxed space-y-2">
+                  {paragraphs.map((p: string, index: number) => (
+                    <p key={index}>{p}</p>
+                  ))}
+                </div>
               </div>
-              <div className="col-span-5 h-44 rounded-2xl bg-[#EAEAEA] dark:bg-zinc-800 flex items-center justify-center border dark:border-zinc-750 shrink-0">
-                <ImageIcon className="h-6 w-6 text-gray-400 dark:text-zinc-550" />
+              <div className="col-span-5 aspect-square max-w-[150px] mx-auto rounded-xl bg-gray-50 dark:bg-zinc-950 flex items-center justify-center p-3 border dark:border-zinc-850 shrink-0">
+                <svg viewBox="0 0 400 400" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  {/* Matching Fashion Shop SVG Mockup */}
+                  <circle cx="200" cy="200" r="140" className="fill-gray-200/30 dark:fill-zinc-800/30" />
+                  <path d="M120,150 Q160,110 240,130 T300,220 Q320,290 230,300 T110,230 Q80,180 120,150 Z" className="fill-blue-500/5 dark:fill-amber-400/5" style={{ fill: `${primaryColor}15` }} />
+                  
+                  {/* Floor Line */}
+                  <path d="M80,310 L320,310" className="stroke-gray-200 dark:stroke-zinc-800" strokeWidth="2" strokeLinecap="round" />
+
+                  {/* Character 1 (Left) */}
+                  <circle cx="135" cy="130" r="15" className="fill-[#F0D5C6] dark:fill-[#DDA894]" />
+                  <path d="M120,145 L115,280 C115,285 120,290 126,290 L144,290 C150,290 155,285 155,280 L150,145 Z" className="fill-amber-600/80 dark:fill-amber-500/70" />
+                  <line x1="122" y1="205" x2="148" y2="205" className="stroke-amber-900/30 dark:stroke-zinc-900/30" strokeWidth="3" />
+                  <path d="M130,290 L130,310 M140,290 L140,310" className="stroke-zinc-800 dark:stroke-zinc-400" strokeWidth="4.5" strokeLinecap="round" />
+
+                  {/* Character 2 (Center) */}
+                  <circle cx="200" cy="115" r="16" className="fill-[#E6C2AC] dark:fill-[#D2A992]" />
+                  <path d="M185,131 C180,140 180,160 182,180 L218,180 C220,160 220,140 215,131 Z" className="fill-blue-600 dark:fill-amber-400/90" style={{ fill: primaryColor }} />
+                  <path d="M190,131 L200,148 L210,131" className="stroke-white/30 dark:stroke-zinc-950/20" strokeWidth="2" strokeLinecap="round" />
+                  <path d="M188,180 L188,310 M212,180 L212,310" className="stroke-zinc-850 dark:stroke-zinc-300" strokeWidth="5.5" strokeLinecap="round" />
+
+                  {/* Character 3 (Right) */}
+                  <circle cx="265" cy="125" r="15.5" className="fill-[#EAD2C6] dark:fill-[#CFA490]" />
+                  <path d="M250,140 C248,150 248,180 252,215 L278,215 C282,180 282,150 280,140 Z" className="fill-zinc-700 dark:fill-zinc-450" />
+                  <path d="M248,215 L238,285 C238,288 242,290 245,290 L285,290 C288,290 292,288 292,285 L282,215 Z" className="fill-zinc-400/90 dark:fill-zinc-600" />
+                  <path d="M258,290 L258,310 M272,290 L272,310" className="stroke-zinc-800 dark:stroke-zinc-400" strokeWidth="4.5" strokeLinecap="round" />
+                  
+                  {/* Shopping Bag */}
+                  <path d="M280,165 Q305,185 305,210" className="stroke-[#EAD2C6] dark:stroke-[#CFA490]" strokeWidth="4.5" strokeLinecap="round" />
+                  <rect x="290" y="210" width="30" height="35" rx="3" className="fill-blue-500/80 dark:fill-amber-400/80" style={{ fill: `${primaryColor}c0` }} />
+
+                  {/* Sparkles */}
+                  <path d="M100,90 L102,94 L106,95 L102,96 L100,100 L98,96 L94,95 L98,94 Z" className="fill-amber-400 dark:fill-amber-300" />
+                  <path d="M305,100 L307,104 L311,105 L307,106 L305,110 L303,106 L299,105 L303,104 Z" className="fill-amber-400 dark:fill-amber-300" />
+                </svg>
               </div>
             </div>
           </div>

@@ -269,58 +269,85 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
         </section>
       );
 
-    case 'about':
+    case 'about': {
+      const desc = content.description || 'Kami adalah sebuah toko baju yang melayani pada offline store dan online store pada Shopee dan Tokopedia dengan merek Onderstroom.\n\nKami berkomitmen untuk menyediakan pakaian yang nyaman, stylish, dan berkualitas tinggi untuk pelanggan kami.';
+      const paragraphs = desc.split('\n\n');
+
       return (
-        <section id={section.id} className="py-16 px-6 lg:py-24 bg-gray-50/50 dark:bg-zinc-900/10 transition-colors">
-          <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div 
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={containerVariants}
-              className="space-y-6"
-            >
-              <div className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-white" style={buttonStyle}>
-                Tentang Kami
-              </div>
-              <h2 className="text-2xl lg:text-3xl font-extrabold tracking-tight leading-tight text-gray-900 dark:text-white">
-                {content.title || 'Misi Utama Bisnis Kami'}
-              </h2>
-              <p className="text-sm lg:text-base opacity-75 leading-relaxed whitespace-pre-wrap font-medium text-gray-700 dark:text-zinc-300">
-                {content.description || 'Kami bertekad menyajikan produk berstandar tinggi yang mendukung kegiatan UMKM dan pengembangan bisnis di Indonesia.'}
-              </p>
-              <div className="grid grid-cols-2 gap-6 pt-4">
-                {[
-                  { label: 'Kualitas', value: 'Premium' },
-                  { label: 'Layanan', value: 'Terpercaya' }
-                ].map((item, i) => (
-                  <div key={i} className="space-y-1 border-l-4 pl-4" style={borderPrimaryStyle}>
-                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{item.label}</p>
-                    <p className="text-lg font-bold text-gray-900 dark:text-white">{item.value}</p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="aspect-square bg-white dark:bg-zinc-900 rounded-2xl p-3 shadow-md ring-1 ring-border/50 overflow-hidden group max-w-sm mx-auto w-full"
-            >
-              <div className="w-full h-full bg-muted dark:bg-zinc-950 rounded-xl flex items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent" style={{ backgroundColor: `${theme.primaryColor}10` }} />
-                <div className="relative text-center space-y-4 group-hover:scale-105 transition-transform duration-700">
-                  <div className="w-16 h-16 rounded-full bg-white dark:bg-zinc-900 shadow-md mx-auto flex items-center justify-center">
-                    <Sparkles className="h-6 w-6" style={textPrimaryStyle} />
-                  </div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Premium Experience</p>
+        <section id={section.id} className="py-24 overflow-hidden bg-white dark:bg-zinc-950 transition-colors" style={{ order: section.order }}>
+          <div className="container max-w-6xl mx-auto px-4 md:px-8">
+            <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
+              <motion.div 
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={containerVariants}
+                className="order-2 md:order-1 space-y-6"
+              >
+                <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white tracking-tight">
+                  {content.title || 'Tentang Kami'}
+                </h2>
+                <div className="rich-text-content text-lg text-muted-foreground leading-relaxed space-y-6">
+                  {paragraphs.map((p: string, index: number) => (
+                    <p key={index}>{p}</p>
+                  ))}
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+              
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                className="order-1 md:order-2"
+              >
+                <div className="relative aspect-square w-full max-w-md mx-auto">
+                  <div className="w-full h-full bg-gray-50 dark:bg-zinc-900 rounded-xl flex items-center justify-center p-8 shadow-sm border border-gray-100 dark:border-zinc-800/80">
+                    <svg viewBox="0 0 400 400" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      {/* Premium fashion shop SVG illustration design representing 3 characters */}
+                      <circle cx="200" cy="200" r="140" className="fill-gray-200/30 dark:fill-zinc-800/30" />
+                      {/* Organic abstract blob background */}
+                      <path d="M120,150 Q160,110 240,130 T300,220 Q320,290 230,300 T110,230 Q80,180 120,150 Z" className="fill-primary/5 dark:fill-amber-400/5" style={{ fill: `${theme.primaryColor}15` }} />
+                      
+                      {/* Floor shadow line */}
+                      <path d="M80,310 L320,310" className="stroke-gray-200 dark:stroke-zinc-800" strokeWidth="2" strokeLinecap="round" />
+
+                      {/* Character 1 (Left): Chic trench coat model */}
+                      <circle cx="135" cy="130" r="15" className="fill-[#F0D5C6] dark:fill-[#DDA894]" />
+                      <path d="M120,145 L115,280 C115,285 120,290 126,290 L144,290 C150,290 155,285 155,280 L150,145 Z" className="fill-amber-600/80 dark:fill-amber-500/70" />
+                      <line x1="122" y1="205" x2="148" y2="205" className="stroke-amber-900/30 dark:stroke-zinc-900/30" strokeWidth="3" />
+                      <path d="M130,290 L130,310 M140,290 L140,310" className="stroke-zinc-800 dark:stroke-zinc-400" strokeWidth="4.5" strokeLinecap="round" />
+
+                      {/* Character 2 (Center): Tall classic model with brand primary color jacket */}
+                      <circle cx="200" cy="115" r="16" className="fill-[#E6C2AC] dark:fill-[#D2A992]" />
+                      <path d="M185,131 C180,140 180,160 182,180 L218,180 C220,160 220,140 215,131 Z" className="fill-primary dark:fill-amber-400/90" style={{ fill: theme.primaryColor }} />
+                      <path d="M190,131 L200,148 L210,131" className="stroke-white/30 dark:stroke-zinc-950/20" strokeWidth="2" strokeLinecap="round" />
+                      <path d="M188,180 L188,310 M212,180 L212,310" className="stroke-zinc-850 dark:stroke-zinc-300" strokeWidth="5.5" strokeLinecap="round" />
+                      <path d="M182,310 L188,315 M206,310 L212,315" className="stroke-zinc-850 dark:stroke-zinc-300" strokeWidth="4.5" strokeLinecap="round" />
+
+                      {/* Character 3 (Right): turtleneck top & skirt model holding shopper bag */}
+                      <circle cx="265" cy="125" r="15.5" className="fill-[#EAD2C6] dark:fill-[#CFA490]" />
+                      <path d="M250,140 C248,150 248,180 252,215 L278,215 C282,180 282,150 280,140 Z" className="fill-zinc-700 dark:fill-zinc-450" />
+                      <path d="M248,215 L238,285 C238,288 242,290 245,290 L285,290 C288,290 292,288 292,285 L282,215 Z" className="fill-zinc-400/90 dark:fill-zinc-600" />
+                      <path d="M258,290 L258,310 M272,290 L272,310" className="stroke-zinc-800 dark:stroke-zinc-400" strokeWidth="4.5" strokeLinecap="round" />
+                      
+                      {/* Shopping bag attached to right character */}
+                      <path d="M280,165 Q305,185 305,210" className="stroke-[#EAD2C6] dark:stroke-[#CFA490]" strokeWidth="4.5" strokeLinecap="round" />
+                      <rect x="290" y="210" width="30" height="35" rx="3" className="fill-primary/80 dark:fill-amber-400/80" style={{ fill: `${theme.primaryColor}c0` }} />
+                      <path d="M298,210 C298,202 312,202 312,210" className="stroke-primary/50 dark:stroke-amber-400/50" strokeWidth="2.5" style={{ stroke: `${theme.primaryColor}80` }} />
+
+                      {/* Floating sparkle elements */}
+                      <path d="M100,90 L102,94 L106,95 L102,96 L100,100 L98,96 L94,95 L98,94 Z" className="fill-amber-400 dark:fill-amber-300" />
+                      <path d="M305,100 L307,104 L311,105 L307,106 L305,110 L303,106 L299,105 L303,104 Z" className="fill-amber-400 dark:fill-amber-300" />
+                      <path d="M325,270 L327,274 L331,275 L327,276 L325,280 L323,276 L319,275 L323,274 Z" className="fill-amber-400 dark:fill-amber-300" />
+                    </svg>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
           </div>
         </section>
       );
+    }
 
     case 'gallery':
       const galleryImages = content.images || [];
