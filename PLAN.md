@@ -240,6 +240,7 @@ Tasks:
 - [x] Integrated an interactive, fully responsive live mockup preview on the hero section allowing real-time category filtering.
 - [x] Designed visual mockups for Website Builder blocks drag-and-drop and an interactive checkout step-by-step slider simulation.
 - [x] Designed custom, beautiful public pages for Syarat & Ketentuan (`/terms`) and Kebijakan Privasi (`/privacy`).
+- [x] Resolved visual overlapping UI display bugs in Onboarding form fields (Inputs, Select, Textareas) caused by Tailwind's twMerge padding conflicts and select flexbox rendering, and added a premium custom ChevronDown dropdown icon.
 - [x] Successfully verified Next.js and NestJS compilation builds with 100% completion (0 errors).
 
 ## Phase 15: SuperAdmin Dashboard & Platform Statistics

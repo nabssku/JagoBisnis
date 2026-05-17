@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
-import { Store, Globe, ArrowRight, Phone, MapPin, Tag, FileText, Compass, Star } from 'lucide-react';
+import { Store, Globe, ArrowRight, Phone, MapPin, Tag, FileText, Compass, Star, ChevronDown } from 'lucide-react';
 
 const CATEGORIES = [
   { value: 'fnb', label: 'Kuliner (Makanan & Minuman)' },
@@ -175,7 +175,7 @@ export default function OnboardingPage() {
                 <Input
                   type="text"
                   placeholder="Contoh: Kopi Sedap Rasa, Butik Cantik"
-                  className="rounded-xl h-12 pl-12 border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-850 px-4 py-2.5 focus:border-[#e8aa20] focus:ring-2 focus:ring-[#e8aa20]/20 transition-all placeholder:text-gray-400"
+                  className="rounded-xl h-12 pl-12 pr-4 border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-850 py-2.5 focus:border-[#e8aa20] focus:ring-2 focus:ring-[#e8aa20]/20 transition-all placeholder:text-gray-400"
                   {...register('name')}
                   error={errors.name?.message}
                 />
@@ -192,7 +192,7 @@ export default function OnboardingPage() {
                 <Input
                   type="text"
                   placeholder="namabisnismu"
-                  className="rounded-xl h-12 pl-12 border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-850 px-4 py-2.5 focus:border-[#e8aa20] focus:ring-2 focus:ring-[#e8aa20]/20 transition-all placeholder:text-gray-400 font-mono text-sm"
+                  className="rounded-xl h-12 pl-12 pr-4 border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-850 py-2.5 focus:border-[#e8aa20] focus:ring-2 focus:ring-[#e8aa20]/20 transition-all placeholder:text-gray-400 font-mono text-sm"
                   {...register('slug')}
                   onChange={onSlugChange}
                   error={errors.slug?.message}
@@ -205,7 +205,7 @@ export default function OnboardingPage() {
                   <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
                   <span className="text-[11px] font-bold text-gray-400 dark:text-zinc-500">Link Publik Anda:</span>
                   <span className="text-[11px] font-black text-[#e8aa20] font-mono break-all">
-                    https://www.jago-bisnis.my.id/jago/{slugPreview || '...'}
+                    https://www.jago-bisnis.my.id/jagobisnis/{slugPreview || '...'}
                   </span>
                 </div>
               </div>
@@ -221,7 +221,7 @@ export default function OnboardingPage() {
                 <div className="relative">
                   <Compass className="absolute left-4 top-3.5 h-5 w-5 text-gray-400 pointer-events-none" />
                   <select
-                    className="flex w-full rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-850 h-12 pl-12 pr-4 py-2 text-sm text-gray-900 dark:text-white focus:border-[#e8aa20] focus:ring-2 focus:ring-[#e8aa20]/20 outline-none transition-all appearance-none cursor-pointer"
+                    className="w-full rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-850 h-12 pl-12 pr-10 py-2 text-sm text-gray-900 dark:text-white focus:border-[#e8aa20] focus:ring-2 focus:ring-[#e8aa20]/20 outline-none transition-all appearance-none cursor-pointer"
                     {...register('category')}
                   >
                     {CATEGORIES.map((cat) => (
@@ -230,6 +230,7 @@ export default function OnboardingPage() {
                       </option>
                     ))}
                   </select>
+                  <ChevronDown className="absolute right-4 top-3.5 h-5 w-5 text-gray-400 pointer-events-none" />
                 </div>
               </div>
 
@@ -243,7 +244,7 @@ export default function OnboardingPage() {
                   <Input
                     type="text"
                     placeholder="Contoh: 08123456789"
-                    className="rounded-xl h-12 pl-12 border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-850 px-4 py-2.5 focus:border-[#e8aa20] focus:ring-2 focus:ring-[#e8aa20]/20 transition-all placeholder:text-gray-400"
+                    className="rounded-xl h-12 pl-12 pr-4 border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-850 py-2.5 focus:border-[#e8aa20] focus:ring-2 focus:ring-[#e8aa20]/20 transition-all placeholder:text-gray-400"
                     {...register('phone')}
                     error={errors.phone?.message}
                   />
@@ -261,7 +262,7 @@ export default function OnboardingPage() {
                 <textarea
                   placeholder="Jelaskan secara singkat apa saja yang Anda tawarkan..."
                   rows={3}
-                  className="flex w-full rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-850 pl-12 pr-4 py-3 text-sm text-gray-900 dark:text-white focus:border-[#e8aa20] focus:ring-2 focus:ring-[#e8aa20]/20 outline-none transition-all placeholder:text-gray-400"
+                  className="w-full block rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-850 pl-12 pr-4 py-3 text-sm text-gray-900 dark:text-white focus:border-[#e8aa20] focus:ring-2 focus:ring-[#e8aa20]/20 outline-none transition-all placeholder:text-gray-400"
                   {...register('description')}
                 />
               </div>
@@ -277,7 +278,7 @@ export default function OnboardingPage() {
                 <textarea
                   placeholder="Contoh: Jl. Merdeka No. 45, Jakarta Selatan"
                   rows={2}
-                  className="flex w-full rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-850 pl-12 pr-4 py-3 text-sm text-gray-900 dark:text-white focus:border-[#e8aa20] focus:ring-2 focus:ring-[#e8aa20]/20 outline-none transition-all placeholder:text-gray-400"
+                  className="w-full block rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50/50 dark:bg-zinc-850 pl-12 pr-4 py-3 text-sm text-gray-900 dark:text-white focus:border-[#e8aa20] focus:ring-2 focus:ring-[#e8aa20]/20 outline-none transition-all placeholder:text-gray-400"
                   {...register('address')}
                 />
               </div>
