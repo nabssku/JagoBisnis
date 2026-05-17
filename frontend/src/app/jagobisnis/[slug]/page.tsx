@@ -95,9 +95,9 @@ export default function PublicWebsitePage() {
       <motion.nav 
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="p-6 flex justify-between items-center bg-white/70 border-b border-gray-100 sticky top-0 z-50 backdrop-blur-xl"
+        className="p-6 flex justify-between items-center bg-white/70 dark:bg-zinc-950/70 border-b border-gray-100 dark:border-zinc-900 sticky top-0 z-50 backdrop-blur-xl transition-colors duration-200"
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
           <div className="h-8 w-8 rounded-lg flex items-center justify-center text-white" style={{ backgroundColor: theme.primaryColor }}>
             <Globe className="h-5 w-5" />
           </div>
@@ -106,17 +106,39 @@ export default function PublicWebsitePage() {
           </span>
         </div>
         <div className="hidden md:flex gap-10 text-[10px] font-black uppercase tracking-[0.2em]">
-          {sections.map(s => (
-            <a key={s.id} href={`#${s.id}`} className="hover:opacity-50 transition-all relative group">
-              {s.type}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" style={{ backgroundColor: theme.primaryColor }} />
-            </a>
-          ))}
+          {sections.map(s => {
+            const getSectionLabel = (type: string) => {
+              switch (type) {
+                case 'hero': return 'Beranda';
+                case 'about': return 'Tentang Kami';
+                case 'products': return 'Layanan & Produk';
+                case 'contact': return 'Hubungi';
+                default: return type;
+              }
+            };
+            return (
+              <a key={s.id} href={`#${s.id}`} className="hover:opacity-50 transition-all relative group" style={{ color: theme.textColor }}>
+                {getSectionLabel(s.type)}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" style={{ backgroundColor: theme.primaryColor }} />
+              </a>
+            );
+          })}
         </div>
-        <Button size="sm" className="rounded-full px-6 font-bold" style={{ backgroundColor: theme.primaryColor }}>
+        <Button 
+          onClick={() => {
+            const contactSection = document.getElementById('contact');
+            if (contactSection) {
+              contactSection.scrollIntoView({ behavior: 'smooth' });
+            }
+          }}
+          size="sm" 
+          className="rounded-full px-6 font-bold text-white" 
+          style={{ backgroundColor: theme.primaryColor }}
+        >
           Hubungi
         </Button>
       </motion.nav>
+
 
       {/* Sections Renderer */}
       <main className="flex flex-col">

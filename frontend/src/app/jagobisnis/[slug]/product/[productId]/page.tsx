@@ -161,31 +161,50 @@ export default function PublicProductDetailPage() {
       <motion.nav 
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="p-6 flex justify-between items-center bg-white/85 dark:bg-[#0B0F19]/85 border-b border-gray-100 dark:border-zinc-900 sticky top-0 z-50 backdrop-blur-xl"
+        className="p-6 flex justify-between items-center bg-white/70 dark:bg-zinc-950/70 border-b border-gray-100 dark:border-zinc-900 sticky top-0 z-50 backdrop-blur-xl transition-colors duration-200"
       >
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push(`/jagobisnis/${slug}`)}>
           <div className="h-8 w-8 rounded-lg flex items-center justify-center text-white" style={{ backgroundColor: theme.primaryColor }}>
             <Globe className="h-5 w-5" />
           </div>
-          <span className="text-2xl font-black tracking-tighter">
+          <span className="text-2xl font-black tracking-tighter" style={{ color: theme.textColor }}>
             {site.title}
           </span>
         </div>
         <div className="hidden md:flex gap-10 text-[10px] font-black uppercase tracking-[0.2em]">
-          <Link href={`/jagobisnis/${slug}#hero`} className="hover:opacity-50 transition-all">Beranda</Link>
-          <Link href={`/jagobisnis/${slug}#products`} className="hover:opacity-50 transition-all font-bold">Produk & Layanan</Link>
-          <Link href={`/jagobisnis/${slug}#about`} className="hover:opacity-50 transition-all">Tentang Kami</Link>
-          <Link href={`/jagobisnis/${slug}#contact`} className="hover:opacity-50 transition-all">Hubungi</Link>
+          {site.sections.map(s => {
+            const getSectionLabel = (type: string) => {
+              switch (type) {
+                case 'hero': return 'Beranda';
+                case 'about': return 'Tentang Kami';
+                case 'products': return 'Layanan & Produk';
+                case 'contact': return 'Hubungi';
+                default: return type;
+              }
+            };
+            return (
+              <Link 
+                key={s.id} 
+                href={`/jagobisnis/${slug}#${s.id}`} 
+                className="hover:opacity-50 transition-all relative group" 
+                style={{ color: theme.textColor }}
+              >
+                {getSectionLabel(s.type)}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 transition-all group-hover:w-full" style={{ backgroundColor: theme.primaryColor }} />
+              </Link>
+            );
+          })}
         </div>
         <Button 
           onClick={() => window.open(waUrl, '_blank')}
           size="sm" 
-          className="rounded-full px-6 font-bold" 
+          className="rounded-full px-6 font-bold text-white" 
           style={{ backgroundColor: theme.primaryColor }}
         >
           Hubungi
         </Button>
       </motion.nav>
+
 
       {/* Main Content Container */}
       <main className="max-w-7xl mx-auto px-6 py-12 space-y-12">
