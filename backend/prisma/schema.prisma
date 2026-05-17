@@ -39,6 +39,8 @@ model Business {
   Product      Product[]
   Site         Site?
   Post         Post[]
+  Integration  Integration[]
+  SocialPost   SocialPost[]
 }
 
 model Site {
@@ -124,3 +126,76 @@ enum Role {
   ADMIN
   STAFF
 }
+
+enum IntegrationProvider {
+  INSTAGRAM
+  THREADS
+  PAKASIR
+  GOOGLE_ANALYTICS
+}
+
+enum IntegrationStatus {
+  CONNECTED
+  DISCONNECTED
+  ERROR
+}
+
+model Integration {
+  id                  String              @id @default(uuid())
+  businessId          String
+  provider            IntegrationProvider
+  status              IntegrationStatus   @default(DISCONNECTED)
+  accessToken         String?             // encrypted
+  refreshToken        String?             // encrypted
+  tokenExpiresAt      DateTime?
+  providerAccountId   String?
+  providerAccountName String?
+  config              Json?               // e.g. { slug: "...", apiKey: "..." } or { measurementId: "..." }
+  lastSyncedAt        DateTime?
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  business            Business            @relation(fields: [businessId], references: [id])
+  SocialPost          SocialPost[]
+
+  @@unique([businessId, provider])
+}
+
+enum SocialPostProvider {
+  INSTAGRAM
+  THREADS
+}
+
+enum SocialPostStatus {
+  DRAFT
+  PUBLISHING
+  PUBLISHED
+  FAILED
+}
+
+enum MediaType {
+  TEXT
+  IMAGE
+  VIDEO
+  CAROUSEL
+}
+
+model SocialPost {
+  id              String             @id @default(uuid())
+  businessId      String
+  provider        SocialPostProvider
+  integrationId   String
+  content         String
+  mediaUrls       Json?              // e.g. ["url1", "url2"]
+  mediaType       MediaType          @default(TEXT)
+  status          SocialPostStatus   @default(DRAFT)
+  providerPostId  String?
+  errorMessage    String?
+  publishedAt     DateTime?
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  business        Business           @relation(fields: [businessId], references: [id])
+  integration     Integration        @relation(fields: [integrationId], references: [id])
+}
+

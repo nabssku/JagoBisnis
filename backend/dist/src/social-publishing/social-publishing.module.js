@@ -1,0 +1,25 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SocialPublishingModule = void 0;
+const common_1 = require("@nestjs/common");
+const prisma_service_1 = require("../prisma.service");
+const social_publishing_controller_1 = require("./social-publishing.controller");
+const social_publishing_service_1 = require("./social-publishing.service");
+const integration_module_1 = require("../integration/integration.module");
+let SocialPublishingModule = class SocialPublishingModule {
+};
+exports.SocialPublishingModule = SocialPublishingModule;
+exports.SocialPublishingModule = SocialPublishingModule = __decorate([
+    (0, common_1.Module)({
+        imports: [integration_module_1.IntegrationModule],
+        controllers: [social_publishing_controller_1.SocialPublishingController],
+        providers: [social_publishing_service_1.SocialPublishingService, prisma_service_1.PrismaService],
+    })
+], SocialPublishingModule);
+//# sourceMappingURL=social-publishing.module.js.map

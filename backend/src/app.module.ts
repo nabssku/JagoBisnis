@@ -8,6 +8,8 @@ import { BusinessModule } from './business/business.module';
 import { ProductModule } from './product/product.module';
 import { SiteModule } from './site/site.module';
 import { PostModule } from './post/post.module';
+import { IntegrationModule } from './integration/integration.module';
+import { SocialPublishingModule } from './social-publishing/social-publishing.module';
 
 @Module({
   imports: [
@@ -24,6 +26,8 @@ import { PostModule } from './post/post.module';
     ProductModule,
     SiteModule,
     PostModule,
+    IntegrationModule,
+    SocialPublishingModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
