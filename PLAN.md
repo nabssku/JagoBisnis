@@ -149,6 +149,7 @@ Tasks:
 - [x] Hero Background Redesign: Refactored hero template in SectionRenderer to use the uploaded image as a gorgeous container background with elegant high-contrast overlays instead of rendering as an inline element.
 - [x] Dynamic Editable Footer Block: Designed copyright statement, description, and social link inputs in the Available Blocks list, Right Sidebar Editor Panel, and unified SectionRenderer using premium minimal, warm, and responsive SVG social icons. Fully synchronized in both live preview and public websites with robust backward-compatibility fallbacks.
 - [x] JagoBisnis Watermark: Integrated a beautiful, clean, and modern platform watermark branding matching the site's primary HSL colors inside both static fallback footers and the new dynamic block footer layout.
+- [x] Floating Action Controls Consistency: Unified backgrounds, grey borders, and hover micro-interactions of the floating side controls (Up chevron, Drag handle dots, Down chevron) to fix mismatched dark/light colors and make the grip dots highly visible.
 
 ## Phase 11: Post-MVP & Optimization
 Status: In Planning

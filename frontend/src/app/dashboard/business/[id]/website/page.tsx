@@ -907,34 +907,34 @@ export default function WebsiteBuilderPage() {
                   <div key={section.id} className="relative w-full group">
                     {/* Floating Side Action Controls on Hover/Active */}
                     {isActive && (
-                      <div className="absolute left-[-40px] top-1/2 -translate-y-1/2 flex flex-col gap-1.5 z-20 animate-in fade-in slide-in-from-left-2 duration-200">
+                      <div className="absolute left-[-42px] top-1/2 -translate-y-1/2 flex flex-col gap-1.5 z-20 animate-in fade-in slide-in-from-left-2 duration-200">
                         <button
                           onClick={(e) => { e.stopPropagation(); moveUp(idx); }}
                           disabled={idx === 0}
-                          className="h-8 w-8 bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 rounded-lg flex items-center justify-center shadow-md disabled:opacity-30 disabled:hover:bg-zinc-200 transition-all border border-zinc-300 dark:border-zinc-750"
+                          className="h-8.5 w-8.5 bg-white hover:bg-gray-50 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-xl flex items-center justify-center shadow-md disabled:opacity-30 disabled:hover:bg-white disabled:hover:scale-100 border border-border/80 dark:border-zinc-800 transition-all hover:scale-105 active:scale-95"
                           title="Pindahkan ke Atas"
                         >
-                          <ChevronUp className="h-4.5 w-4.5" />
+                          <ChevronUp className="h-4.5 w-4.5 stroke-[2.5]" />
                         </button>
                         
-                        <div className="h-8 w-8 bg-zinc-900 dark:bg-zinc-850 text-zinc-450 rounded-lg flex items-center justify-center shadow-md border border-zinc-800 dark:border-zinc-800 cursor-grab active:cursor-grabbing">
-                          <svg width="10" height="14" viewBox="0 0 10 14" fill="none" stroke="currentColor" strokeWidth="2.5" className="opacity-90">
-                            <circle cx="3" cy="3" r="1" fill="currentColor"/>
-                            <circle cx="7" cy="3" r="1" fill="currentColor"/>
-                            <circle cx="3" cy="7" r="1" fill="currentColor"/>
-                            <circle cx="7" cy="7" r="1" fill="currentColor"/>
-                            <circle cx="3" cy="11" r="1" fill="currentColor"/>
-                            <circle cx="7" cy="11" r="1" fill="currentColor"/>
+                        <div className="h-8.5 w-8.5 bg-white dark:bg-zinc-900 text-zinc-400 dark:text-zinc-500 rounded-xl flex items-center justify-center shadow-md border border-border/80 dark:border-zinc-800 cursor-grab active:cursor-grabbing hover:scale-105 transition-all">
+                          <svg width="10" height="14" viewBox="0 0 10 14" fill="none" stroke="currentColor" strokeWidth="2.5" className="opacity-95 text-zinc-400 dark:text-zinc-500">
+                            <circle cx="3" cy="3" r="1.2" fill="currentColor" stroke="none" />
+                            <circle cx="7" cy="3" r="1.2" fill="currentColor" stroke="none" />
+                            <circle cx="3" cy="7" r="1.2" fill="currentColor" stroke="none" />
+                            <circle cx="7" cy="7" r="1.2" fill="currentColor" stroke="none" />
+                            <circle cx="3" cy="11" r="1.2" fill="currentColor" stroke="none" />
+                            <circle cx="7" cy="11" r="1.2" fill="currentColor" stroke="none" />
                           </svg>
                         </div>
                         
                         <button
                           onClick={(e) => { e.stopPropagation(); moveDown(idx); }}
                           disabled={idx === site.sections.length - 1}
-                          className="h-8 w-8 bg-zinc-900 hover:bg-zinc-950 dark:bg-zinc-850 dark:hover:bg-zinc-900 text-white rounded-lg flex items-center justify-center shadow-md disabled:opacity-30 disabled:hover:bg-zinc-900 transition-all border border-zinc-800 dark:border-zinc-800"
+                          className="h-8.5 w-8.5 bg-white hover:bg-gray-50 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-xl flex items-center justify-center shadow-md disabled:opacity-30 disabled:hover:bg-white disabled:hover:scale-100 border border-border/80 dark:border-zinc-800 transition-all hover:scale-105 active:scale-95"
                           title="Pindahkan ke Bawah"
                         >
-                          <ChevronDown className="h-4.5 w-4.5" />
+                          <ChevronDown className="h-4.5 w-4.5 stroke-[2.5]" />
                         </button>
                       </div>
                     )}
