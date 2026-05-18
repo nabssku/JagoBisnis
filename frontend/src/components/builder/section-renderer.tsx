@@ -38,6 +38,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { postService } from '@/services/post.service';
 import { Post } from '@/types/post';
+import { RichTextRenderer } from '@/components/ui/RichTextRenderer';
 
 interface SectionRendererProps {
   section: Section;
@@ -366,7 +367,10 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
 
     case 'about': {
       const desc = content.description || 'Kami adalah sebuah toko baju yang melayani pada offline store dan online store pada Shopee dan Tokopedia dengan merek Onderstroom.\n\nKami berkomitmen untuk menyediakan pakaian yang nyaman, stylish, dan berkualitas tinggi untuk pelanggan kami.';
-      const paragraphs = desc.split('\n').map((p: string) => p.trim()).filter(Boolean);
+      const isHtml = desc.includes('<p>') || desc.includes('<br') || desc.includes('<strong>') || desc.includes('<ul>') || desc.includes('<ol>');
+      const htmlContent = isHtml 
+        ? desc 
+        : desc.split('\n').map((p: string) => `<p>${p.trim()}</p>`).join('');
       const aboutImage = content.imageUrl || '';
 
       return (
@@ -383,10 +387,8 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
                 <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
                   {content.title || 'Tentang Kami'}
                 </h2>
-                <div className="rich-text-content text-sm md:text-base text-muted-foreground leading-relaxed space-y-4 font-medium">
-                  {paragraphs.map((p: string, index: number) => (
-                    <p key={index}>{p}</p>
-                  ))}
+                <div className="rich-text-content text-sm md:text-base text-muted-foreground leading-relaxed font-medium">
+                  <RichTextRenderer content={htmlContent} />
                 </div>
               </motion.div>
               

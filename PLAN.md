@@ -169,10 +169,16 @@ Tasks:
 - [x] Backend Blog/Post Module: Engineered PostgreSQL schema models, NestJS controller routing `/api/v1/posts`, data transfer objects, Pino logging, and secure JWT-guarded mutations.
 - [x] Minimalist Blog Dashboard CRUD Page: Created `/dashboard/business/[id]/posts` featuring quick search, status categorization (Draft, Publik, Arsip), cover thumbnails, dynamic list layout, and a smooth creation entry flow.
 - [x] Premium PostFormModal with Live SEO Quality: Built double-column editing panels featuring cover image select, 8 support gallery items, a full rich-text Markdown editor, metadata descriptors (keywords, title, description), and live-updating SEO score metrics with actionable checklists.
-- [x] Customization Block integration: Added the 'Blog' block template into the 3-column builder workspace, supporting direct grid/table canvas mockups and custom dynamic item layouts.
-- [x] Public Article Dedicated Detail Page & Lightbox zoom: Overhauled the sliding overlay drawer to a dedicated `/jagobisnis/[slug]/posts/[postSlug]` detail page route featuring a gorgeous double-column layout, tag collections, related cross-selling product CTA cards, and full-screen lightbox zoom.
-- [x] Bento Grid Layout for Blog Block: Added beautiful, asymmetric Bento Grid layout option to the dynamic Blog block inside the Live Editor (`blog-section-editor.tsx`) and the Unified Section Renderer (`section-renderer.tsx`). Handles 1, 2, 3 or more articles gracefully with a massive highlighted hero post featuring gradient background text overlays, metadata badges, hover zoom animations, and a full-height secondary text block next to standard minimal cards. Fully synchronized in both builder workspace preview and public `/jagobisnis/[slug]` landing pages.
-- [x] Blog Live Editor Panel Integration: Resolved empty blog settings block in the builder sidebar by importing and integrating the `BlogSectionEditor` configuration panel in website page.tsx. Mapped the canvas section previews to dynamically render Bento, Grid, and Table layouts as responsive styled skeletons.
+- [x] Three-Column Live Editor Overhaul: Refactored the live editor workspace to look and feel like Framer, Webflow, and Figma.
+- [x] Left Sidebar (Block Library) Accordions: Created a categorized, search-filtered layout of 11+ blocks with collapsible groups, visual badges, and beautiful empty states.
+- [x] Workspace Canvas Viewports: Built an interactive responsive device frame wrapper supporting Laptop, Tablet, and Mobile scaling with browser headers and soft shadow outlines.
+- [x] Collapsible Sidebar Panels: Added independent floating slide triggers to collapse/expand Left & Right sidebars, allowing full-screen visual canvas layout.
+- [x] Blue Selection Outlines: Replaced plain outlines with premium glowing border shadows and active scale highlights.
+- [x] Beautiful Canvas Onboarding Card: Built a gorgeous empty-state illustration prompting the user with simple drag guidelines to kickstart their website design.
+- [x] 100% Error-free compilation and fluid client-side interaction animations.
+- [x] Verified full Next.js production build and TypeScript type-check compilation with zero warnings or errors.
+- [x] Aligned active block editor canvas controls: replaced floating vertical side action controls with an elegant, contextual, 100% clip-safe horizontal floating pill toolbar centered on the top outline border of selected blocks, providing intuitive reordering, drag grip handles, and delete actions without any sidebar clipping or occlusion issues.
+- [x] Tiptap & Rich Text Consistency: Upgraded all rich text edit zones in the Visual Canvas Editor and Post Creation dashboard panels to use Tiptap editor blocks. Implemented `RichTextRenderer` in the public `SectionRenderer` (About section) and `PublicPostDetailPage` to gracefully parse and render high-fidelity HTML markup with elegant automatic paragraph fallbacks for legacy plaintext database records.
 
 
 

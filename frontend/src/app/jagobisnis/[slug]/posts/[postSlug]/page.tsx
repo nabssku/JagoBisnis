@@ -35,6 +35,7 @@ import {
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { RichTextRenderer } from '@/components/ui/RichTextRenderer';
 
 export default function PublicPostDetailPage() {
   const params = useParams();
@@ -310,8 +311,14 @@ export default function PublicPostDetailPage() {
             </div>
 
             {/* Content Body */}
-            <div className="text-base text-gray-800 dark:text-zinc-200 leading-relaxed font-medium whitespace-pre-wrap space-y-4 pt-2">
-              {post.content}
+            <div className="text-base text-gray-800 dark:text-zinc-200 leading-relaxed font-medium pt-2">
+              {(() => {
+                const isHtml = post.content.includes('<p>') || post.content.includes('<br') || post.content.includes('<strong>') || post.content.includes('<ul>') || post.content.includes('<ol>');
+                const htmlContent = isHtml 
+                  ? post.content 
+                  : post.content.split('\n').map((p: string) => `<p>${p.trim()}</p>`).join('');
+                return <RichTextRenderer content={htmlContent} />;
+              })()}
             </div>
 
             {/* Additional Photo Gallery Grid */}

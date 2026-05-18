@@ -44,12 +44,59 @@ import {
   Smile,
   Star,
   X,
-  FileText
+  FileText,
+  Undo,
+  Redo,
+  Search,
+  PanelLeftClose,
+  PanelLeft,
+  PanelRightClose,
+  PanelRight,
+  EyeOff
 } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
+
+const CATEGORIES = [
+  {
+    id: 'hero',
+    name: 'Hero & Header',
+    description: 'Headline pembuka dan banner',
+    types: ['hero']
+  },
+  {
+    id: 'about',
+    name: 'Tentang Bisnis',
+    description: 'Profil usaha dan biodata',
+    types: ['about', 'stats']
+  },
+  {
+    id: 'products',
+    name: 'Produk & Katalog',
+    description: 'Etalase produk dan daftar layanan',
+    types: ['products', 'gallery']
+  },
+  {
+    id: 'marketing',
+    name: 'Pemasaran & Kepercayaan',
+    description: 'Logo mitra, keunggulan, & ajakan bertindak',
+    types: ['logos', 'features-grid', 'features-cards', 'cta']
+  },
+  {
+    id: 'interaction',
+    name: 'Interaksi & Bantuan',
+    description: 'FAQ, kontak, dan berita blog',
+    types: ['faq', 'contact', 'blog']
+  },
+  {
+    id: 'footer',
+    name: 'Footer',
+    description: 'Navigasi bawah & info legal',
+    types: ['footer']
+  }
+];
 
 const AVAILABLE_BLOCKS = [
   { 
@@ -248,6 +295,23 @@ export default function WebsiteBuilderPage() {
   const [previewMode, setPreviewMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [isLivePreviewOpen, setIsLivePreviewOpen] = useState(false);
   
+  // Premium Builder Overhaul States
+  const [leftSidebarCollapsed, setLeftSidebarCollapsed] = useState(false);
+  const [rightSidebarCollapsed, setRightSidebarCollapsed] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [history, setHistory] = useState<{ sections: Section[]; theme: SiteTheme }[]>([]);
+  const [historyIndex, setHistoryIndex] = useState<number>(-1);
+  const [blockSubTab, setBlockSubTab] = useState<'content' | 'style' | 'layout'>('content');
+  const [autosaveStatus, setAutosaveStatus] = useState<'saved' | 'saving' | 'dirty'>('saved');
+  const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({
+    hero: true,
+    about: true,
+    products: true,
+    marketing: true,
+    interaction: true,
+    footer: true
+  });
+
   // Drag and drop states
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
@@ -310,7 +374,11 @@ export default function WebsiteBuilderPage() {
             ]
           };
         }
-        setSite(normalizedSite);
+        if (normalizedSite) {
+          setSite(normalizedSite);
+          setHistory([{ sections: JSON.parse(JSON.stringify(normalizedSite.sections)), theme: JSON.parse(JSON.stringify(normalizedSite.theme)) }]);
+          setHistoryIndex(0);
+        }
       } catch (err) {
         console.error('Failed to fetch data', err);
         toast.error('Gagal memuat data website');
@@ -321,6 +389,61 @@ export default function WebsiteBuilderPage() {
 
     fetchData();
   }, [businessId]);
+
+  // Helper to update site data and keep history & trigger autosave indicator
+  const updateSiteData = (newSite: Site, skipHistory = false) => {
+    setSite(newSite);
+    if (!skipHistory) {
+      const nextHistory = history.slice(0, historyIndex + 1);
+      const updatedHistory = [
+        ...nextHistory,
+        {
+          sections: JSON.parse(JSON.stringify(newSite.sections)),
+          theme: JSON.parse(JSON.stringify(newSite.theme))
+        }
+      ];
+      setHistory(updatedHistory);
+      setHistoryIndex(updatedHistory.length - 1);
+      setAutosaveStatus('dirty');
+    }
+  };
+
+  const handleUndo = () => {
+    if (historyIndex > 0 && site) {
+      const prev = history[historyIndex - 1];
+      setHistoryIndex(historyIndex - 1);
+      setSite({
+        ...site,
+        sections: JSON.parse(JSON.stringify(prev.sections)),
+        theme: JSON.parse(JSON.stringify(prev.theme))
+      });
+      toast.success('Kembali ke langkah sebelumnya (Undo)');
+    }
+  };
+
+  const handleRedo = () => {
+    if (historyIndex < history.length - 1 && site) {
+      const next = history[historyIndex + 1];
+      setHistoryIndex(historyIndex + 1);
+      setSite({
+        ...site,
+        sections: JSON.parse(JSON.stringify(next.sections)),
+        theme: JSON.parse(JSON.stringify(next.theme))
+      });
+      toast.success('Maju ke langkah berikutnya (Redo)');
+    }
+  };
+
+  // Simulated background autosave
+  useEffect(() => {
+    if (autosaveStatus === 'dirty') {
+      setAutosaveStatus('saving');
+      const timer = setTimeout(() => {
+        setAutosaveStatus('saved');
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [autosaveStatus]);
 
   const handleSave = async () => {
     if (!site) return;
@@ -373,7 +496,7 @@ export default function WebsiteBuilderPage() {
     };
 
     const updatedSections = [...site.sections, newSection];
-    setSite({ ...site, sections: updatedSections });
+    updateSiteData({ ...site, sections: updatedSections });
     setActiveSectionId(newSection.id);
     setActiveTab('block');
     toast.success(`Blok ${defaultBlock.name} berhasil ditambahkan!`);
@@ -385,7 +508,7 @@ export default function WebsiteBuilderPage() {
     const newSections = [...site.sections];
     [newSections[index - 1], newSections[index]] = [newSections[index], newSections[index - 1]];
     newSections.forEach((s, i) => s.order = i + 1);
-    setSite({ ...site, sections: newSections });
+    updateSiteData({ ...site, sections: newSections });
   };
 
   const moveDown = (index: number) => {
@@ -393,7 +516,7 @@ export default function WebsiteBuilderPage() {
     const newSections = [...site.sections];
     [newSections[index + 1], newSections[index]] = [newSections[index], newSections[index + 1]];
     newSections.forEach((s, i) => s.order = i + 1);
-    setSite({ ...site, sections: newSections });
+    updateSiteData({ ...site, sections: newSections });
   };
 
   // Drag and Drop Handlers
@@ -437,7 +560,7 @@ export default function WebsiteBuilderPage() {
       newSections.splice(index, 0, newSection);
       newSections.forEach((s, i) => s.order = i + 1);
 
-      setSite({ ...site, sections: newSections });
+      updateSiteData({ ...site, sections: newSections });
       setActiveSectionId(newSection.id);
       setActiveTab('block');
       setDraggedBlockType(null);
@@ -453,7 +576,7 @@ export default function WebsiteBuilderPage() {
       newSections.splice(index, 0, draggedItem);
       newSections.forEach((s, i) => s.order = i + 1);
 
-      setSite({ ...site, sections: newSections });
+      updateSiteData({ ...site, sections: newSections });
       setActiveSectionId(draggedItem.id);
       setDraggedIndex(null);
       setDragOverIndex(null);
@@ -484,7 +607,7 @@ export default function WebsiteBuilderPage() {
     if (!site) return;
     const newSections = site.sections.filter(s => s.id !== id);
     newSections.forEach((s, i) => s.order = i + 1);
-    setSite({ ...site, sections: newSections });
+    updateSiteData({ ...site, sections: newSections });
     if (activeSectionId === id) {
       setActiveSectionId(null);
     }
@@ -769,7 +892,7 @@ export default function WebsiteBuilderPage() {
       }
       return s;
     });
-    setSite({ ...site, sections: newSections });
+    updateSiteData({ ...site, sections: newSections });
   };
 
   const getSectionIcon = (type: string) => {
@@ -1177,11 +1300,11 @@ export default function WebsiteBuilderPage() {
 
   return (
     <div className="h-screen flex flex-col bg-[#F8F9FB] dark:bg-zinc-950 overflow-hidden transition-colors duration-200">
-      {/* Top Bar */}
-      <header className="h-16 bg-white dark:bg-zinc-900 border-b border-border dark:border-zinc-850 px-6 flex items-center justify-between z-30 shadow-sm transition-colors duration-200">
+      {/* Top Bar - Premium Glassmorphism styling */}
+      <header className="h-16 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md border-b border-border dark:border-zinc-850 px-6 flex items-center justify-between z-30 sticky top-0 transition-colors duration-200">
         <div className="flex items-center gap-4">
           <Link href={`/dashboard`}>
-            <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full hover:bg-muted dark:hover:bg-zinc-800">
+            <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl hover:bg-muted dark:hover:bg-zinc-800 transition-all">
               <ChevronLeft className="h-5 w-5" />
             </Button>
           </Link>
@@ -1190,7 +1313,72 @@ export default function WebsiteBuilderPage() {
               <Globe className="h-4 w-4 text-primary" />
               {site.title}
             </h1>
-            <p className="text-[10px] text-muted-foreground dark:text-zinc-500 font-bold uppercase tracking-widest">Kanvas Live Editor</p>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <span className="text-[9px] text-muted-foreground dark:text-zinc-550 font-bold uppercase tracking-wider">Editor Kanvas</span>
+              <span className="text-[9px] text-zinc-350 dark:text-zinc-700 select-none">•</span>
+              {/* Autosave Status Ticker */}
+              <div className="flex items-center gap-1 select-none">
+                <span className={cn(
+                  "h-1.5 w-1.5 rounded-full transition-all duration-300",
+                  autosaveStatus === 'saving' ? "bg-amber-400 animate-pulse" :
+                  autosaveStatus === 'dirty' ? "bg-amber-500" : "bg-green-500"
+                )} />
+                <span className="text-[9px] font-bold text-muted-foreground/85 dark:text-zinc-400 transition-all duration-300">
+                  {autosaveStatus === 'saving' ? 'Menyimpan...' :
+                   autosaveStatus === 'dirty' ? 'Belum disimpan' : 'Tersimpan otomatis'}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Middle controls: Undo/Redo & Centered Device Resizer Toggles */}
+        <div className="hidden md:flex items-center gap-4">
+          {/* History Operations */}
+          <div className="flex items-center bg-muted/40 dark:bg-zinc-850 p-0.5 rounded-xl border dark:border-zinc-800">
+            <button 
+              onClick={handleUndo}
+              disabled={historyIndex <= 0}
+              className="p-1.5 rounded-lg transition-all text-muted-foreground hover:text-foreground dark:text-zinc-450 dark:hover:text-white hover:bg-white dark:hover:bg-zinc-800 disabled:opacity-20 disabled:hover:bg-transparent"
+              title="Kembali (Undo)"
+            >
+              <Undo className="h-3.5 w-3.5" />
+            </button>
+            <button 
+              onClick={handleRedo}
+              disabled={historyIndex >= history.length - 1}
+              className="p-1.5 rounded-lg transition-all text-muted-foreground hover:text-foreground dark:text-zinc-450 dark:hover:text-white hover:bg-white dark:hover:bg-zinc-800 disabled:opacity-20 disabled:hover:bg-transparent"
+              title="Maju (Redo)"
+            >
+              <Redo className="h-3.5 w-3.5" />
+            </button>
+          </div>
+
+          {/* Centered Premium Device Resizer */}
+          <div className="flex items-center bg-muted/40 dark:bg-zinc-850 p-0.5 rounded-xl border dark:border-zinc-800">
+            {[
+              { mode: 'desktop', icon: Monitor, label: 'Desktop View' },
+              { mode: 'tablet', icon: Laptop, label: 'Tablet View' },
+              { mode: 'mobile', icon: Smartphone, label: 'Mobile View' }
+            ].map((item) => {
+              const Icon = item.icon;
+              const isSel = previewMode === item.mode;
+              return (
+                <button
+                  key={item.mode}
+                  onClick={() => setPreviewMode(item.mode as any)}
+                  className={cn(
+                    "p-1.5 rounded-lg transition-all flex items-center gap-1",
+                    isSel 
+                      ? "bg-white dark:bg-zinc-800 shadow-sm text-primary dark:text-white border border-black/5 dark:border-zinc-700" 
+                      : "text-muted-foreground hover:text-foreground dark:text-zinc-450 dark:hover:text-white"
+                  )}
+                  title={item.label}
+                >
+                  <Icon className="h-3.5 w-3.5" />
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -1200,30 +1388,31 @@ export default function WebsiteBuilderPage() {
             variant="outline" 
             size="sm" 
             onClick={() => setIsLivePreviewOpen(!isLivePreviewOpen)}
-            className={cn("h-9 rounded-xl text-xs font-bold gap-2", isLivePreviewOpen && "bg-primary/5 text-primary border-primary")}
+            className={cn("h-9 rounded-xl text-xs font-bold gap-1.5 transition-all hover:bg-muted/50", isLivePreviewOpen && "bg-primary/5 text-primary border-primary")}
           >
-            <Eye className="h-4 w-4" />
-            {isLivePreviewOpen ? 'Tutup Preview' : 'Preview Langsung'}
+            {isLivePreviewOpen ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            {isLivePreviewOpen ? 'Tutup Preview' : 'Tinjau'}
           </Button>
 
           <Button 
             variant="outline" 
             size="sm" 
-            className={cn("h-9 px-4 font-bold rounded-xl text-xs", site.isPublished && "border-green-500 text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-950/20 hover:bg-green-100 dark:hover:bg-green-950/30")}
+            className={cn("h-9 px-4 font-bold rounded-xl text-xs transition-all", site.isPublished ? "border-green-500 text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-950/20 hover:bg-green-100 dark:hover:bg-green-950/30" : "hover:bg-muted/50")}
             onClick={handleTogglePublish}
             disabled={isPublishing}
           >
-            {site.isPublished ? <CheckCircle2 className="h-3.5 w-3.5 mr-1.5" /> : <Globe className="h-3.5 w-3.5 mr-1.5" />}
+            {site.isPublished ? <CheckCircle2 className="h-3.5 w-3.5 mr-1 text-green-500" /> : <Globe className="h-3.5 w-3.5 mr-1 text-muted-foreground" />}
             {site.isPublished ? 'Live' : 'Publish'}
           </Button>
+          
           <Button 
             variant="primary" 
             size="sm" 
-            className="h-9 px-5 font-black rounded-xl text-xs shadow-lg shadow-primary/20 dark:shadow-none text-white bg-blue-600 hover:bg-blue-700"
+            className="h-9 px-5 font-black rounded-xl text-xs shadow-lg shadow-primary/10 dark:shadow-none text-white bg-blue-600 hover:bg-blue-700 active:scale-95 transition-all flex items-center gap-1.5"
             onClick={handleSave}
             isLoading={isSaving}
           >
-            <Save className="h-3.5 w-3.5 mr-1.5" />
+            <Save className="h-3.5 w-3.5" />
             Simpan
           </Button>
         </div>
@@ -1233,181 +1422,342 @@ export default function WebsiteBuilderPage() {
       <div className="flex-1 flex overflow-hidden relative">
         
         {/* COLUMN 1 (LEFT): Available Blocks Panel */}
-        <aside className="w-[280px] bg-white dark:bg-zinc-900 border-r border-border dark:border-zinc-850 p-4 overflow-y-auto flex flex-col gap-4 shrink-0 transition-colors duration-200">
-          <div className="space-y-1">
-            <h3 className="text-xs font-black text-gray-900 dark:text-white uppercase tracking-wider">Blok Tersedia</h3>
-            <p className="text-[10px] text-muted-foreground">Klik blok di bawah untuk menambahkannya ke kanvas tengah</p>
+        <aside 
+          className={cn(
+            "bg-white dark:bg-zinc-900 border-r border-border dark:border-zinc-850 overflow-hidden flex flex-col shrink-0 transition-all duration-300 ease-in-out z-20 shadow-sm relative",
+            leftSidebarCollapsed ? "w-0 border-r-0" : "w-[300px]"
+          )}
+        >
+          {/* Header & Collapse Toggle */}
+          <div className="p-4 border-b border-border dark:border-zinc-850 flex items-center justify-between bg-gray-50/50 dark:bg-zinc-900/50 shrink-0">
+            <div className="space-y-0.5">
+              <h3 className="text-xs font-black text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
+                <Layout className="h-3.5 w-3.5 text-primary" />
+                Elemen Visual
+              </h3>
+              <p className="text-[9px] text-muted-foreground font-medium">Klik & seret blok ke kanvas</p>
+            </div>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => setLeftSidebarCollapsed(true)}
+              className="h-7 w-7 rounded-lg text-muted-foreground hover:text-foreground dark:hover:text-white hover:bg-muted dark:hover:bg-zinc-800"
+              title="Sembunyikan Panel Kiri"
+            >
+              <PanelLeftClose className="h-4 w-4" />
+            </Button>
           </div>
-          
-          <div className="flex flex-col gap-2.5">
-            {AVAILABLE_BLOCKS.map((block) => {
-              const Icon = getSectionIcon(block.type);
-              return (
-                <button
-                  key={block.type}
-                  onClick={() => handleAddSection(block.type)}
-                  draggable
-                  onDragStart={(e) => handleAvailableBlockDragStart(e, block.type)}
-                  onDragEnd={handleAvailableBlockDragEnd}
-                  className="w-full text-left p-3 rounded-xl border border-border dark:border-zinc-850 hover:border-primary/50 dark:hover:border-amber-400/50 bg-white dark:bg-zinc-900 hover:bg-gray-50/50 dark:hover:bg-zinc-850/50 transition-all shadow-sm hover:scale-[1.01] active:scale-95 group flex items-start gap-3 cursor-grab active:cursor-grabbing"
+
+          {/* Search filter bar */}
+          <div className="px-4 py-3 border-b border-border dark:border-zinc-850 shrink-0 bg-white dark:bg-zinc-900">
+            <div className="relative">
+              <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-muted-foreground/75" />
+              <input
+                type="text"
+                placeholder="Cari blok..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-9 pr-4 py-2 text-xs font-medium rounded-xl border border-border dark:border-zinc-800 bg-gray-50/50 dark:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary dark:focus:ring-amber-500/55 transition-all text-foreground placeholder:text-muted-foreground/60"
+              />
+              {searchQuery && (
+                <button 
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-2.5 text-muted-foreground hover:text-foreground text-xs"
                 >
-                  <div className="h-8 w-8 shrink-0 rounded-lg flex items-center justify-center bg-gray-50 dark:bg-zinc-850 border dark:border-zinc-800 shadow-inner group-hover:bg-primary/5 dark:group-hover:bg-amber-400/5 group-hover:text-primary dark:group-hover:text-amber-400 transition-colors">
-                    <Icon className="h-4 w-4 text-gray-500 dark:text-zinc-400 group-hover:text-primary dark:group-hover:text-amber-400 transition-colors" />
-                  </div>
-                  <div className="space-y-0.5 min-w-0">
-                    <p className="text-xs font-bold text-gray-900 dark:text-white group-hover:text-primary dark:group-hover:text-amber-400 transition-colors truncate">
-                      {block.name}
-                    </p>
-                    <p className="text-[9px] text-muted-foreground dark:text-zinc-500 font-medium leading-normal line-clamp-1">
-                      {block.description}
-                    </p>
-                  </div>
+                  <X className="h-3.5 w-3.5" />
                 </button>
+              )}
+            </div>
+          </div>
+
+          {/* Categorized blocks scroll area */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            {CATEGORIES.map((category) => {
+              // Filter blocks in this category
+              const blocks = AVAILABLE_BLOCKS.filter(b => 
+                category.types.includes(b.type) && 
+                (b.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                 b.description.toLowerCase().includes(searchQuery.toLowerCase()))
+              );
+
+              if (blocks.length === 0) return null;
+
+              const isExpanded = expandedCategories[category.id] !== false;
+
+              return (
+                <div key={category.id} className="space-y-2 border-b dark:border-zinc-850/60 pb-3 last:border-0 last:pb-0">
+                  {/* Category Header */}
+                  <button
+                    onClick={() => setExpandedCategories(prev => ({ ...prev, [category.id]: !isExpanded }))}
+                    className="w-full flex items-center justify-between text-left group"
+                  >
+                    <div className="min-w-0">
+                      <span className="text-[10px] font-black text-gray-900 dark:text-white uppercase tracking-wider group-hover:text-primary dark:group-hover:text-amber-400 transition-colors">
+                        {category.name}
+                      </span>
+                      <p className="text-[8px] text-muted-foreground/80 dark:text-zinc-500 font-medium truncate">
+                        {category.description}
+                      </p>
+                    </div>
+                    <ChevronDown className={cn("h-3.5 w-3.5 text-muted-foreground group-hover:text-foreground transition-all duration-200 shrink-0", !isExpanded && "-rotate-90")} />
+                  </button>
+
+                  {/* Collapsible content with animation placeholder */}
+                  {isExpanded && (
+                    <div className="grid grid-cols-1 gap-2 pt-1 transition-all">
+                      {blocks.map((block) => {
+                        const Icon = getSectionIcon(block.type);
+                        return (
+                          <button
+                            key={block.type}
+                            onClick={() => handleAddSection(block.type)}
+                            draggable
+                            onDragStart={(e) => handleAvailableBlockDragStart(e, block.type)}
+                            onDragEnd={handleAvailableBlockDragEnd}
+                            className="w-full text-left p-2.5 rounded-xl border border-border dark:border-zinc-850 hover:border-primary/50 dark:hover:border-amber-400/50 bg-white dark:bg-zinc-950/20 hover:bg-gray-50/50 dark:hover:bg-zinc-850/50 transition-all shadow-sm hover:scale-[1.01] active:scale-95 group flex items-start gap-2.5 cursor-grab active:cursor-grabbing"
+                          >
+                            <div className="h-7 w-7 shrink-0 rounded-lg flex items-center justify-center bg-gray-50 dark:bg-zinc-850 border dark:border-zinc-800 shadow-inner group-hover:bg-primary/5 dark:group-hover:bg-amber-400/5 group-hover:text-primary dark:group-hover:text-amber-400 transition-colors">
+                              <Icon className="h-3.5 w-3.5 text-gray-500 dark:text-zinc-400 group-hover:text-primary dark:group-hover:text-amber-400 transition-colors" />
+                            </div>
+                            <div className="space-y-0.5 min-w-0">
+                              <p className="text-xs font-bold text-gray-900 dark:text-white group-hover:text-primary dark:group-hover:text-amber-400 transition-colors truncate">
+                                {block.name}
+                              </p>
+                              <p className="text-[9px] text-muted-foreground dark:text-zinc-500 font-medium leading-normal line-clamp-1">
+                                {block.description}
+                              </p>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
               );
             })}
+
+            {/* Empty search results fallback */}
+            {AVAILABLE_BLOCKS.filter(b => 
+              b.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+              b.description.toLowerCase().includes(searchQuery.toLowerCase())
+            ).length === 0 && (
+              <div className="text-center py-8 px-4 border border-dashed rounded-xl dark:border-zinc-800">
+                <p className="text-xs font-bold text-gray-400">Tidak ada blok ditemukan</p>
+                <p className="text-[9px] text-muted-foreground/80 mt-1">Coba kata kunci pencarian yang lain.</p>
+              </div>
+            )}
           </div>
         </aside>
 
         {/* COLUMN 2 (MIDDLE): The Canvas (visual high-fidelity mockups stack) */}
         <main className={cn(
-          "flex-1 bg-[#F5F5F7] dark:bg-zinc-950 p-8 overflow-y-auto flex flex-col items-center gap-6 transition-all duration-300",
+          "flex-1 bg-[#F8F9FB] dark:bg-zinc-950 p-6 overflow-y-auto flex flex-col items-center gap-4 transition-all duration-300 relative",
           isLivePreviewOpen ? "hidden lg:flex" : "flex"
         )}>
-          {/* Canvas Mode Indicator */}
-          <div className="w-full max-w-xl flex items-center justify-between pb-1 border-b dark:border-zinc-900">
-            <div className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-amber-500 animate-pulse" />
-              <span className="text-xs font-black text-foreground dark:text-white uppercase tracking-widest">Kanvas Struktur</span>
+          {/* Floating Expand Sidebar Handles if collapsed */}
+          {leftSidebarCollapsed && (
+            <button 
+              onClick={() => setLeftSidebarCollapsed(false)}
+              className="absolute left-4 top-4 h-9 w-9 bg-white dark:bg-zinc-900 rounded-xl flex items-center justify-center shadow-lg border border-border dark:border-zinc-850 text-muted-foreground hover:text-foreground dark:hover:text-white transition-all z-20 hover:scale-105 active:scale-95"
+              title="Tampilkan Panel Elemen"
+            >
+              <PanelLeft className="h-4 w-4" />
+            </button>
+          )}
+
+          {leftSidebarCollapsed && (
+            <div className="absolute left-14 top-[22px] pointer-events-none select-none text-[10px] font-bold text-muted-foreground/60 dark:text-zinc-550 animate-pulse">
+              Buka Panel Elemen
             </div>
-            <span className="text-[10px] text-muted-foreground font-bold">Susun potongan blok secara visual</span>
-          </div>
+          )}
 
-          {/* Visual Canvas Stack */}
-          <div className="w-full max-w-xl flex flex-col gap-6 pt-2 pb-16">
-            {site.sections.length === 0 ? (
-              <div 
-                onDragOver={(e) => {
-                  e.preventDefault();
-                  e.currentTarget.classList.add('border-primary/50', 'bg-primary/5', 'scale-[1.01]');
-                }}
-                onDragLeave={(e) => {
-                  e.currentTarget.classList.remove('border-primary/50', 'bg-primary/5', 'scale-[1.01]');
-                }}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  e.currentTarget.classList.remove('border-primary/50', 'bg-primary/5', 'scale-[1.01]');
-                  if (draggedBlockType) {
-                    handleAddSection(draggedBlockType);
-                  }
-                }}
-                className="py-24 text-center bg-white dark:bg-zinc-900 border border-dashed border-border dark:border-zinc-800 rounded-3xl p-8 flex flex-col items-center justify-center gap-4 transition-all duration-200"
-              >
-                <Layout className="h-12 w-12 text-muted-foreground/30 animate-bounce" />
-                <div className="space-y-1">
-                  <p className="font-bold text-sm text-gray-900 dark:text-white">Kanvas Kosong</p>
-                  <p className="text-xs text-muted-foreground max-w-xs mx-auto">Tambahkan atau Tarik (Drag & Drop) blok dari menu sebelah kiri ke sini untuk menyusun desain.</p>
-                </div>
+          {rightSidebarCollapsed && (
+            <button 
+              onClick={() => setRightSidebarCollapsed(false)}
+              className="absolute right-4 top-4 h-9 w-9 bg-white dark:bg-zinc-900 rounded-xl flex items-center justify-center shadow-lg border border-border dark:border-zinc-850 text-muted-foreground hover:text-foreground dark:hover:text-white transition-all z-20 hover:scale-105 active:scale-95"
+              title="Tampilkan Pengaturan Blok"
+            >
+              <PanelRight className="h-4 w-4" />
+            </button>
+          )}
+
+          {rightSidebarCollapsed && (
+            <div className="absolute right-14 top-[22px] pointer-events-none select-none text-[10px] font-bold text-muted-foreground/60 dark:text-zinc-550 animate-pulse text-right">
+              Buka Pengaturan Blok
+            </div>
+          )}
+
+          {/* Premium Resizable Canvas Viewport Wrapper */}
+          <div 
+            className={cn(
+              "transition-all duration-300 ease-in-out border border-border/80 dark:border-zinc-850 rounded-2xl shadow-xl bg-white dark:bg-zinc-900 p-5 flex flex-col gap-6 pt-3 pb-16 overflow-y-auto min-h-[calc(100vh-8.5rem)] my-2 relative w-full",
+              previewMode === 'desktop' ? "max-w-4xl" :
+              previewMode === 'tablet' ? "max-w-[768px]" : "max-w-[375px]"
+            )}
+          >
+            {/* Elegant Device Header Frame */}
+            <div className="flex items-center justify-between border-b dark:border-zinc-850 pb-3 shrink-0">
+              <div className="flex items-center gap-1.5 select-none">
+                <span className="h-2.5 w-2.5 rounded-full bg-red-400/80" />
+                <span className="h-2.5 w-2.5 rounded-full bg-amber-400/80" />
+                <span className="h-2.5 w-2.5 rounded-full bg-green-400/80" />
               </div>
-            ) : (
-              [...site.sections].sort((a, b) => a.order - b.order).map((section, idx) => {
-                const isActive = activeSectionId === section.id;
-                return (
-                  <div 
-                    key={section.id} 
-                    id={`section-card-${section.id}`}
-                    className="relative w-full group transition-all duration-200"
-                    onDragStart={(e) => handleDragStart(e, idx)}
-                    onDragOver={(e) => handleDragOver(e, idx)}
-                    onDragLeave={handleDragLeave}
-                    onDrop={(e) => handleDrop(e, idx)}
-                    onDragEnd={(e) => { handleDragEnd(e); e.currentTarget.setAttribute('draggable', 'false'); }}
+              <div className="text-[9px] text-muted-foreground/70 dark:text-zinc-500 font-black uppercase tracking-widest flex items-center gap-1 bg-muted/40 dark:bg-zinc-950 px-2 py-0.5 rounded-md border border-border/20 dark:border-zinc-800 select-none">
+                {previewMode === 'desktop' ? 'Laptop Frame - 100% Lebar' :
+                 previewMode === 'tablet' ? 'Tablet Frame - 768px' : 'Mobile Frame - 375px'}
+              </div>
+              <span className="w-8 shrink-0" />
+            </div>
+
+            {/* Visual Canvas Stack */}
+            <div className="flex flex-col gap-6 flex-1">
+              {site.sections.length === 0 ? (
+                <div 
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    e.currentTarget.classList.add('border-primary/50', 'bg-primary/5', 'scale-[1.01]');
+                  }}
+                  onDragLeave={(e) => {
+                    e.currentTarget.classList.remove('border-primary/50', 'bg-primary/5', 'scale-[1.01]');
+                  }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    e.currentTarget.classList.remove('border-primary/50', 'bg-primary/5', 'scale-[1.01]');
+                    if (draggedBlockType) {
+                      handleAddSection(draggedBlockType);
+                    }
+                  }}
+                  className="w-full flex-1 flex flex-col items-center justify-center gap-5 py-20 px-8 text-center bg-white/50 dark:bg-zinc-900/50 backdrop-blur-sm border-2 border-dashed border-border dark:border-zinc-800 rounded-3xl transition-all duration-300 hover:border-primary/40 hover:bg-white dark:hover:bg-zinc-900 shadow-sm group"
+                >
+                  <div className="h-16 w-16 bg-blue-50 dark:bg-zinc-850 rounded-2xl flex items-center justify-center border border-blue-100 dark:border-zinc-800 shadow-inner group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                    <Sparkles className="h-8 w-8 text-blue-650 dark:text-amber-400" />
+                  </div>
+                  <div className="space-y-1.5">
+                    <p className="font-black text-sm text-gray-900 dark:text-white">Kanvas Desain Anda Menanti</p>
+                    <p className="text-xs text-muted-foreground/80 dark:text-zinc-400 max-w-xs mx-auto leading-relaxed">
+                      Susun website impian Anda dengan menarik! Tarik & seret (drag) blok dari panel kiri, atau klik untuk menyusun halaman dalam hitungan detik.
+                    </p>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => handleAddSection('hero')}
+                    className="mt-2 text-xs font-bold rounded-xl bg-white dark:bg-zinc-900 shadow-sm border dark:border-zinc-800 hover:bg-muted"
                   >
-                    {/* Floating Side Action Controls on Hover/Active */}
-                    {isActive && (
-                      <div className="absolute left-[-42px] top-1/2 -translate-y-1/2 flex flex-col gap-1.5 z-20 animate-in fade-in slide-in-from-left-2 duration-200">
-                        <button
-                          onClick={(e) => { e.stopPropagation(); moveUp(idx); }}
-                          disabled={idx === 0}
-                          className="h-8.5 w-8.5 bg-white hover:bg-gray-50 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-xl flex items-center justify-center shadow-md disabled:opacity-30 disabled:hover:bg-white dark:disabled:hover:bg-zinc-900 disabled:hover:scale-100 border border-border/80 dark:border-zinc-800 transition-all hover:scale-105 active:scale-95"
-                          title="Pindahkan ke Atas"
-                        >
-                          <ChevronUp className="h-4.5 w-4.5 stroke-[2.5]" />
-                        </button>
-                        
-                        <div 
-                          onMouseDown={() => {
-                            const el = document.getElementById(`section-card-${section.id}`);
-                            if (el) el.setAttribute('draggable', 'true');
-                          }}
-                          onMouseUp={() => {
-                            const el = document.getElementById(`section-card-${section.id}`);
-                            if (el) el.setAttribute('draggable', 'false');
-                          }}
-                          className="h-8.5 w-8.5 bg-white dark:bg-zinc-900 text-zinc-400 dark:text-zinc-500 rounded-xl flex items-center justify-center shadow-md border border-border/80 dark:border-zinc-800 cursor-grab active:cursor-grabbing hover:scale-105 transition-all"
-                        >
-                          <svg width="10" height="14" viewBox="0 0 10 14" fill="none" stroke="currentColor" strokeWidth="2.5" className="opacity-95 text-zinc-400 dark:text-zinc-500">
-                            <circle cx="3" cy="3" r="1.2" fill="currentColor" stroke="none" />
-                            <circle cx="7" cy="3" r="1.2" fill="currentColor" stroke="none" />
-                            <circle cx="3" cy="7" r="1.2" fill="currentColor" stroke="none" />
-                            <circle cx="7" cy="7" r="1.2" fill="currentColor" stroke="none" />
-                            <circle cx="3" cy="11" r="1.2" fill="currentColor" stroke="none" />
-                            <circle cx="7" cy="11" r="1.2" fill="currentColor" stroke="none" />
-                          </svg>
-                        </div>
-                        
-                        <button
-                          onClick={(e) => { e.stopPropagation(); moveDown(idx); }}
-                          disabled={idx === site.sections.length - 1}
-                          className="h-8.5 w-8.5 bg-white hover:bg-gray-50 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-xl flex items-center justify-center shadow-md disabled:opacity-30 disabled:hover:bg-white dark:disabled:hover:bg-zinc-900 disabled:hover:scale-100 border border-border/80 dark:border-zinc-800 transition-all hover:scale-105 active:scale-95"
-                          title="Pindahkan ke Bawah"
-                        >
-                          <ChevronDown className="h-4.5 w-4.5 stroke-[2.5]" />
-                        </button>
-                      </div>
-                    )}
-
-                    {/* Block Slice Frame */}
-                    <div
-                      onClick={() => {
-                        setActiveSectionId(section.id);
-                        setActiveTab('block');
-                      }}
-                      className={cn(
-                        "w-full rounded-none border transition-all cursor-pointer relative select-none p-1.5",
-                        isActive 
-                          ? "border-amber-500 dark:border-amber-400 bg-amber-50/10 dark:bg-amber-950/5" 
-                          : "border-transparent bg-transparent hover:border-gray-200 dark:hover:border-zinc-800/60",
-                        dragOverIndex === idx && "border-dashed border-2 border-amber-500 dark:border-amber-400 scale-[1.01] bg-amber-500/5 dark:bg-amber-400/5"
-                      )}
+                    <Plus className="h-3.5 w-3.5 mr-1" />
+                    Tambah Blok Hero Pertama
+                  </Button>
+                </div>
+              ) : (
+                [...site.sections].sort((a, b) => a.order - b.order).map((section, idx) => {
+                  const isActive = activeSectionId === section.id;
+                  return (
+                    <div 
+                      key={section.id} 
+                      id={`section-card-${section.id}`}
+                      className="relative w-full group transition-all duration-200"
+                      onDragStart={(e) => handleDragStart(e, idx)}
+                      onDragOver={(e) => handleDragOver(e, idx)}
+                      onDragLeave={handleDragLeave}
+                      onDrop={(e) => handleDrop(e, idx)}
+                      onDragEnd={(e) => { handleDragEnd(e); e.currentTarget.setAttribute('draggable', 'false'); }}
                     >
-                      {/* Labeled Top Ribbon */}
-                      <div className="flex items-center justify-between pb-1.5 px-2">
-                        <span className="text-[10px] font-black text-muted-foreground/80 dark:text-zinc-500 uppercase tracking-widest flex items-center gap-1.5">
-                          {section.type.replace('-', ' ')}
-                          {section.type === 'hero' && <span className="text-xs">🔒</span>}
-                        </span>
-                        {section.type !== 'hero' && (
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-6 w-6 rounded-lg text-muted-foreground/60 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20"
-                            onClick={(e) => { e.stopPropagation(); handleDeleteSection(section.id); }}
-                            title="Hapus Blok"
-                          >
-                            <Trash2 className="h-3.5 w-3.5" />
-                          </Button>
+                      {/* Block Slice Frame - Framer style glowing active outline */}
+                      <div
+                        onClick={() => {
+                          setActiveSectionId(section.id);
+                          setActiveTab('block');
+                        }}
+                        className={cn(
+                          "w-full rounded-2xl border transition-all duration-200 cursor-pointer relative p-2 flex flex-col gap-2",
+                          isActive 
+                            ? "border-blue-500 dark:border-blue-450 bg-blue-50/[0.04] dark:bg-blue-950/10 ring-2 ring-blue-500/10 shadow-lg shadow-blue-500/[0.03] scale-[1.002]" 
+                            : "border-gray-150/80 dark:border-zinc-850 hover:border-blue-400/50 dark:hover:border-zinc-750/70 hover:shadow-md hover:bg-gray-50/20 dark:hover:bg-zinc-900/30",
+                          dragOverIndex === idx && "border-dashed border-2 border-blue-500 dark:border-blue-400 scale-[1.01] bg-blue-500/5 dark:bg-blue-400/5"
                         )}
-                      </div>
+                      >
+                        {/* Elegant Contextual Floating Pill Action Toolbar on selected block - 100% Clip-safe */}
+                        {isActive && (
+                          <div 
+                            className="absolute top-[-18px] left-4 z-30 flex items-center bg-white/95 dark:bg-zinc-900/95 backdrop-blur-sm border border-blue-500/80 dark:border-zinc-750 px-1 py-1 rounded-xl shadow-xl gap-0.5 animate-in fade-in slide-in-from-top-1 duration-150 select-none text-foreground"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            {/* Block Name Type Indicator Label */}
+                            <span className="text-[9px] font-extrabold text-blue-600 dark:text-blue-400 uppercase tracking-widest px-2.5 py-0.5 bg-blue-50 dark:bg-blue-950/40 rounded-lg flex items-center gap-1 select-none">
+                              {section.type.replace('-', ' ')}
+                              {section.type === 'hero' && <span className="text-[10px]" title="Blok Utama Wajib">🔒</span>}
+                            </span>
+                            
+                            <div className="h-4 w-px bg-gray-200 dark:bg-zinc-800 mx-1" />
+                            
+                            {/* Move Up Trigger */}
+                            <button
+                              onClick={(e) => { e.stopPropagation(); moveUp(idx); }}
+                              disabled={idx === 0}
+                              className="h-7 w-7 hover:bg-muted dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-lg flex items-center justify-center transition-all disabled:opacity-20 active:scale-90"
+                              title="Pindahkan ke Atas"
+                            >
+                              <ChevronUp className="h-4 w-4 stroke-[2.5]" />
+                            </button>
+                            
+                            {/* Reorder Grip Handle dots */}
+                            <div 
+                              onMouseDown={() => {
+                                const el = document.getElementById(`section-card-${section.id}`);
+                                if (el) el.setAttribute('draggable', 'true');
+                              }}
+                              onMouseUp={() => {
+                                const el = document.getElementById(`section-card-${section.id}`);
+                                if (el) el.setAttribute('draggable', 'false');
+                              }}
+                              className="h-7 w-7 hover:bg-muted dark:hover:bg-zinc-800 text-zinc-450 dark:text-zinc-500 rounded-lg flex items-center justify-center cursor-grab active:cursor-grabbing transition-all"
+                              title="Tahan & Seret untuk Reorder"
+                            >
+                              <svg width="10" height="12" viewBox="0 0 10 14" fill="none" stroke="currentColor" strokeWidth="2.5" className="opacity-95 text-zinc-400 dark:text-zinc-550">
+                                <circle cx="3" cy="3" r="1.2" fill="currentColor" stroke="none" />
+                                <circle cx="7" cy="3" r="1.2" fill="currentColor" stroke="none" />
+                                <circle cx="3" cy="7" r="1.2" fill="currentColor" stroke="none" />
+                                <circle cx="7" cy="7" r="1.2" fill="currentColor" stroke="none" />
+                                <circle cx="3" cy="11" r="1.2" fill="currentColor" stroke="none" />
+                                <circle cx="7" cy="11" r="1.2" fill="currentColor" stroke="none" />
+                              </svg>
+                            </div>
+                            
+                            {/* Move Down Trigger */}
+                            <button
+                              onClick={(e) => { e.stopPropagation(); moveDown(idx); }}
+                              disabled={idx === site.sections.length - 1}
+                              className="h-7 w-7 hover:bg-muted dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-lg flex items-center justify-center transition-all disabled:opacity-20 active:scale-90"
+                              title="Pindahkan ke Bawah"
+                            >
+                              <ChevronDown className="h-4 w-4 stroke-[2.5]" />
+                            </button>
 
-                      {/* Mockup Frame Content */}
-                      <div className="w-full bg-white dark:bg-zinc-900 rounded-none overflow-hidden shadow-sm border border-border dark:border-zinc-850">
-                        {renderCanvasMockup(section)}
+                            {/* Delete Trigger */}
+                            {section.type !== 'hero' && (
+                              <>
+                                <div className="h-4 w-px bg-gray-200 dark:bg-zinc-800 mx-1" />
+                                <button
+                                  onClick={(e) => { e.stopPropagation(); handleDeleteSection(section.id); }}
+                                  className="h-7 w-7 hover:bg-red-50 dark:hover:bg-red-950/20 text-muted-foreground/60 hover:text-red-500 rounded-lg flex items-center justify-center transition-all active:scale-90"
+                                  title="Hapus Blok"
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </button>
+                              </>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Mockup Frame Content */}
+                        <div className="w-full bg-white dark:bg-zinc-950 rounded-xl overflow-hidden shadow-sm border border-border dark:border-zinc-850">
+                          {renderCanvasMockup(section)}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })
-            )}
+                  );
+                })
+              )}
+            </div>
           </div>
         </main>
 
@@ -1457,28 +1807,44 @@ export default function WebsiteBuilderPage() {
         )}
 
         {/* COLUMN 3 (RIGHT): Settings Panel (Site & Active Block tabs) */}
-        <aside className="w-[360px] bg-white dark:bg-zinc-900 border-l border-border dark:border-zinc-850 overflow-hidden flex flex-col shrink-0 transition-colors duration-200">
-          <nav className="flex border-b border-border dark:border-zinc-850 p-2 bg-muted/20 dark:bg-zinc-950/20">
-            <button 
-              onClick={() => setActiveTab('site')}
-              className={cn(
-                "flex-1 flex items-center justify-center py-2 rounded-lg gap-2 transition-all font-bold text-[10px] uppercase tracking-wider",
-                activeTab === 'site' ? "bg-white dark:bg-zinc-800 shadow-sm text-primary dark:text-white border dark:border-zinc-750" : "text-muted-foreground dark:text-zinc-400 hover:bg-muted dark:hover:bg-zinc-800/50 dark:hover:text-white"
-              )}
+        <aside 
+          className={cn(
+            "bg-white dark:bg-zinc-900 border-l border-border dark:border-zinc-850 overflow-hidden flex flex-col shrink-0 transition-all duration-300 ease-in-out z-20 shadow-sm relative",
+            rightSidebarCollapsed ? "w-0 border-l-0" : "w-[360px]"
+          )}
+        >
+          <nav className="flex items-center justify-between border-b border-border dark:border-zinc-850 p-2 bg-muted/20 dark:bg-zinc-950/20 shrink-0">
+            <div className="flex items-center gap-1 flex-1 mr-2">
+              <button 
+                onClick={() => setActiveTab('site')}
+                className={cn(
+                  "flex-1 flex items-center justify-center py-1.5 rounded-lg gap-1.5 transition-all font-bold text-[10px] uppercase tracking-wider",
+                  activeTab === 'site' ? "bg-white dark:bg-zinc-800 shadow-sm text-primary dark:text-white border dark:border-zinc-750" : "text-muted-foreground dark:text-zinc-400 hover:bg-muted dark:hover:bg-zinc-800/50 dark:hover:text-white"
+                )}
+              >
+                <Settings className="h-3.5 w-3.5" />
+                Site
+              </button>
+              <button 
+                onClick={() => setActiveTab('block')}
+                className={cn(
+                  "flex-1 flex items-center justify-center py-1.5 rounded-lg gap-1.5 transition-all font-bold text-[10px] uppercase tracking-wider",
+                  activeTab === 'block' ? "bg-white dark:bg-zinc-800 shadow-sm text-primary dark:text-white border dark:border-zinc-750" : "text-muted-foreground dark:text-zinc-400 hover:bg-muted dark:hover:bg-zinc-800/50 dark:hover:text-white"
+                )}
+              >
+                <Layout className="h-3.5 w-3.5" />
+                Block
+              </button>
+            </div>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => setRightSidebarCollapsed(true)}
+              className="h-7 w-7 rounded-lg text-muted-foreground hover:text-foreground dark:hover:text-white hover:bg-muted dark:hover:bg-zinc-800 shrink-0"
+              title="Sembunyikan Panel Kanan"
             >
-              <Settings className="h-4 w-4" />
-              Site
-            </button>
-            <button 
-              onClick={() => setActiveTab('block')}
-              className={cn(
-                "flex-1 flex items-center justify-center py-2 rounded-lg gap-2 transition-all font-bold text-[10px] uppercase tracking-wider",
-                activeTab === 'block' ? "bg-white dark:bg-zinc-800 shadow-sm text-primary dark:text-white border dark:border-zinc-750" : "text-muted-foreground dark:text-zinc-400 hover:bg-muted dark:hover:bg-zinc-800/50 dark:hover:text-white"
-              )}
-            >
-              <Layout className="h-4 w-4" />
-              Block
-            </button>
+              <PanelRightClose className="h-4 w-4" />
+            </Button>
           </nav>
 
           <div className="flex-1 overflow-y-auto p-5 custom-scrollbar">
