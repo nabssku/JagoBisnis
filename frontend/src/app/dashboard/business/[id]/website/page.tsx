@@ -58,6 +58,7 @@ import Link from 'next/link';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { RichTextEditor } from '@/components/ui/RichTextEditor';
 
 const CATEGORIES = [
   {
@@ -2358,29 +2359,16 @@ export default function WebsiteBuilderPage() {
                               </button>
                             </div>
 
-                            {/* Deskripsi berbentuk rich text box matching Image 4 */}
+                            {/* Deskripsi berbentuk rich text box using Tiptap */}
                             <div className="space-y-1">
                               <div className="flex items-center justify-between">
                                 <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider">Deskripsi Profil Bisnis</label>
                               </div>
-                              
-                              {/* Rich editor look matching Image 4 */}
-                              <div className="rounded-xl border border-border dark:border-zinc-800 overflow-hidden bg-muted/20 dark:bg-zinc-950">
-                                <div className="flex items-center gap-1.5 px-3 py-1.5 border-b border-border/80 bg-gray-50/30 dark:bg-zinc-900/30 text-[10px] font-bold text-gray-500 dark:text-zinc-400">
-                                  <span className="cursor-pointer hover:text-primary">B</span>
-                                  <span className="italic cursor-pointer hover:text-primary">I</span>
-                                  <span className="underline cursor-pointer hover:text-primary">U</span>
-                                  <span className="mx-1 text-border/80">|</span>
-                                  <span className="cursor-pointer hover:text-primary">☰</span>
-                                  <span className="cursor-pointer hover:text-primary">☷</span>
-                                </div>
-                                <textarea
-                                  className="w-full bg-transparent px-3 py-2 text-xs text-gray-700 dark:text-zinc-200 font-medium min-h-[140px] leading-relaxed border-0 focus:outline-none focus:ring-0"
-                                  value={activeSection.content.description || ''}
-                                  onChange={(e) => updateActiveSectionContent('description', e.target.value)}
-                                  placeholder="Ketik profil/tentang bisnis Anda di sini..."
-                                />
-                              </div>
+                              <RichTextEditor
+                                value={activeSection.content.description || ''}
+                                onChange={(value) => updateActiveSectionContent('description', value)}
+                                placeholder="Ketik profil/tentang bisnis Anda di sini..."
+                              />
                             </div>
                           </div>
                         )}

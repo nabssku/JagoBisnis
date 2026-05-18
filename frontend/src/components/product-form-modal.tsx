@@ -9,6 +9,7 @@ import { productSchema, ProductDto } from '@/types/product-dto';
 import { productService } from '@/services/product.service';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { RichTextEditor } from '@/components/ui/RichTextEditor';
 import axios from 'axios';
 
 interface ProductFormModalProps {
@@ -488,66 +489,16 @@ export function ProductFormModal({
                 </div>
 
                 {/* Rich Editor Description Mock */}
+                {/* Rich Editor Description using Tiptap */}
                 <div className="space-y-1.5">
                   <label className="text-xs font-black uppercase tracking-widest text-gray-400 dark:text-zinc-500 block">
                     Deskripsi
                   </label>
-                  <div className="rounded-[1.25rem] border border-gray-200 dark:border-zinc-800 overflow-hidden bg-white dark:bg-zinc-900 flex flex-col focus-within:ring-2 focus-within:ring-amber-500">
-                    
-                    {/* Visual formatting toolbar */}
-                    <div className="flex flex-wrap items-center gap-1 p-2 border-b border-gray-100 dark:border-zinc-800 bg-gray-50/50 dark:bg-zinc-900/50">
-                      {[
-                        { icon: Bold, label: 'Bold' },
-                        { icon: Italic, label: 'Italic' },
-                        { icon: Underline, label: 'Underline' }
-                      ].map((tool, i) => (
-                        <button 
-                          key={i} 
-                          type="button"
-                          className="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-zinc-850 text-gray-500 dark:text-zinc-400 transition-colors"
-                        >
-                          <tool.icon className="h-3.5 w-3.5" />
-                        </button>
-                      ))}
-                      <div className="w-px h-4 bg-gray-200 dark:bg-zinc-800 mx-1" />
-                      {[
-                        { icon: List, label: 'Bullet' },
-                        { icon: ListOrdered, label: 'Numbered' }
-                      ].map((tool, i) => (
-                        <button 
-                          key={i} 
-                          type="button"
-                          className="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-zinc-850 text-gray-500 dark:text-zinc-400 transition-colors"
-                        >
-                          <tool.icon className="h-3.5 w-3.5" />
-                        </button>
-                      ))}
-                      <div className="w-px h-4 bg-gray-200 dark:bg-zinc-800 mx-1" />
-                      {[AlignLeft, AlignCenter, AlignRight].map((Icon, i) => (
-                        <button 
-                          key={i} 
-                          type="button"
-                          className="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-zinc-850 text-gray-500 dark:text-zinc-400 transition-colors"
-                        >
-                          <Icon className="h-3.5 w-3.5" />
-                        </button>
-                      ))}
-                      <div className="w-px h-4 bg-gray-200 dark:bg-zinc-800 mx-1" />
-                      <button 
-                        type="button" 
-                        className="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-zinc-850 text-gray-500 dark:text-zinc-400 transition-colors"
-                      >
-                        <Link2 className="h-3.5 w-3.5" />
-                      </button>
-                    </div>
-
-                    <textarea
-                      placeholder="kacang goreng"
-                      {...register('description')}
-                      rows={5}
-                      className="w-full p-4 text-sm font-medium focus:outline-none bg-transparent text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-zinc-650 resize-none"
-                    />
-                  </div>
+                  <RichTextEditor
+                    value={watch('description') || ''}
+                    onChange={(value) => setValue('description', value, { shouldDirty: true, shouldValidate: true })}
+                    placeholder="Tulis deskripsi detail produk/layanan Anda disini..."
+                  />
                 </div>
 
                 {/* Price (Harga) & Button Text */}

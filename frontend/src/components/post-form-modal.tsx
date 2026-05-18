@@ -13,6 +13,7 @@ import { productService } from '@/services/product.service';
 import { businessService } from '@/services/business.service';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { RichTextEditor } from '@/components/ui/RichTextEditor';
 import { Product } from '@/types/product';
 import { Business } from '@/types/business';
 import axios from 'axios';
@@ -833,94 +834,11 @@ export function PostFormModal({
                     <label className="text-xs font-black uppercase tracking-widest text-gray-400 dark:text-zinc-500 block">
                       Isi Konten Utama
                     </label>
-                    <div className="rounded-[1.5rem] border border-gray-200 dark:border-zinc-800 overflow-hidden bg-white dark:bg-zinc-900 flex flex-col focus-within:ring-2 focus-within:ring-amber-500">
-                      
-                      {/* Editor formatting toolbar */}
-                      <div className="flex flex-wrap items-center gap-1.5 p-2.5 border-b border-gray-100 dark:border-zinc-800 bg-gray-50/50 dark:bg-zinc-900/50">
-                        <button 
-                          type="button"
-                          onClick={() => insertText('**', '**')}
-                          className="p-2 rounded-xl hover:bg-gray-200 dark:hover:bg-zinc-800 text-gray-500 dark:text-zinc-400 transition-colors"
-                          title="Tebal"
-                        >
-                          <Bold className="h-4 w-4" />
-                        </button>
-                        <button 
-                          type="button"
-                          onClick={() => insertText('*', '*')}
-                          className="p-2 rounded-xl hover:bg-gray-200 dark:hover:bg-zinc-800 text-gray-500 dark:text-zinc-400 transition-colors"
-                          title="Miring"
-                        >
-                          <Italic className="h-4 w-4" />
-                        </button>
-                        <button 
-                          type="button"
-                          onClick={() => insertText('<u>', '</u>')}
-                          className="p-2 rounded-xl hover:bg-gray-200 dark:hover:bg-zinc-800 text-gray-500 dark:text-zinc-400 transition-colors"
-                          title="Garis Bawah"
-                        >
-                          <Underline className="h-4 w-4" />
-                        </button>
-                        
-                        <div className="w-px h-5 bg-gray-200 dark:bg-zinc-800 mx-1" />
-                        
-                        <button 
-                          type="button"
-                          onClick={() => insertText('\n- ', '')}
-                          className="p-2 rounded-xl hover:bg-gray-200 dark:hover:bg-zinc-800 text-gray-500 dark:text-zinc-400 transition-colors"
-                          title="Bullet List"
-                        >
-                          <List className="h-4 w-4" />
-                        </button>
-                        <button 
-                          type="button"
-                          onClick={() => insertText('\n1. ', '')}
-                          className="p-2 rounded-xl hover:bg-gray-200 dark:hover:bg-zinc-800 text-gray-500 dark:text-zinc-400 transition-colors"
-                          title="Number List"
-                        >
-                          <ListOrdered className="h-4 w-4" />
-                        </button>
-                        
-                        <div className="w-px h-5 bg-gray-200 dark:bg-zinc-800 mx-1" />
-                        
-                        <button 
-                          type="button"
-                          onClick={() => insertText('\n### ', '')}
-                          className="p-2 rounded-xl hover:bg-gray-200 dark:hover:bg-zinc-800 text-gray-500 dark:text-zinc-400 transition-all font-bold text-xs"
-                          title="Subheading H3"
-                        >
-                          H3
-                        </button>
-                        <button 
-                          type="button"
-                          onClick={() => insertText('[Teks Tautan](', ')') }
-                          className="p-2 rounded-xl hover:bg-gray-200 dark:hover:bg-zinc-800 text-gray-500 dark:text-zinc-400 transition-colors"
-                          title="Tautan Link"
-                        >
-                          <Link2 className="h-4 w-4" />
-                        </button>
-                      </div>
-
-                      {(() => {
-                        const { ref: registerRef, onChange: registerOnChange, ...restRegister } = register('content', { required: true });
-                        return (
-                          <textarea
-                            placeholder="Tulis artikel atau berita pembaruan Anda secara rinci disini menggunakan format markdown..."
-                            rows={10}
-                            className="w-full p-4 text-sm font-medium focus:outline-none bg-transparent text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-zinc-650 resize-y min-h-[250px]"
-                            {...restRegister}
-                            onChange={(e) => {
-                              registerOnChange(e);
-                              setValue('content', e.target.value);
-                            }}
-                            ref={(e) => {
-                              registerRef(e);
-                              editorRef.current = e;
-                            }}
-                          />
-                        );
-                      })()}
-                    </div>
+                    <RichTextEditor
+                      value={watch('content') || ''}
+                      onChange={(value) => setValue('content', value, { shouldDirty: true, shouldValidate: true })}
+                      placeholder="Tulis artikel atau berita pembaruan Anda secara rinci disini..."
+                    />
                   </div>
 
                   {/* Ringkasan (Card Snippet) */}
