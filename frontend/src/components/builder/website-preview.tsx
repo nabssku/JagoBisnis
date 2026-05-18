@@ -4,6 +4,7 @@ import React from 'react';
 import { Site, Section, SiteTheme } from '@/types/site';
 import { Product } from '@/types/product';
 import { SectionRenderer } from './section-renderer';
+import { generateThemeCSS } from '@/lib/theme';
 import { 
   Globe, 
   Store, 
@@ -59,6 +60,7 @@ export const WebsitePreview: React.FC<WebsitePreviewProps> = ({ site, products =
         color: theme.textColor
       }}
     >
+      <style dangerouslySetInnerHTML={{ __html: generateThemeCSS(theme) }} />
       {/* Navigation Bar */}
       <nav className="py-3.5 px-6 flex justify-between items-center border-b border-gray-100 dark:border-zinc-900 bg-white/80 dark:bg-zinc-950/80 sticky top-0 z-[50] backdrop-blur-xl transition-colors duration-200">
         <div className="flex items-center gap-2.5">

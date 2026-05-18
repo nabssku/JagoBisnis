@@ -58,7 +58,10 @@ import Link from 'next/link';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { generateThemeCSS } from '@/lib/theme';
 import { RichTextEditor } from '@/components/ui/RichTextEditor';
+import { InlineRichTextEditor } from '@/components/ui/InlineRichTextEditor';
+import { AIGeneratorModal } from '@/components/builder/ai-generator-modal';
 
 const CATEGORIES = [
   {
@@ -304,6 +307,7 @@ export default function WebsiteBuilderPage() {
   const [historyIndex, setHistoryIndex] = useState<number>(-1);
   const [blockSubTab, setBlockSubTab] = useState<'content' | 'style' | 'layout'>('content');
   const [autosaveStatus, setAutosaveStatus] = useState<'saved' | 'saving' | 'dirty'>('saved');
+  const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({
     hero: true,
     about: true,
@@ -407,6 +411,16 @@ export default function WebsiteBuilderPage() {
       setHistoryIndex(updatedHistory.length - 1);
       setAutosaveStatus('dirty');
     }
+  };
+
+  const handleAIGenerated = (data: { sections: Section[]; theme: SiteTheme }) => {
+    if (!site) return;
+    updateSiteData({
+      ...site,
+      sections: data.sections,
+      theme: data.theme
+    });
+    toast.success('Landing page hasil rancangan AI berhasil diterapkan! Anda dapat klik Undo jika ingin kembali.');
   };
 
   const handleUndo = () => {
@@ -896,6 +910,23 @@ export default function WebsiteBuilderPage() {
     updateSiteData({ ...site, sections: newSections });
   };
 
+  const updateSectionContentById = (sectionId: string, key: string, value: any) => {
+    if (!site) return;
+    const newSections = site.sections.map(s => {
+      if (s.id === sectionId) {
+        return {
+          ...s,
+          content: {
+            ...s.content,
+            [key]: value
+          }
+        };
+      }
+      return s;
+    });
+    updateSiteData({ ...site, sections: newSections });
+  };
+
   const getSectionIcon = (type: string) => {
     switch (type) {
       case 'hero': return Type;
@@ -942,13 +973,20 @@ export default function WebsiteBuilderPage() {
             {/* Dark gradient overlay for extreme readability */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/25" />
             
-            <div className="relative z-10 space-y-2 text-left">
-              <h4 className="text-sm md:text-base font-black tracking-tight leading-snug drop-shadow-md">
-                {headline}
-              </h4>
-              <p className="text-[10px] text-zinc-300 font-medium leading-relaxed max-w-md line-clamp-3 drop-shadow">
-                {subheadline}
-              </p>
+            <div className="relative z-10 space-y-2 text-left w-full">
+              <div className="text-sm md:text-base font-black tracking-tight leading-snug drop-shadow-md">
+                <InlineRichTextEditor
+                  value={headline}
+                  onChange={(val) => updateSectionContentById(section.id, 'headline', val)}
+                />
+              </div>
+              <div className="text-[10px] text-zinc-300 font-medium leading-relaxed max-w-md drop-shadow">
+                <InlineRichTextEditor
+                  value={subheadline}
+                  onChange={(val) => updateSectionContentById(section.id, 'subheadline', val)}
+                  multiline={true}
+                />
+              </div>
             </div>
           </div>
         );
@@ -964,7 +1002,12 @@ export default function WebsiteBuilderPage() {
         ];
         return (
           <div className="w-full bg-white dark:bg-zinc-900 border border-zinc-150 dark:border-zinc-800/80 rounded-none p-6 text-left space-y-4 shadow-sm">
-            <h4 className="text-sm font-black text-gray-800 dark:text-zinc-100 tracking-tight">{title}</h4>
+            <div className="text-sm font-black text-gray-800 dark:text-zinc-100 tracking-tight">
+              <InlineRichTextEditor
+                value={title}
+                onChange={(val) => updateSectionContentById(section.id, 'title', val)}
+              />
+            </div>
             <div className="grid grid-cols-3 gap-4">
               {Array.from({ length: 3 }).map((_, i) => (
                 <div key={i} className="border border-gray-150 dark:border-zinc-800/80 rounded-xl p-3 bg-white dark:bg-zinc-950/20 space-y-3.5 flex flex-col shadow-sm">
@@ -983,14 +1026,19 @@ export default function WebsiteBuilderPage() {
           </div>
         );
       }
-
+ 
       case 'products': {
         const title = section.content.title || 'Produk & Layanan';
         return (
           <div className="w-full bg-white dark:bg-zinc-900 border border-zinc-150 dark:border-zinc-800/80 rounded-none p-6 text-left space-y-4 shadow-sm">
             <div className="flex justify-between items-center">
-              <h4 className="text-sm font-black text-gray-800 dark:text-zinc-100 tracking-tight">{title}</h4>
-              <span className="text-[8px] font-black text-muted-foreground uppercase tracking-widest bg-gray-100 dark:bg-zinc-850 px-2 py-0.5 rounded">GRID</span>
+              <div className="text-sm font-black text-gray-800 dark:text-zinc-100 tracking-tight flex-1">
+                <InlineRichTextEditor
+                  value={title}
+                  onChange={(val) => updateSectionContentById(section.id, 'title', val)}
+                />
+              </div>
+              <span className="text-[8px] font-black text-muted-foreground uppercase tracking-widest bg-gray-100 dark:bg-zinc-850 px-2 py-0.5 rounded shrink-0">GRID</span>
             </div>
             <div className="grid grid-cols-4 gap-3">
               {products.length > 0 ? (
@@ -1018,22 +1066,28 @@ export default function WebsiteBuilderPage() {
           </div>
         );
       }
-
+ 
       case 'about': {
         const title = section.content.title || 'Tentang Kami';
         const desc = section.content.description || 'Kami adalah sebuah toko baju yang melayani pada offline store dan online store pada Shopee dan Tokopedia dengan merek Onderstroom.\n\nKami berkomitmen untuk menyediakan pakaian yang nyaman, stylish, dan berkualitas tinggi untuk pelanggan kami.';
-        const paragraphs = desc.split('\n\n');
         const primaryColor = site.theme?.primaryColor || '#2563eb';
         
         return (
           <div className="w-full bg-white dark:bg-zinc-900 border border-zinc-150 dark:border-zinc-800/80 rounded-none p-6 text-left shadow-sm">
             <div className="grid grid-cols-12 gap-6 items-center">
               <div className="col-span-7 space-y-3">
-                <h4 className="text-sm font-black text-gray-800 dark:text-zinc-100 tracking-tight">{title}</h4>
-                <div className="text-[9px] text-muted-foreground font-medium leading-relaxed space-y-2">
-                  {paragraphs.map((p: string, index: number) => (
-                    <p key={index}>{p}</p>
-                  ))}
+                <div className="text-sm font-black text-gray-800 dark:text-zinc-100 tracking-tight">
+                  <InlineRichTextEditor
+                    value={title}
+                    onChange={(val) => updateSectionContentById(section.id, 'title', val)}
+                  />
+                </div>
+                <div className="text-[9px] text-muted-foreground font-medium leading-relaxed">
+                  <InlineRichTextEditor
+                    value={desc}
+                    onChange={(val) => updateSectionContentById(section.id, 'description', val)}
+                    multiline={true}
+                  />
                 </div>
               </div>
               <div className="col-span-5 aspect-square max-w-[150px] mx-auto rounded-xl bg-gray-50 dark:bg-zinc-950 flex items-center justify-center p-3 border dark:border-zinc-850 shrink-0">
@@ -1136,7 +1190,12 @@ export default function WebsiteBuilderPage() {
         const features = section.content.features || [];
         return (
           <div className="w-full bg-white dark:bg-zinc-900 border border-zinc-150 dark:border-zinc-800/80 rounded-none p-6 text-left space-y-3.5 shadow-sm">
-            <h4 className="text-sm font-black text-gray-800 dark:text-zinc-100 tracking-tight">{title}</h4>
+            <div className="text-sm font-black text-gray-800 dark:text-zinc-100 tracking-tight">
+              <InlineRichTextEditor
+                value={title}
+                onChange={(val) => updateSectionContentById(section.id, 'title', val)}
+              />
+            </div>
             <div className="grid grid-cols-2 gap-4">
               {features.slice(0, 4).map((f: any, i: number) => (
                 <div key={i} className="flex gap-2 items-start">
@@ -1153,26 +1212,39 @@ export default function WebsiteBuilderPage() {
           </div>
         );
       }
-
+ 
       case 'cta': {
         const title = section.content.title || 'Siap Meningkatkan Bisnis Anda?';
         const buttonText = section.content.buttonText || 'Mulai Sekarang';
         return (
           <div className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-zinc-800 dark:to-zinc-900 rounded-none p-6 text-center text-white space-y-3 shadow-md">
-            <h4 className="text-xs md:text-sm font-black tracking-tight leading-tight">{title}</h4>
+            <div className="text-xs md:text-sm font-black tracking-tight leading-tight">
+              <InlineRichTextEditor
+                value={title}
+                onChange={(val) => updateSectionContentById(section.id, 'title', val)}
+              />
+            </div>
             <span className="inline-block px-4 py-1 rounded-lg bg-white/20 text-[9px] font-black uppercase tracking-widest">
-              {buttonText}
+              <InlineRichTextEditor
+                value={buttonText}
+                onChange={(val) => updateSectionContentById(section.id, 'buttonText', val)}
+              />
             </span>
           </div>
         );
       }
-
+ 
       case 'faq': {
         const title = section.content.title || 'Pertanyaan Umum';
         const faqs = section.content.faqs || [];
         return (
           <div className="w-full bg-white dark:bg-zinc-900 border border-zinc-150 dark:border-zinc-800/80 rounded-none p-6 text-left space-y-3 shadow-sm">
-            <h4 className="text-sm font-black text-gray-800 dark:text-zinc-100 tracking-tight">{title}</h4>
+            <div className="text-sm font-black text-gray-800 dark:text-zinc-100 tracking-tight">
+              <InlineRichTextEditor
+                value={title}
+                onChange={(val) => updateSectionContentById(section.id, 'title', val)}
+              />
+            </div>
             <div className="space-y-2">
               {faqs.slice(0, 2).map((faq: any, i: number) => (
                 <div key={i} className="p-2 rounded-lg bg-gray-50/50 dark:bg-zinc-950/20 border border-gray-100 dark:border-zinc-850 flex justify-between items-center">
@@ -1184,12 +1256,17 @@ export default function WebsiteBuilderPage() {
           </div>
         );
       }
-
+ 
       case 'contact': {
         const title = section.content.title || 'Hubungi Kami';
         return (
           <div className="w-full bg-white dark:bg-zinc-900 border border-zinc-150 dark:border-zinc-800/80 rounded-none p-6 text-left space-y-3.5 shadow-sm">
-            <h4 className="text-sm font-black text-gray-800 dark:text-zinc-100 tracking-tight">{title}</h4>
+            <div className="text-sm font-black text-gray-800 dark:text-zinc-100 tracking-tight">
+              <InlineRichTextEditor
+                value={title}
+                onChange={(val) => updateSectionContentById(section.id, 'title', val)}
+              />
+            </div>
             <div className="grid grid-cols-2 gap-4 items-center">
               <div className="space-y-2">
                 <div className="flex items-center gap-1.5 text-[8.5px] font-bold text-muted-foreground">
@@ -1209,7 +1286,7 @@ export default function WebsiteBuilderPage() {
           </div>
         );
       }
-
+ 
       case 'blog': {
         const title = section.content.title || 'Artikel & Kegiatan Terbaru';
         const subtitle = section.content.subtitle || 'Ikuti pembaruan terkini, pengumuman, dan artikel edukatif dari kami.';
@@ -1219,8 +1296,19 @@ export default function WebsiteBuilderPage() {
         return (
           <div className="w-full bg-white dark:bg-zinc-900 border border-zinc-150 dark:border-zinc-800/80 rounded-none p-6 text-left space-y-4 shadow-sm">
             <div className="space-y-1">
-              <h4 className="text-sm font-black text-gray-800 dark:text-zinc-100 tracking-tight">{title}</h4>
-              <p className="text-[9px] text-muted-foreground font-medium leading-relaxed max-w-lg">{subtitle}</p>
+              <div className="text-sm font-black text-gray-800 dark:text-zinc-100 tracking-tight">
+                <InlineRichTextEditor
+                  value={title}
+                  onChange={(val) => updateSectionContentById(section.id, 'title', val)}
+                />
+              </div>
+              <div className="text-[9px] text-muted-foreground font-medium leading-relaxed max-w-lg">
+                <InlineRichTextEditor
+                  value={subtitle}
+                  onChange={(val) => updateSectionContentById(section.id, 'subtitle', val)}
+                  multiline={true}
+                />
+              </div>
             </div>
             
             {layout === 'grid' && (
@@ -1385,6 +1473,16 @@ export default function WebsiteBuilderPage() {
 
         {/* Global Live Preview Panel Toggle */}
         <div className="flex items-center gap-2">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={() => setIsAiModalOpen(true)}
+            className="h-9 rounded-xl text-xs font-bold gap-1.5 transition-all text-amber-600 dark:text-amber-400 border-amber-500/30 hover:bg-amber-500/[0.08] dark:hover:bg-amber-400/10 hover:border-amber-500/80"
+          >
+            <Sparkles className="h-3.5 w-3.5 fill-amber-500 text-amber-500 animate-pulse" />
+            Rancang AI
+          </Button>
+
           <Button 
             variant="outline" 
             size="sm" 
@@ -1591,11 +1689,14 @@ export default function WebsiteBuilderPage() {
           {/* Premium Resizable Canvas Viewport Wrapper */}
           <div 
             className={cn(
-              "transition-all duration-300 ease-in-out border border-border/80 dark:border-zinc-850 rounded-2xl shadow-xl bg-white dark:bg-zinc-900 p-5 flex flex-col gap-6 pt-3 pb-16 overflow-y-auto min-h-[calc(100vh-8.5rem)] my-2 relative w-full",
+              "canvas-viewport-wrapper transition-all duration-300 ease-in-out border border-border/80 dark:border-zinc-850 rounded-2xl shadow-xl bg-white dark:bg-zinc-900 p-5 flex flex-col gap-6 pt-3 pb-16 overflow-y-auto min-h-[calc(100vh-8.5rem)] my-2 relative w-full",
               previewMode === 'desktop' ? "max-w-4xl" :
               previewMode === 'tablet' ? "max-w-[768px]" : "max-w-[375px]"
             )}
           >
+            {/* Inject dynamic Global Theme tokens scoped to canvas */}
+            <style dangerouslySetInnerHTML={{ __html: generateThemeCSS(site.theme, 'canvas-viewport-wrapper') }} />
+
             {/* Elegant Device Header Frame */}
             <div className="flex items-center justify-between border-b dark:border-zinc-850 pb-3 shrink-0">
               <div className="flex items-center gap-1.5 select-none">
@@ -3295,6 +3396,13 @@ export default function WebsiteBuilderPage() {
           </div>
         </div>
       )}
+      
+      {/* AI GENERATOR MODAL */}
+      <AIGeneratorModal
+        isOpen={isAiModalOpen}
+        onClose={() => setIsAiModalOpen(false)}
+        onGenerate={handleAIGenerated}
+      />
       </div>
     </div>
   );

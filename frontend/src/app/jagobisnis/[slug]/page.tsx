@@ -27,9 +27,11 @@ import { Button } from '@/components/ui/button';
 import { SectionRenderer } from '@/components/builder/section-renderer';
 import { OrderModal } from '@/components/order/order-modal';
 
+import { generateThemeCSS } from '@/lib/theme';
+
 export default function PublicWebsitePage() {
   const params = useParams();
-  const slug = params.slug as string;
+  const slug = params?.slug as string;
 
   const [site, setSite] = useState<Site | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
@@ -145,6 +147,7 @@ export default function PublicWebsitePage() {
         fontFamily: theme.font 
       }}
     >
+      <style dangerouslySetInnerHTML={{ __html: generateThemeCSS(theme) }} />
       {/* Navigation */}
       <motion.nav 
         initial={{ y: -60, opacity: 0 }}

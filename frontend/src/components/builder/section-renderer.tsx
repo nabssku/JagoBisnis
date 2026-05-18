@@ -117,9 +117,9 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
   };
 
   // Get active color style
-  const buttonStyle = { backgroundColor: theme.primaryColor };
-  const textPrimaryStyle = { color: theme.primaryColor };
-  const borderPrimaryStyle = { borderColor: theme.primaryColor };
+  const buttonStyle = { backgroundColor: 'var(--primary-color)' };
+  const textPrimaryStyle = { color: 'var(--primary-color)' };
+  const borderPrimaryStyle = { borderColor: 'var(--primary-color)' };
 
   switch (section.type) {
     case 'hero':

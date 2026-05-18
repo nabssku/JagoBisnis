@@ -268,13 +268,23 @@ Tasks:
 - [x] Created the System Telemetry Page featuring animated live-updating SVG progress circles, latencies, and node specification charts.
 - [x] Verified a 100% successful Next.js static build compilation and NestJS production build with zero errors.
 
-## Phase 16: Post-MVP & Optimization
+## Phase 16: Next-Generation Visual Website Builder
+Status: Completed
+
+Tasks:
+- [x] Canvas Inline Editing: Replaced static text mockups with direct inline-editable Tiptap `<InlineRichTextEditor />` components with floating glassmorphic bubble menus across all 11 core sections.
+- [x] Global Theme Synchronization: Scoped live HSL stylesheet variable compiling injected dynamically inside `.canvas-viewport-wrapper` to achieves instant site styling reactive updates without layout leakage.
+- [x] Floating Pill Block Toolbar: Center-top border overlapping actions toolbar featuring Grab drag handle, Move Up/Down, Block Settings Sidebar triggers, and Delete options.
+- [x] AI Preset Page & Content Generator: Designed Indonesian niche models (Cafe, Fashion, Laundry, Tech, Barbershop, Food, General Services) with dynamic text compiling to instantly generate visual sections and theme aesthetics.
+- [x] Smooth Undo & Redo History State Tracking: Full layout version cache enabling quick one-click revert options on visual alterations or automatic AI generations.
+- [x] Checked Next.js and NestJS production bundle compiler to confirm 100% successful build with zero warnings or errors.
+
+## Phase 17: Post-MVP & Optimization
 Status: In Planning
 
 Tasks:
 - [ ] CI/CD Deployment
 - [ ] Advanced Analytics
-- [ ] AI Content Generator
 - [ ] Custom Domain Support
 - [ ] Payment Gateway Integration
 - [ ] Performance Caching (Redis)
