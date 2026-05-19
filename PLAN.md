@@ -83,6 +83,9 @@ Tasks:
 - [x] Public route `/jagobisnis/[slug]`
 - [x] Render public website from JSON
 - [x] SEO metadata
+- [x] Fitur Pengaturan SEO Khusus Bisnis pada Website Builder (SEO Title, SEO Description, SEO Keywords, dan SEO Image)
+- [x] Live Google Search Preview card inside visual builder settings panel
+- [x] Dynamic server-side SEO metadata generation in public site route using Next.js App Router `layout.tsx` `generateMetadata`
 
 ## Phase 7: UI/UX Polish & Branding
 Status: Completed

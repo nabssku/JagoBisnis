@@ -326,12 +326,13 @@ export default function WebsiteBuilderPage() {
   const logoUploadRef = useRef<HTMLInputElement>(null);
   const bgUploadRef = useRef<HTMLInputElement>(null);
   const galleryUploadRef = useRef<HTMLInputElement>(null);
+  const seoImageUploadRef = useRef<HTMLInputElement>(null);
   const cardUploadRefs = useRef<Record<number, HTMLInputElement>>({});
 
   // Media Library states
   const [mediaLibrary, setMediaLibrary] = useState<{ name: string; url: string }[]>([]);
   const [activeMediaPickerTarget, setActiveMediaPickerTarget] = useState<{
-    type: 'logo' | 'hero-bg' | 'gallery' | 'card' | 'logos' | 'grid-rt' | 'grid-rb' | 'about-img';
+    type: 'logo' | 'hero-bg' | 'gallery' | 'card' | 'logos' | 'grid-rt' | 'grid-rb' | 'about-img' | 'seo-image';
     extraIndex?: number;
   } | null>(null);
 
@@ -630,7 +631,7 @@ export default function WebsiteBuilderPage() {
   };
 
   // Handle local file uploads using productService.uploadImage
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'logo' | 'hero-bg' | 'gallery' | 'card' | 'logos' | 'grid-rt' | 'grid-rb' | 'about-img', extraIndex?: number) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'logo' | 'hero-bg' | 'gallery' | 'card' | 'logos' | 'grid-rt' | 'grid-rb' | 'about-img' | 'seo-image', extraIndex?: number) => {
     const file = e.target.files?.[0];
     if (!file || !site) return;
 
@@ -645,6 +646,14 @@ export default function WebsiteBuilderPage() {
             ...site.theme,
             logoUrl: res.url,
             logoIcon: undefined
+          }
+        });
+      } else if (type === 'seo-image') {
+        setSite({
+          ...site,
+          theme: {
+            ...site.theme,
+            seoImage: res.url
           }
         });
       } else if (type === 'hero-bg') {
@@ -779,6 +788,14 @@ export default function WebsiteBuilderPage() {
           ...site.theme,
           logoUrl: url,
           logoIcon: undefined
+        }
+      });
+    } else if (type === 'seo-image') {
+      setSite({
+        ...site,
+        theme: {
+          ...site.theme,
+          seoImage: url
         }
       });
     } else if (type === 'hero-bg') {
@@ -2086,6 +2103,139 @@ export default function WebsiteBuilderPage() {
                         <p style={{ fontFamily: site.theme.font }} className="text-xs text-muted-foreground leading-normal max-w-xs mx-auto">
                           Menyediakan seduhan terbaik dari biji kopi pilihan Nusantara langsung ke cangkir Anda.
                         </p>
+                      </div>
+                    </div>
+
+                    {/* Optimasi SEO & Pencarian */}
+                    <div className="space-y-4 pt-4 border-t border-border dark:border-zinc-850">
+                      <div className="flex items-center gap-2">
+                        <Globe className="h-4 w-4 text-primary" />
+                        <label className="text-[10px] font-black text-gray-900 dark:text-white uppercase tracking-wider block">Optimasi SEO & Pencarian</label>
+                      </div>
+
+                      {/* Interactive Google Search Live Preview */}
+                      <div className="p-4 bg-gray-50 dark:bg-zinc-950/40 rounded-xl border border-border dark:border-zinc-900 space-y-2">
+                        <p className="text-[8px] uppercase font-bold text-muted-foreground tracking-widest">Live Preview Google Search</p>
+                        <div className="space-y-1 font-sans bg-white dark:bg-zinc-900 p-3 rounded-lg border border-gray-100 dark:border-zinc-800 shadow-sm text-left">
+                          <div className="flex items-center gap-1 text-[11px] text-[#202124] dark:text-zinc-400">
+                            <span className="font-semibold truncate">https://jagobisnis.id</span>
+                            <span className="text-zinc-400">/jagobisnis/{site.slug || 'slug'}</span>
+                          </div>
+                          <h4 className="text-base text-[#1a0dab] dark:text-blue-400 font-medium hover:underline cursor-pointer leading-tight truncate">
+                            {site.theme.seoTitle || site.title || 'Judul SEO Website'}
+                          </h4>
+                          <p className="text-xs text-[#4d5156] dark:text-zinc-400 leading-normal line-clamp-2">
+                            {site.theme.seoDescription || 'Kunjungi website bisnis resmi kami untuk info produk, promo, dan penawaran terbaik...'}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* SEO Title Input */}
+                      <div className="space-y-1.5">
+                        <div className="flex justify-between items-center text-[10px]">
+                          <label className="font-bold text-muted-foreground dark:text-zinc-500 uppercase tracking-wider">Judul SEO</label>
+                          <span className={cn(
+                            "font-bold font-mono text-[9px]",
+                            (site.theme.seoTitle || '').length > 60 ? "text-amber-500" : "text-muted-foreground"
+                          )}>
+                            {(site.theme.seoTitle || '').length}/60
+                          </span>
+                        </div>
+                        <input 
+                          className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/30 dark:bg-zinc-950 px-3.5 py-2 text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-semibold"
+                          value={site.theme.seoTitle || ''}
+                          onChange={(e) => setSite({ 
+                            ...site, 
+                            theme: { 
+                              ...site.theme, 
+                              seoTitle: e.target.value 
+                            } 
+                          })}
+                          placeholder="Contoh: Toko Kopi Jago - Kopi Arabika Terbaik"
+                        />
+                        <p className="text-[9px] text-muted-foreground leading-normal">Judul yang muncul pada hasil mesin pencari Google dan tab browser.</p>
+                      </div>
+
+                      {/* SEO Description Input */}
+                      <div className="space-y-1.5">
+                        <div className="flex justify-between items-center text-[10px]">
+                          <label className="font-bold text-muted-foreground dark:text-zinc-500 uppercase tracking-wider">Deskripsi SEO</label>
+                          <span className={cn(
+                            "font-bold font-mono text-[9px]",
+                            (site.theme.seoDescription || '').length > 160 ? "text-amber-500" : "text-muted-foreground"
+                          )}>
+                            {(site.theme.seoDescription || '').length}/160
+                          </span>
+                        </div>
+                        <textarea 
+                          rows={3}
+                          className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/30 dark:bg-zinc-950 px-3.5 py-2 text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium leading-normal resize-none"
+                          value={site.theme.seoDescription || ''}
+                          onChange={(e) => setSite({ 
+                            ...site, 
+                            theme: { 
+                              ...site.theme, 
+                              seoDescription: e.target.value 
+                            } 
+                          })}
+                          placeholder="Ringkasan singkat tentang produk, lokasi, kelebihan usaha Anda..."
+                        />
+                        <p className="text-[9px] text-muted-foreground leading-normal">Teks rangkuman singkat penawaran usaha di bawah judul SEO Google.</p>
+                      </div>
+
+                      {/* SEO Keywords Input */}
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-muted-foreground dark:text-zinc-500 uppercase tracking-wider block">Kata Kunci (Keywords)</label>
+                        <input 
+                          className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/30 dark:bg-zinc-950 px-3.5 py-2 text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium"
+                          value={site.theme.seoKeywords || ''}
+                          onChange={(e) => setSite({ 
+                            ...site, 
+                            theme: { 
+                              ...site.theme, 
+                              seoKeywords: e.target.value 
+                            } 
+                          })}
+                          placeholder="kopi susu, biji kopi arabika, cafe jakarta"
+                        />
+                        <p className="text-[9px] text-muted-foreground leading-normal">Pisahkan kata kunci dengan koma (,).</p>
+                      </div>
+
+                      {/* SEO Share Image Upload */}
+                      <div className="space-y-2 pb-4">
+                        <label className="text-[10px] font-bold text-muted-foreground dark:text-zinc-500 uppercase tracking-wider block">Gambar Berbagi Sosial (SEO Image)</label>
+                        <div 
+                          onClick={() => seoImageUploadRef.current?.click()}
+                          className="border-2 border-dashed border-border dark:border-zinc-800 rounded-xl p-4 text-center cursor-pointer hover:border-primary dark:hover:border-amber-400 bg-gray-50/20 dark:bg-zinc-950/20 hover:bg-gray-50 dark:hover:bg-zinc-900 transition-all flex flex-col items-center justify-center gap-1.5 group"
+                        >
+                          <input 
+                            type="file" 
+                            ref={seoImageUploadRef} 
+                            onChange={(e) => handleFileUpload(e, 'seo-image')} 
+                            className="hidden" 
+                            accept="image/*" 
+                          />
+                          {site.theme.seoImage ? (
+                            <div className="space-y-2">
+                              <img src={site.theme.seoImage} alt="SEO Share" className="max-h-24 mx-auto object-cover rounded-lg shadow-sm" />
+                              <p className="text-[9px] text-green-500 font-bold">✓ Gambar Berhasil Dipilih</p>
+                            </div>
+                          ) : (
+                            <>
+                              <Upload className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                              <p className="text-xs font-bold text-gray-700 dark:text-zinc-300">Pilih Berkas Gambar</p>
+                              <p className="text-[9px] text-muted-foreground">Format JPG, PNG (Rasio ideal 1200x630)</p>
+                            </>
+                          )}
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setActiveMediaPickerTarget({ type: 'seo-image' })}
+                          className="w-full flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl border border-border dark:border-zinc-800 hover:bg-muted/50 text-[10px] font-bold text-gray-700 dark:text-zinc-300 transition-all mt-2"
+                        >
+                          <ImageIcon className="h-3.5 w-3.5 text-primary" />
+                          Pilih dari Pustaka Media
+                        </button>
                       </div>
                     </div>
                   </div>

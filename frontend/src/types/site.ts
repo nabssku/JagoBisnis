@@ -5,6 +5,10 @@ export interface SiteTheme {
   textColor: string;
   logoUrl?: string;
   logoIcon?: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  seoKeywords?: string;
+  seoImage?: string;
 }
 
 export type SectionType = 
