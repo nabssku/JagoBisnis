@@ -22,6 +22,7 @@ async function getPublicSite(slug: string) {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const site = await getPublicSite(slug);
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://jago-bisnis.my.id';
 
   if (!site) {
     return {
@@ -45,7 +46,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       title: seoTitle,
       description: seoDescription,
       type: 'website',
-      url: `https://jagobisnis.id/jagobisnis/${slug}`,
+      url: `${siteUrl}/jagobisnis/${slug}`,
       images: [
         {
           url: seoImage,
@@ -60,7 +61,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       images: [seoImage],
     },
     alternates: {
-      canonical: `/jagobisnis/${slug}`,
+      canonical: `${siteUrl}/jagobisnis/${slug}`,
     },
     verification: {
       google: 'EvS2na51FGrNH_Tkf2U8t42eYDjr0-iarbHjym6lFQ0',

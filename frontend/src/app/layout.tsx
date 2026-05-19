@@ -15,8 +15,41 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "JagoBisnis - Solusi Digital UMKM",
-  description: "Bangun website bisnis Anda dalam hitungan menit dengan JagoBisnis.",
+  metadataBase: new URL("https://jago-bisnis.my.id"),
+  title: {
+    default: "JagoBisnis | Solusi Website & POS Digital UMKM Terbaik",
+    template: "%s | JagoBisnis"
+  },
+  description: "Bangun website portofolio, katalog produk, dan kelola kasir digital POS (Point of Sale) bisnis UMKM Anda dalam hitungan menit secara instan, aman, dan profesional.",
+  keywords: ["website builder umkm", "aplikasi kasir gratis", "pos digital", "pembuat website instan", "jagobisnis", "website kasirku"],
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
+  openGraph: {
+    title: "JagoBisnis | Solusi Website & POS Digital UMKM Terbaik",
+    description: "Bangun website portofolio, katalog produk, dan kelola kasir digital POS (Point of Sale) bisnis UMKM Anda dalam hitungan menit secara instan, aman, dan profesional.",
+    type: "website",
+    url: "https://jago-bisnis.my.id",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "JagoBisnis - Solusi Digital UMKM",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "JagoBisnis | Solusi Website & POS Digital UMKM Terbaik",
+    description: "Bangun website portofolio, katalog produk, dan kelola kasir digital POS (Point of Sale) bisnis UMKM Anda dalam hitungan menit secara instan, aman, dan profesional.",
+    images: ["/og-image.png"],
+  },
+  verification: {
+    google: "EvS2na51FGrNH_Tkf2U8t42eYDjr0-iarbHjym6lFQ0",
+  },
 };
 
 export default function RootLayout({

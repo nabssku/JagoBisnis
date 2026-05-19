@@ -5,7 +5,7 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://jagobisnis.id';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://jago-bisnis.my.id';
 
   const txt = `User-agent: *
 Allow: /

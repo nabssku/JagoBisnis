@@ -6,7 +6,7 @@ export async function GET(
 ) {
   const { slug } = await params;
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://jagobisnis.id';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://jago-bisnis.my.id';
 
   try {
     // 1. Fetch site & products
