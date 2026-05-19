@@ -207,7 +207,7 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
                   style={buttonStyle}
                 >
                   <a href={customUrl}>
-                    {customText}
+                    <RichTextRenderer content={customText} isInline />
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </a>
                 </Button>
@@ -893,7 +893,7 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
                 style={btnStyle}
               >
                 <a href={resolvedUrl}>
-                  {ctaBtnText}
+                  <RichTextRenderer content={ctaBtnText} isInline />
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </a>
               </Button>

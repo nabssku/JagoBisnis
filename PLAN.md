@@ -281,6 +281,8 @@ Tasks:
 - [x] Fixed visual rich text HTML tags rendering issues: Added `isInline` prop support in `RichTextRenderer` to use spans instead of block elements inside paragraph/heading tags.
 - [x] Fixed Tiptap fallback state rendering in `InlineRichTextEditor` by using safe HTML parsing before editor initialization.
 - [x] Aligned all text content elements across all 11 section layouts in `SectionRenderer` to output HTML via `RichTextRenderer` correctly.
+- [x] Removed Inline Editing feature completely from visual builder canvas (replaced editor instances with read-only RichTextRenderer layout view).
+- [x] Standardized hero and CTA button text components in public site renderer to render HTML formatting via RichTextRenderer.
 
 ## Phase 17: Post-MVP & Optimization
 Status: In Planning

@@ -60,7 +60,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { cn, stripHtml } from '@/lib/utils';
 import { generateThemeCSS } from '@/lib/theme';
 import { RichTextEditor } from '@/components/ui/RichTextEditor';
-import { InlineRichTextEditor } from '@/components/ui/InlineRichTextEditor';
+import { RichTextRenderer } from '@/components/ui/RichTextRenderer';
 import { AIGeneratorModal } from '@/components/builder/ai-generator-modal';
 
 const CATEGORIES = [
@@ -975,17 +975,10 @@ export default function WebsiteBuilderPage() {
             
             <div className="relative z-10 space-y-2 text-left w-full">
               <div className="text-sm md:text-base font-black tracking-tight leading-snug drop-shadow-md">
-                <InlineRichTextEditor
-                  value={headline}
-                  onChange={(val) => updateSectionContentById(section.id, 'headline', val)}
-                />
+                <RichTextRenderer content={headline} isInline />
               </div>
               <div className="text-[10px] text-zinc-300 font-medium leading-relaxed max-w-md drop-shadow">
-                <InlineRichTextEditor
-                  value={subheadline}
-                  onChange={(val) => updateSectionContentById(section.id, 'subheadline', val)}
-                  multiline={true}
-                />
+                <RichTextRenderer content={subheadline} isInline />
               </div>
             </div>
           </div>
@@ -1003,10 +996,7 @@ export default function WebsiteBuilderPage() {
         return (
           <div className="w-full bg-white dark:bg-zinc-900 border border-zinc-150 dark:border-zinc-800/80 rounded-none p-6 text-left space-y-4 shadow-sm">
             <div className="text-sm font-black text-gray-800 dark:text-zinc-100 tracking-tight">
-              <InlineRichTextEditor
-                value={title}
-                onChange={(val) => updateSectionContentById(section.id, 'title', val)}
-              />
+              <RichTextRenderer content={title} isInline />
             </div>
             <div className="grid grid-cols-3 gap-4">
               {Array.from({ length: 3 }).map((_, i) => (
@@ -1033,10 +1023,7 @@ export default function WebsiteBuilderPage() {
           <div className="w-full bg-white dark:bg-zinc-900 border border-zinc-150 dark:border-zinc-800/80 rounded-none p-6 text-left space-y-4 shadow-sm">
             <div className="flex justify-between items-center">
               <div className="text-sm font-black text-gray-800 dark:text-zinc-100 tracking-tight flex-1">
-                <InlineRichTextEditor
-                  value={title}
-                  onChange={(val) => updateSectionContentById(section.id, 'title', val)}
-                />
+                <RichTextRenderer content={title} isInline />
               </div>
               <span className="text-[8px] font-black text-muted-foreground uppercase tracking-widest bg-gray-100 dark:bg-zinc-850 px-2 py-0.5 rounded shrink-0">GRID</span>
             </div>
@@ -1077,17 +1064,10 @@ export default function WebsiteBuilderPage() {
             <div className="grid grid-cols-12 gap-6 items-center">
               <div className="col-span-7 space-y-3">
                 <div className="text-sm font-black text-gray-800 dark:text-zinc-100 tracking-tight">
-                  <InlineRichTextEditor
-                    value={title}
-                    onChange={(val) => updateSectionContentById(section.id, 'title', val)}
-                  />
+                  <RichTextRenderer content={title} isInline />
                 </div>
                 <div className="text-[9px] text-muted-foreground font-medium leading-relaxed">
-                  <InlineRichTextEditor
-                    value={desc}
-                    onChange={(val) => updateSectionContentById(section.id, 'description', val)}
-                    multiline={true}
-                  />
+                  <RichTextRenderer content={desc} />
                 </div>
               </div>
               <div className="col-span-5 aspect-square max-w-[150px] mx-auto rounded-xl bg-gray-50 dark:bg-zinc-950 flex items-center justify-center p-3 border dark:border-zinc-850 shrink-0">
@@ -1191,10 +1171,7 @@ export default function WebsiteBuilderPage() {
         return (
           <div className="w-full bg-white dark:bg-zinc-900 border border-zinc-150 dark:border-zinc-800/80 rounded-none p-6 text-left space-y-3.5 shadow-sm">
             <div className="text-sm font-black text-gray-800 dark:text-zinc-100 tracking-tight">
-              <InlineRichTextEditor
-                value={title}
-                onChange={(val) => updateSectionContentById(section.id, 'title', val)}
-              />
+              <RichTextRenderer content={title} isInline />
             </div>
             <div className="grid grid-cols-2 gap-4">
               {features.slice(0, 4).map((f: any, i: number) => (
@@ -1219,16 +1196,10 @@ export default function WebsiteBuilderPage() {
         return (
           <div className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-zinc-800 dark:to-zinc-900 rounded-none p-6 text-center text-white space-y-3 shadow-md">
             <div className="text-xs md:text-sm font-black tracking-tight leading-tight">
-              <InlineRichTextEditor
-                value={title}
-                onChange={(val) => updateSectionContentById(section.id, 'title', val)}
-              />
+              <RichTextRenderer content={title} isInline />
             </div>
             <span className="inline-block px-4 py-1 rounded-lg bg-white/20 text-[9px] font-black uppercase tracking-widest">
-              <InlineRichTextEditor
-                value={buttonText}
-                onChange={(val) => updateSectionContentById(section.id, 'buttonText', val)}
-              />
+              <RichTextRenderer content={buttonText} isInline />
             </span>
           </div>
         );
@@ -1240,10 +1211,7 @@ export default function WebsiteBuilderPage() {
         return (
           <div className="w-full bg-white dark:bg-zinc-900 border border-zinc-150 dark:border-zinc-800/80 rounded-none p-6 text-left space-y-3 shadow-sm">
             <div className="text-sm font-black text-gray-800 dark:text-zinc-100 tracking-tight">
-              <InlineRichTextEditor
-                value={title}
-                onChange={(val) => updateSectionContentById(section.id, 'title', val)}
-              />
+              <RichTextRenderer content={title} isInline />
             </div>
             <div className="space-y-2">
               {faqs.slice(0, 2).map((faq: any, i: number) => (
@@ -1262,10 +1230,7 @@ export default function WebsiteBuilderPage() {
         return (
           <div className="w-full bg-white dark:bg-zinc-900 border border-zinc-150 dark:border-zinc-800/80 rounded-none p-6 text-left space-y-3.5 shadow-sm">
             <div className="text-sm font-black text-gray-800 dark:text-zinc-100 tracking-tight">
-              <InlineRichTextEditor
-                value={title}
-                onChange={(val) => updateSectionContentById(section.id, 'title', val)}
-              />
+              <RichTextRenderer content={title} isInline />
             </div>
             <div className="grid grid-cols-2 gap-4 items-center">
               <div className="space-y-2">
@@ -1297,17 +1262,10 @@ export default function WebsiteBuilderPage() {
           <div className="w-full bg-white dark:bg-zinc-900 border border-zinc-150 dark:border-zinc-800/80 rounded-none p-6 text-left space-y-4 shadow-sm">
             <div className="space-y-1">
               <div className="text-sm font-black text-gray-800 dark:text-zinc-100 tracking-tight">
-                <InlineRichTextEditor
-                  value={title}
-                  onChange={(val) => updateSectionContentById(section.id, 'title', val)}
-                />
+                <RichTextRenderer content={title} isInline />
               </div>
               <div className="text-[9px] text-muted-foreground font-medium leading-relaxed max-w-lg">
-                <InlineRichTextEditor
-                  value={subtitle}
-                  onChange={(val) => updateSectionContentById(section.id, 'subtitle', val)}
-                  multiline={true}
-                />
+                <RichTextRenderer content={subtitle} isInline />
               </div>
             </div>
             
