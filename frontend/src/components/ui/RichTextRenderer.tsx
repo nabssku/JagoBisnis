@@ -6,9 +6,10 @@ import { cn } from '@/lib/utils';
 interface RichTextRendererProps {
   content: string;
   className?: string;
+  isInline?: boolean;
 }
 
-export function RichTextRenderer({ content, className }: RichTextRendererProps) {
+export function RichTextRenderer({ content, className, isInline = false }: RichTextRendererProps) {
   // Safe basic sanitization for client side rendering (without script execution risks)
   const safeHtml = useMemo(() => {
     if (!content) return '';
@@ -21,10 +22,13 @@ export function RichTextRenderer({ content, className }: RichTextRendererProps) 
       .replace(/javascript:/gi, '');
   }, [content]);
 
+  const Comp = isInline ? 'span' : 'div';
+
   return (
-    <div 
+    <Comp 
       className={cn(
         "prose prose-sm dark:prose-invert max-w-none break-words text-current leading-relaxed",
+        isInline ? "inline [&_p]:inline [&_p]:m-0" : "",
         // styling bullet list bullets
         "[&_ul]:list-disc [&_ul]:pl-5 [&_ul]:my-2 [&_ul_li]:my-0.5",
         // styling ordered list numbers

@@ -57,7 +57,7 @@ import {
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '@/lib/utils';
+import { cn, stripHtml } from '@/lib/utils';
 import { generateThemeCSS } from '@/lib/theme';
 import { RichTextEditor } from '@/components/ui/RichTextEditor';
 import { InlineRichTextEditor } from '@/components/ui/InlineRichTextEditor';
@@ -2167,7 +2167,7 @@ export default function WebsiteBuilderPage() {
                               <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider">Headline Utama (Judul)</label>
                               <textarea
                                 className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-bold min-h-[60px]"
-                                value={activeSection.content.headline || ''}
+                                value={stripHtml(activeSection.content.headline || '')}
                                 onChange={(e) => updateActiveSectionContent('headline', e.target.value)}
                                 placeholder="Headline utama hero banner..."
                               />
@@ -2177,7 +2177,7 @@ export default function WebsiteBuilderPage() {
                               <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider">Subheadline (Deskripsi)</label>
                               <textarea
                                 className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium min-h-[80px] leading-relaxed"
-                                value={activeSection.content.subheadline || ''}
+                                value={stripHtml(activeSection.content.subheadline || '')}
                                 onChange={(e) => updateActiveSectionContent('subheadline', e.target.value)}
                                 placeholder="Tuliskan penjelasan produk utama di sini..."
                               />
@@ -2292,7 +2292,7 @@ export default function WebsiteBuilderPage() {
                               <input
                                 type="text"
                                 className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-900 dark:text-white font-bold"
-                                value={activeSection.content.title || ''}
+                                value={stripHtml(activeSection.content.title || '')}
                                 onChange={(e) => updateActiveSectionContent('title', e.target.value)}
                               />
                             </div>
@@ -2301,7 +2301,7 @@ export default function WebsiteBuilderPage() {
                               <input
                                 type="text"
                                 className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-900 dark:text-white font-medium"
-                                value={activeSection.content.subtitle || ''}
+                                value={stripHtml(activeSection.content.subtitle || '')}
                                 onChange={(e) => updateActiveSectionContent('subtitle', e.target.value)}
                               />
                             </div>
@@ -2418,7 +2418,7 @@ export default function WebsiteBuilderPage() {
                               <input
                                 type="text"
                                 className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-900 dark:text-white font-bold"
-                                value={activeSection.content.title || ''}
+                                value={stripHtml(activeSection.content.title || '')}
                                 onChange={(e) => updateActiveSectionContent('title', e.target.value)}
                               />
                             </div>
@@ -2482,7 +2482,7 @@ export default function WebsiteBuilderPage() {
                               <input
                                 type="text"
                                 className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-900 dark:text-white font-bold"
-                                value={activeSection.content.title || ''}
+                                value={stripHtml(activeSection.content.title || '')}
                                 onChange={(e) => updateActiveSectionContent('title', e.target.value)}
                               />
                             </div>
@@ -2506,7 +2506,7 @@ export default function WebsiteBuilderPage() {
                               <input
                                 type="text"
                                 className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-900 dark:text-white font-bold"
-                                value={activeSection.content.title || ''}
+                                value={stripHtml(activeSection.content.title || '')}
                                 onChange={(e) => updateActiveSectionContent('title', e.target.value)}
                               />
                             </div>
@@ -2515,7 +2515,7 @@ export default function WebsiteBuilderPage() {
                               <input
                                 type="text"
                                 className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-700 dark:text-zinc-200 font-medium"
-                                value={activeSection.content.subtitle || ''}
+                                value={stripHtml(activeSection.content.subtitle || '')}
                                 onChange={(e) => updateActiveSectionContent('subtitle', e.target.value)}
                               />
                             </div>
@@ -2616,7 +2616,7 @@ export default function WebsiteBuilderPage() {
                               <input
                                 type="text"
                                 className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-900 dark:text-white font-bold"
-                                value={activeSection.content.title || ''}
+                                value={stripHtml(activeSection.content.title || '')}
                                 onChange={(e) => updateActiveSectionContent('title', e.target.value)}
                               />
                             </div>
@@ -2692,7 +2692,7 @@ export default function WebsiteBuilderPage() {
                               <input
                                 type="text"
                                 className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-900 dark:text-white font-bold"
-                                value={activeSection.content.title || ''}
+                                value={stripHtml(activeSection.content.title || '')}
                                 onChange={(e) => updateActiveSectionContent('title', e.target.value)}
                               />
                             </div>
@@ -2700,7 +2700,7 @@ export default function WebsiteBuilderPage() {
                               <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider">Deskripsi CTA</label>
                               <textarea
                                 className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-700 dark:text-zinc-200 font-medium min-h-[60px]"
-                                value={activeSection.content.description || ''}
+                                value={stripHtml(activeSection.content.description || '')}
                                 onChange={(e) => updateActiveSectionContent('description', e.target.value)}
                               />
                             </div>
@@ -2793,7 +2793,7 @@ export default function WebsiteBuilderPage() {
                               <input
                                 type="text"
                                 className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-900 dark:text-white font-bold"
-                                value={activeSection.content.title || ''}
+                                value={stripHtml(activeSection.content.title || '')}
                                 onChange={(e) => updateActiveSectionContent('title', e.target.value)}
                               />
                             </div>
@@ -2801,7 +2801,7 @@ export default function WebsiteBuilderPage() {
                               <label className="text-[9px] font-bold text-muted-foreground dark:text-zinc-550 uppercase tracking-wider">Deskripsi Seksyen</label>
                               <textarea
                                 className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-900 dark:text-white font-medium min-h-[60px]"
-                                value={activeSection.content.description || ''}
+                                value={stripHtml(activeSection.content.description || '')}
                                 onChange={(e) => updateActiveSectionContent('description', e.target.value)}
                                 placeholder="Tuliskan pengantar statistik..."
                               />
@@ -2960,7 +2960,7 @@ export default function WebsiteBuilderPage() {
                               <input
                                 type="text"
                                 className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-900 dark:text-white font-bold"
-                                value={activeSection.content.title || ''}
+                                value={stripHtml(activeSection.content.title || '')}
                                 onChange={(e) => updateActiveSectionContent('title', e.target.value)}
                               />
                             </div>
@@ -2973,14 +2973,14 @@ export default function WebsiteBuilderPage() {
                                 <input
                                   type="text"
                                   className="w-full rounded-lg border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs text-gray-900 dark:text-white font-bold"
-                                  value={activeSection.content.rtTitle || ''}
+                                  value={stripHtml(activeSection.content.rtTitle || '')}
                                   onChange={(e) => updateActiveSectionContent('rtTitle', e.target.value)}
                                   placeholder="Judul Kiri Atas"
                                 />
                                 <label className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest block">Deskripsi Kiri Atas</label>
                                 <textarea
                                   className="w-full rounded-lg border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs text-gray-700 dark:text-zinc-300 min-h-[50px]"
-                                  value={activeSection.content.rtDesc || ''}
+                                  value={stripHtml(activeSection.content.rtDesc || '')}
                                   onChange={(e) => updateActiveSectionContent('rtDesc', e.target.value)}
                                   placeholder="Deskripsi Kiri Atas..."
                                 />
@@ -3031,14 +3031,14 @@ export default function WebsiteBuilderPage() {
                                 <input
                                   type="text"
                                   className="w-full rounded-lg border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs text-gray-900 dark:text-white font-bold"
-                                  value={activeSection.content.rbTitle || ''}
+                                  value={stripHtml(activeSection.content.rbTitle || '')}
                                   onChange={(e) => updateActiveSectionContent('rbTitle', e.target.value)}
                                   placeholder="Judul Kanan Bawah"
                                 />
                                 <label className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest block">Deskripsi Kanan Bawah</label>
                                 <textarea
                                   className="w-full rounded-lg border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs text-gray-700 dark:text-zinc-300 min-h-[50px]"
-                                  value={activeSection.content.rbDesc || ''}
+                                  value={stripHtml(activeSection.content.rbDesc || '')}
                                   onChange={(e) => updateActiveSectionContent('rbDesc', e.target.value)}
                                   placeholder="Deskripsi Kanan Bawah..."
                                 />
@@ -3167,7 +3167,7 @@ export default function WebsiteBuilderPage() {
                               <input
                                 type="text"
                                 className="w-full rounded-xl border border-border dark:border-zinc-800 bg-muted/20 dark:bg-zinc-950 px-3 py-2 text-xs text-gray-900 dark:text-white font-bold"
-                                value={activeSection.content.title || ''}
+                                value={stripHtml(activeSection.content.title || '')}
                                 onChange={(e) => updateActiveSectionContent('title', e.target.value)}
                               />
                             </div>

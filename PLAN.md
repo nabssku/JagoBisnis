@@ -278,6 +278,9 @@ Tasks:
 - [x] AI Preset Page & Content Generator: Designed Indonesian niche models (Cafe, Fashion, Laundry, Tech, Barbershop, Food, General Services) with dynamic text compiling to instantly generate visual sections and theme aesthetics.
 - [x] Smooth Undo & Redo History State Tracking: Full layout version cache enabling quick one-click revert options on visual alterations or automatic AI generations.
 - [x] Checked Next.js and NestJS production bundle compiler to confirm 100% successful build with zero warnings or errors.
+- [x] Fixed visual rich text HTML tags rendering issues: Added `isInline` prop support in `RichTextRenderer` to use spans instead of block elements inside paragraph/heading tags.
+- [x] Fixed Tiptap fallback state rendering in `InlineRichTextEditor` by using safe HTML parsing before editor initialization.
+- [x] Aligned all text content elements across all 11 section layouts in `SectionRenderer` to output HTML via `RichTextRenderer` correctly.
 
 ## Phase 17: Post-MVP & Optimization
 Status: In Planning

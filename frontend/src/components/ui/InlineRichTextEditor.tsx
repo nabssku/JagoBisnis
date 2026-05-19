@@ -111,7 +111,7 @@ export function InlineRichTextEditor({
   }, []);
 
   if (!editor) {
-    return <span className={className}>{value}</span>;
+    return <span className={className} dangerouslySetInnerHTML={{ __html: value || '' }} />;
   }
 
   const setLink = () => {

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { LayoutGrid, Table, AlignLeft, Sparkles, Filter, Eye } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn, stripHtml } from '@/lib/utils';
 
 interface BlogSectionContent {
   title: string;
@@ -23,8 +23,9 @@ export const BlogSectionEditor: React.FC<BlogSectionEditorProps> = ({ content, o
   };
 
   // Ensure default fallback values
-  const currentTitle = content.title || 'Artikel & Kegiatan Terbaru';
-  const currentSubtitle = content.subtitle || 'Ikuti pembaruan terkini, pengumuman, dan artikel edukatif dari kami.';
+  const currentTitle = stripHtml(content.title || 'Artikel & Kegiatan Terbaru');
+  const currentSubtitle = stripHtml(content.subtitle || 'Ikuti pembaruan terkini, pengumuman, dan artikel edukatif dari kami.');
+
   const currentLayout = content.layout || 'grid';
   const currentMaxPosts = content.maxPosts || 3;
   const currentFilter = content.postTypeFilter || 'Semua';

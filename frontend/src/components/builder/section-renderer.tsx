@@ -189,14 +189,14 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
               "text-3xl font-black tracking-tight lg:text-5xl leading-tight text-balance transition-colors",
               hasBgImage ? "text-white" : "text-gray-900 dark:text-white"
             )}>
-              {content.headline || 'Selamat Datang di Bisnis Kami'}
+              <RichTextRenderer content={content.headline || 'Selamat Datang di Bisnis Kami'} isInline />
             </h1>
             
             <p className={cn(
               "text-sm lg:text-base font-medium max-w-xl mx-auto leading-relaxed text-balance transition-colors",
               hasBgImage ? "text-zinc-200" : "text-gray-700 dark:text-zinc-300 opacity-75"
             )}>
-              {content.subheadline || 'Kami menyediakan produk dan layanan terbaik khusus untuk kebutuhan Anda.'}
+              <RichTextRenderer content={content.subheadline || 'Kami menyediakan produk dan layanan terbaik khusus untuk kebutuhan Anda.'} isInline />
             </p>
             
             <div className="pt-6 flex flex-wrap items-center justify-center gap-3">
@@ -279,7 +279,7 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
               <div className="space-y-3 text-left max-w-xl">
                 <div className="h-1 w-12 rounded-full" style={buttonStyle} />
                 <h2 className="text-2xl lg:text-3xl font-extrabold tracking-tight leading-none text-gray-900 dark:text-white">
-                  {content.title || 'Layanan & Produk Pilihan'}
+                  <RichTextRenderer content={content.title || 'Layanan & Produk Pilihan'} isInline />
                 </h2>
                 <p className="text-sm font-medium text-muted-foreground">
                   Pilihan produk terbaik untuk menunjang kebutuhan Anda.
@@ -385,7 +385,7 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
                 className="order-2 md:order-1 space-y-6"
               >
                 <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-                  {content.title || 'Tentang Kami'}
+                  <RichTextRenderer content={content.title || 'Tentang Kami'} isInline />
                 </h2>
                 <div className="rich-text-content text-sm md:text-base text-muted-foreground leading-relaxed font-medium">
                   <RichTextRenderer content={htmlContent} />
@@ -448,11 +448,11 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
           <div className="max-w-6xl mx-auto text-center space-y-12 relative z-10">
             <div className="space-y-3">
               <h2 className="text-2xl lg:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
-                {content.title || 'Galeri Bisnis'}
+                <RichTextRenderer content={content.title || 'Galeri Bisnis'} isInline />
               </h2>
               {content.subtitle && (
                 <p className="text-sm font-medium text-muted-foreground max-w-xl mx-auto">
-                  {content.subtitle}
+                  <RichTextRenderer content={content.subtitle} isInline />
                 </p>
               )}
             </div>
@@ -678,12 +678,12 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
               <div className="space-y-3">
                 {title && (
                   <h2 className={cn("text-2xl lg:text-3xl font-extrabold tracking-tight", textTitleClass)}>
-                    {title}
+                    <RichTextRenderer content={title} isInline />
                   </h2>
                 )}
                 {description && (
                   <p className={cn("text-sm max-w-xl mx-auto leading-relaxed font-medium", textDescClass)}>
-                    {description}
+                    <RichTextRenderer content={description} isInline />
                   </p>
                 )}
               </div>
@@ -693,10 +693,10 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
               {statsList.map((stat: any, idx: number) => (
                 <div key={idx} className="space-y-1.5 p-4 rounded-xl bg-white/5 backdrop-blur-xs border border-white/5 shadow-xs transition-transform hover:scale-[1.02]">
                   <p className="text-3xl md:text-4xl font-black tracking-tight" style={statValStyle}>
-                    {stat.value || '0'}
+                    <RichTextRenderer content={stat.value || '0'} isInline />
                   </p>
                   <p className={cn("text-xs font-bold uppercase tracking-widest leading-normal", statLblClass)}>
-                    {stat.label || ''}
+                    <RichTextRenderer content={stat.label || ''} isInline />
                   </p>
                 </div>
               ))}
@@ -723,7 +723,7 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
             {content.title && (
               <div className="text-center space-y-3 max-w-xl mx-auto">
                 <h2 className="text-2xl lg:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
-                  {content.title}
+                  <RichTextRenderer content={content.title} isInline />
                 </h2>
               </div>
             )}
@@ -735,15 +735,15 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
                     1
                   </div>
                   <h3 className="text-xl md:text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-                    {rtTitle}
+                    <RichTextRenderer content={rtTitle} isInline />
                   </h3>
                   <p className="text-xs md:text-sm text-muted-foreground leading-relaxed font-medium">
-                    {rtDesc}
+                    <RichTextRenderer content={rtDesc} isInline />
                   </p>
                 </div>
                 <div className="relative aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden bg-muted dark:bg-zinc-900 border border-border/40 shadow-md">
                   {rtImage ? (
-                    <img src={rtImage} alt={rtTitle} className="w-full h-full object-cover transition-transform hover:scale-105 duration-555" />
+                    <img src={rtImage} alt="rtImage" className="w-full h-full object-cover transition-transform hover:scale-105 duration-555" />
                   ) : (
                     <div className="w-full h-full flex flex-col items-center justify-center p-8 bg-gray-50 dark:bg-zinc-900 text-center gap-2">
                       <Package className="h-10 w-10 text-muted-foreground/30 animate-pulse" />
@@ -759,10 +759,10 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
                     2
                   </div>
                   <h3 className="text-xl md:text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-                    {rbTitle}
+                    <RichTextRenderer content={rbTitle} isInline />
                   </h3>
                   <p className="text-xs md:text-sm text-muted-foreground leading-relaxed font-medium">
-                    {rbDesc}
+                    <RichTextRenderer content={rbDesc} isInline />
                   </p>
                 </div>
                 <div className="relative aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden bg-muted dark:bg-zinc-900 border border-border/40 shadow-md">
@@ -793,11 +793,11 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
           <div className="max-w-6xl mx-auto space-y-12 text-center">
             <div className="space-y-3">
               <h2 className="text-2xl lg:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
-                {content.title || 'Layanan Unggulan Kami'}
+                <RichTextRenderer content={content.title || 'Layanan Unggulan Kami'} isInline />
               </h2>
               {content.subtitle && (
                 <p className="text-sm text-muted-foreground max-w-lg mx-auto font-medium">
-                  {content.subtitle}
+                  <RichTextRenderer content={content.subtitle} isInline />
                 </p>
               )}
             </div>
@@ -816,8 +816,12 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
                       </div>
                     )}
                     <div className="space-y-2">
-                      <h3 className="font-extrabold text-base text-gray-900 dark:text-white tracking-tight">{card.title}</h3>
-                      <p className="text-xs text-muted-foreground leading-relaxed font-medium">{card.desc}</p>
+                      <h3 className="font-extrabold text-base text-gray-900 dark:text-white tracking-tight">
+                        <RichTextRenderer content={card.title} isInline />
+                      </h3>
+                      <p className="text-xs text-muted-foreground leading-relaxed font-medium">
+                        <RichTextRenderer content={card.desc} isInline />
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -875,11 +879,11 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
           
           <div className="max-w-4xl mx-auto space-y-6 relative z-10 text-center">
             <h2 className={cn("text-2xl md:text-3xl font-extrabold tracking-tight leading-tight", textTitleClass)}>
-              {ctaTitle}
+              <RichTextRenderer content={ctaTitle} isInline />
             </h2>
             {ctaDesc && (
               <p className={cn("text-xs md:text-sm max-w-md mx-auto leading-relaxed font-medium", textDescClass)}>
-                {ctaDesc}
+                <RichTextRenderer content={ctaDesc} isInline />
               </p>
             )}
             <div className="pt-4">
@@ -910,7 +914,7 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
           <div className="max-w-3xl mx-auto space-y-12">
             <div className="text-center space-y-3">
               <h2 className="text-2xl lg:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
-                {content.title || 'Pertanyaan Umum (FAQ)'}
+                <RichTextRenderer content={content.title || 'Pertanyaan Umum (FAQ)'} isInline />
               </h2>
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
                 Hal yang paling sering ditanyakan pelanggan kami
@@ -929,7 +933,7 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
                       onClick={() => setActiveFaq(isOpen ? null : idx)}
                       className="w-full px-6 py-4 flex items-center justify-between gap-4 text-left font-bold text-sm text-gray-900 dark:text-white focus:outline-none"
                     >
-                      <span>{faq.q}</span>
+                      <span><RichTextRenderer content={faq.q} isInline /></span>
                       <div className="text-muted-foreground">
                         {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                       </div>
@@ -945,7 +949,7 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
                           className="overflow-hidden"
                         >
                           <div className="px-6 pb-5 pt-1 text-xs text-muted-foreground leading-relaxed border-t border-border/30 dark:border-zinc-800">
-                            {faq.a}
+                            <RichTextRenderer content={faq.a} isInline />
                           </div>
                         </motion.div>
                       )}
@@ -984,7 +988,7 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
                 <div className="space-y-6">
                   <div className="space-y-3">
                     <h2 className="text-2xl lg:text-3xl font-extrabold tracking-tight leading-none">
-                      {content.title || 'Hubungi Kami'}
+                      <RichTextRenderer content={content.title || 'Hubungi Kami'} isInline />
                     </h2>
                     <p className="text-sm lg:text-base font-medium opacity-80 leading-relaxed max-w-md">Kami siap melayani Anda. Hubungi kami kapan saja melalui saluran berikut.</p>
                   </div>
@@ -1102,11 +1106,11 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
                 Blog Usaha Kami
               </div>
               <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white leading-tight">
-                {blogTitle}
+                <RichTextRenderer content={blogTitle} isInline />
               </h2>
               {blogSubtitle && (
                 <p className="text-xs md:text-sm font-medium text-muted-foreground leading-relaxed">
-                  {blogSubtitle}
+                  <RichTextRenderer content={blogSubtitle} isInline />
                 </p>
               )}
             </div>
