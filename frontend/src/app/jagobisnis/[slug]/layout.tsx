@@ -62,6 +62,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     alternates: {
       canonical: `/jagobisnis/${slug}`,
     },
+    verification: {
+      google: 'EvS2na51FGrNH_Tkf2U8t42eYDjr0-iarbHjym6lFQ0',
+    },
   };
 }
 

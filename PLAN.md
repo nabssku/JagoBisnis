@@ -86,6 +86,9 @@ Tasks:
 - [x] Fitur Pengaturan SEO Khusus Bisnis pada Website Builder (SEO Title, SEO Description, SEO Keywords, dan SEO Image)
 - [x] Live Google Search Preview card inside visual builder settings panel
 - [x] Dynamic server-side SEO metadata generation in public site route using Next.js App Router `layout.tsx` `generateMetadata`
+- [x] Integrasi kode verifikasi Google Search (`google-site-verification` meta tag)
+- [x] Pembuatan Sitemap XML dinamis per bisnis (`/jagobisnis/[slug]/sitemap.xml`)
+- [x] Pembuatan Robots.txt dinamis per bisnis (`/jagobisnis/[slug]/robots.txt`)
 
 ## Phase 7: UI/UX Polish & Branding
 Status: Completed
