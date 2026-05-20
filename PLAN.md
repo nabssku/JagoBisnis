@@ -127,6 +127,8 @@ Tasks:
 - [x] Unified Media Library selector integration for both Main Cover and Additional Gallery images in Product Catalogue forms
 - [x] Product active/inactive toggle switch synchronized with the database default state
 - [x] Resolved backend DTO validation error by transitioning imageUrl validation from @IsUrl() to @IsString() supporting relative local upload paths
+- [x] Migrated hardcoded localhost media upload URLs to a configurable environment variable setup (`BACKEND_URL`), directing uploads to the main `api.jago-bisnis.my.id` domain.
+
 
 ## Phase 9: Dynamic Product Detail Page
 Status: Completed

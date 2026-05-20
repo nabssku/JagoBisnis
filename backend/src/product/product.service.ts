@@ -25,7 +25,9 @@ export class ProductService {
     });
 
     if (existingProduct) {
-      throw new ConflictException('Product slug already exists in this business');
+      throw new ConflictException(
+        'Product slug already exists in this business',
+      );
     }
 
     return this.prisma.product.create({
@@ -79,7 +81,9 @@ export class ProductService {
         },
       });
       if (existingProduct) {
-        throw new ConflictException('Product slug already exists in this business');
+        throw new ConflictException(
+          'Product slug already exists in this business',
+        );
       }
     }
 
@@ -126,14 +130,17 @@ export class ProductService {
     const mediaCount = await this.prisma.media.count({
       where: { businessId },
     });
-    
+
     if (mediaCount >= 500) {
       throw new ConflictException(
         'Batas maksimal penyimpanan media (500 file) telah tercapai.',
       );
     }
 
-    const url = `http://localhost:3001/uploads/${file.filename}`;
+    const backendUrl = process.env.BACKEND_URL
+      ? process.env.BACKEND_URL.replace(/\/$/, '')
+      : 'http://localhost:3001';
+    const url = `${backendUrl}/uploads/${file.filename}`;
 
     return this.prisma.media.create({
       data: {

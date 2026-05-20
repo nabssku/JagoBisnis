@@ -7,19 +7,31 @@ export class ThreadsProvider {
 
   getConnectUrl(businessId: string): string {
     const appId = process.env.THREADS_APP_ID || 'mock_threads_app_id';
-    const redirectUri = process.env.THREADS_REDIRECT_URI || 'http://localhost:3001/api/v1/integrations/threads/callback';
+    const backendUrl = process.env.BACKEND_URL
+      ? process.env.BACKEND_URL.replace(/\/$/, '')
+      : 'http://localhost:3001';
+    const redirectUri =
+      process.env.THREADS_REDIRECT_URI ||
+      `${backendUrl}/api/v1/integrations/threads/callback`;
     const scope = 'threads_basic,threads_content_publish';
-    
+
     const stateObj = { businessId, timestamp: Date.now() };
     const state = Buffer.from(JSON.stringify(stateObj)).toString('base64');
-    
+
     return `${this.THREADS_OAUTH_URL}?client_id=${appId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}&state=${state}&response_type=code`;
   }
 
-  async exchangeCodeForToken(code: string): Promise<{ accessToken: string; expiresIn: number }> {
+  async exchangeCodeForToken(
+    code: string,
+  ): Promise<{ accessToken: string; expiresIn: number }> {
     const appId = process.env.THREADS_APP_ID;
     const appSecret = process.env.THREADS_APP_SECRET;
-    const redirectUri = process.env.THREADS_REDIRECT_URI || 'http://localhost:3001/api/v1/integrations/threads/callback';
+    const backendUrl = process.env.BACKEND_URL
+      ? process.env.BACKEND_URL.replace(/\/$/, '')
+      : 'http://localhost:3001';
+    const redirectUri =
+      process.env.THREADS_REDIRECT_URI ||
+      `${backendUrl}/api/v1/integrations/threads/callback`;
 
     if (!appId || !appSecret) {
       return {
@@ -33,7 +45,9 @@ export class ThreadsProvider {
       const response = await fetch(url);
       if (!response.ok) {
         const errData = await response.json();
-        throw new Error(errData?.error_message || 'Threads OAuth exchange failed');
+        throw new Error(
+          errData?.error_message || 'Threads OAuth exchange failed',
+        );
       }
       const data = await response.json();
       return {
@@ -41,11 +55,15 @@ export class ThreadsProvider {
         expiresIn: data.expires_in || 2592000,
       };
     } catch (error) {
-      throw new BadRequestException(`Threads token exchange failed: ${error.message}`);
+      throw new BadRequestException(
+        `Threads token exchange failed: ${error.message}`,
+      );
     }
   }
 
-  async getAccountInfo(accessToken: string): Promise<{ accountId: string; accountName: string }> {
+  async getAccountInfo(
+    accessToken: string,
+  ): Promise<{ accountId: string; accountName: string }> {
     if (accessToken.startsWith('th_access_token_mock')) {
       return {
         accountId: 'th_acc_id_987654321',
@@ -56,18 +74,26 @@ export class ThreadsProvider {
     try {
       const url = `${this.THREADS_API_URL}/me?fields=id,username&access_token=${accessToken}`;
       const response = await fetch(url);
-      if (!response.ok) throw new Error('Failed to fetch Threads profile details');
+      if (!response.ok)
+        throw new Error('Failed to fetch Threads profile details');
       const data = await response.json();
       return {
         accountId: data.id,
         accountName: data.username || 'Threads Profile',
       };
     } catch (error) {
-      throw new BadRequestException(`Failed to retrieve Threads account info: ${error.message}`);
+      throw new BadRequestException(
+        `Failed to retrieve Threads account info: ${error.message}`,
+      );
     }
   }
 
-  async publish(accessToken: string, threadsAccountId: string, content: string, imageUrl?: string): Promise<string> {
+  async publish(
+    accessToken: string,
+    threadsAccountId: string,
+    content: string,
+    imageUrl?: string,
+  ): Promise<string> {
     if (accessToken.startsWith('th_access_token_mock')) {
       return `th_post_${Math.random().toString(36).substring(2, 10)}`;
     }
@@ -93,7 +119,9 @@ export class ThreadsProvider {
 
       if (!containerRes.ok) {
         const err = await containerRes.json();
-        throw new Error(err?.error?.message || 'Failed to create Threads container');
+        throw new Error(
+          err?.error?.message || 'Failed to create Threads container',
+        );
       }
       const containerData = await containerRes.json();
       const creationId = containerData.id;
@@ -111,7 +139,9 @@ export class ThreadsProvider {
 
       if (!publishRes.ok) {
         const err = await publishRes.json();
-        throw new Error(err?.error?.message || 'Failed to publish Threads container');
+        throw new Error(
+          err?.error?.message || 'Failed to publish Threads container',
+        );
       }
       const publishData = await publishRes.json();
       return publishData.id;

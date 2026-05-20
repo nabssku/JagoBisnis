@@ -12,7 +12,12 @@ import {
   UseInterceptors,
   UploadedFile,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -42,7 +47,8 @@ export class ProductController {
       storage: diskStorage({
         destination: './uploads',
         filename: (req, file, callback) => {
-          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
           const ext = extname(file.originalname);
           callback(null, `${uniqueSuffix}${ext}`);
         },
@@ -67,11 +73,14 @@ export class ProductController {
     if (!file) {
       throw new BadRequestException('File is required');
     }
-    
+
     // Also record this file in the Media library database for this business!
     await this.productService.createMedia(req.user.id, businessId, file);
 
-    const url = `http://localhost:3001/uploads/${file.filename}`;
+    const backendUrl = process.env.BACKEND_URL
+      ? process.env.BACKEND_URL.replace(/\/$/, '')
+      : 'http://localhost:3001';
+    const url = `${backendUrl}/uploads/${file.filename}`;
     return { url };
   }
 
@@ -90,9 +99,12 @@ export class ProductController {
         return stat.isFile() && file.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i);
       })
       .map((file: string) => {
+        const backendUrl = process.env.BACKEND_URL
+          ? process.env.BACKEND_URL.replace(/\/$/, '')
+          : 'http://localhost:3001';
         return {
           name: file,
-          url: `http://localhost:3001/uploads/${file}`,
+          url: `${backendUrl}/uploads/${file}`,
         };
       });
     return mediaUrls;

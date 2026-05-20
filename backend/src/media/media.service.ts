@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException, BadRequestException, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+  Logger,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import * as fs from 'fs';
 import { join } from 'path';
@@ -53,7 +58,9 @@ export class MediaService {
         try {
           fs.unlinkSync(tempPath);
         } catch (err) {
-          this.logger.error(`Failed to clean up file after limit exceeded: ${err.message}`);
+          this.logger.error(
+            `Failed to clean up file after limit exceeded: ${err.message}`,
+          );
         }
       }
       throw new BadRequestException(
@@ -61,9 +68,11 @@ export class MediaService {
       );
     }
 
-    // 2. Generate local uploads URL
-    // Hardcoded to match our dev settings and product uploads
-    const url = `http://localhost:3001/uploads/${file.filename}`;
+    // 2. Generate uploads URL dynamically using config
+    const backendUrl = process.env.BACKEND_URL
+      ? process.env.BACKEND_URL.replace(/\/$/, '')
+      : 'http://localhost:3001';
+    const url = `${backendUrl}/uploads/${file.filename}`;
 
     // 3. Create Media record in the database
     return this.prisma.media.create({
@@ -109,10 +118,14 @@ export class MediaService {
       try {
         fs.unlinkSync(filePath);
       } catch (err) {
-        this.logger.warn(`Could not delete physical file: ${filePath}. Error: ${err.message}`);
+        this.logger.warn(
+          `Could not delete physical file: ${filePath}. Error: ${err.message}`,
+        );
       }
     } else {
-      this.logger.warn(`Physical file not found for media deletion: ${filePath}`);
+      this.logger.warn(
+        `Physical file not found for media deletion: ${filePath}`,
+      );
     }
 
     // 3. Delete from database
