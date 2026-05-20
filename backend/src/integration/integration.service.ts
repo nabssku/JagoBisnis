@@ -1,4 +1,9 @@
-import { Injectable, ForbiddenException, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  ForbiddenException,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { ConnectPakasirDto } from './dto/connect-pakasir.dto';
 import { ConnectGoogleAnalyticsDto } from './dto/connect-google-analytics.dto';
@@ -27,10 +32,16 @@ export class IntegrationService {
     });
 
     // Strip sensitive fields (like plain keys, tokens, secrets) before sending response
-    return integrations.map((integration) => this.sanitizeIntegration(integration));
+    return integrations.map((integration) =>
+      this.sanitizeIntegration(integration),
+    );
   }
 
-  async findOne(userId: string, businessId: string, provider: IntegrationProvider) {
+  async findOne(
+    userId: string,
+    businessId: string,
+    provider: IntegrationProvider,
+  ) {
     await this.checkAccess(userId, businessId);
 
     const integration = await this.prisma.integration.findFirst({
@@ -38,13 +49,19 @@ export class IntegrationService {
     });
 
     if (!integration) {
-      throw new NotFoundException(`Integration with provider ${provider} not found`);
+      throw new NotFoundException(
+        `Integration with provider ${provider} not found`,
+      );
     }
 
     return this.sanitizeIntegration(integration);
   }
 
-  async connectPakasir(userId: string, businessId: string, dto: ConnectPakasirDto) {
+  async connectPakasir(
+    userId: string,
+    businessId: string,
+    dto: ConnectPakasirDto,
+  ) {
     await this.checkPermission(userId, businessId);
 
     // 1. Test the connection first
@@ -82,9 +99,13 @@ export class IntegrationService {
     return this.sanitizeIntegration(integration);
   }
 
-  async testPakasir(userId: string, businessId: string, dto: ConnectPakasirDto) {
+  async testPakasir(
+    userId: string,
+    businessId: string,
+    dto: ConnectPakasirDto,
+  ) {
     await this.checkAccess(userId, businessId);
-    
+
     let keyToTest = dto.apiKey;
     // If the input is masked, try to read the existing configured key
     if (dto.apiKey.startsWith('pk_****')) {
@@ -111,14 +132,20 @@ export class IntegrationService {
     };
   }
 
-  async connectGoogleAnalytics(userId: string, businessId: string, dto: ConnectGoogleAnalyticsDto) {
+  async connectGoogleAnalytics(
+    userId: string,
+    businessId: string,
+    dto: ConnectGoogleAnalyticsDto,
+  ) {
     await this.checkPermission(userId, businessId);
 
     // 1. Validate configuration format
     await this.gaProvider.testConnection(dto.measurementId, dto.apiSecret);
 
     // 2. Encrypt apiSecret if provided
-    const encryptedApiSecret = dto.apiSecret ? CryptoUtil.encrypt(dto.apiSecret) : undefined;
+    const encryptedApiSecret = dto.apiSecret
+      ? CryptoUtil.encrypt(dto.apiSecret)
+      : undefined;
 
     // 3. Save/Update record
     const integration = await this.prisma.integration.upsert({
@@ -149,9 +176,13 @@ export class IntegrationService {
     return this.sanitizeIntegration(integration);
   }
 
-  async testGoogleAnalytics(userId: string, businessId: string, dto: ConnectGoogleAnalyticsDto) {
+  async testGoogleAnalytics(
+    userId: string,
+    businessId: string,
+    dto: ConnectGoogleAnalyticsDto,
+  ) {
     await this.checkAccess(userId, businessId);
-    
+
     let secretToTest = dto.apiSecret;
     if (dto.apiSecret && dto.apiSecret.startsWith('****')) {
       const existing = await this.prisma.integration.findUnique({
@@ -171,12 +202,19 @@ export class IntegrationService {
     }
 
     return {
-      success: await this.gaProvider.testConnection(dto.measurementId, secretToTest),
+      success: await this.gaProvider.testConnection(
+        dto.measurementId,
+        secretToTest,
+      ),
       message: 'Koneksi ke Google Analytics berhasil!',
     };
   }
 
-  async disconnect(userId: string, businessId: string, provider: IntegrationProvider) {
+  async disconnect(
+    userId: string,
+    businessId: string,
+    provider: IntegrationProvider,
+  ) {
     await this.checkPermission(userId, businessId);
 
     const existing = await this.prisma.integration.findUnique({
@@ -186,7 +224,9 @@ export class IntegrationService {
     });
 
     if (!existing) {
-      throw new NotFoundException(`Integration with provider ${provider} is not connected`);
+      throw new NotFoundException(
+        `Integration with provider ${provider} is not connected`,
+      );
     }
 
     // Completely remove the credentials/tokens from the database for highest security
@@ -204,7 +244,10 @@ export class IntegrationService {
 
   // --- Instagram OAuth handlers ---
 
-  async getInstagramConnectUrl(userId: string, businessId: string): Promise<{ url: string }> {
+  async getInstagramConnectUrl(
+    userId: string,
+    businessId: string,
+  ): Promise<{ url: string }> {
     await this.checkPermission(userId, businessId);
     const url = this.instagramProvider.getConnectUrl(businessId);
     return { url };
@@ -213,21 +256,27 @@ export class IntegrationService {
   async handleInstagramCallback(code: string, state: string) {
     let businessId: string;
     try {
-      const decodedState = JSON.parse(Buffer.from(state, 'base64').toString('utf-8'));
+      const decodedState = JSON.parse(
+        Buffer.from(state, 'base64').toString('utf-8'),
+      );
       businessId = decodedState.businessId;
     } catch (e) {
       throw new BadRequestException('State token is invalid or corrupted');
     }
 
     if (!businessId) {
-      throw new BadRequestException('Business ID was not supplied in the state token');
+      throw new BadRequestException(
+        'Business ID was not supplied in the state token',
+      );
     }
 
     // 1. Exchange OAuth code for Meta Access Token
     const tokenData = await this.instagramProvider.exchangeCodeForToken(code);
 
     // 2. Fetch professional account details
-    const accountInfo = await this.instagramProvider.getAccountInfo(tokenData.accessToken);
+    const accountInfo = await this.instagramProvider.getAccountInfo(
+      tokenData.accessToken,
+    );
 
     // 3. Encrypt access token
     const encryptedToken = CryptoUtil.encrypt(tokenData.accessToken);
@@ -263,7 +312,10 @@ export class IntegrationService {
 
   // --- Threads OAuth handlers ---
 
-  async getThreadsConnectUrl(userId: string, businessId: string): Promise<{ url: string }> {
+  async getThreadsConnectUrl(
+    userId: string,
+    businessId: string,
+  ): Promise<{ url: string }> {
     await this.checkPermission(userId, businessId);
     const url = this.threadsProvider.getConnectUrl(businessId);
     return { url };
@@ -272,21 +324,27 @@ export class IntegrationService {
   async handleThreadsCallback(code: string, state: string) {
     let businessId: string;
     try {
-      const decodedState = JSON.parse(Buffer.from(state, 'base64').toString('utf-8'));
+      const decodedState = JSON.parse(
+        Buffer.from(state, 'base64').toString('utf-8'),
+      );
       businessId = decodedState.businessId;
     } catch (e) {
       throw new BadRequestException('State token is invalid or corrupted');
     }
 
     if (!businessId) {
-      throw new BadRequestException('Business ID was not supplied in the state token');
+      throw new BadRequestException(
+        'Business ID was not supplied in the state token',
+      );
     }
 
     // 1. Exchange code
     const tokenData = await this.threadsProvider.exchangeCodeForToken(code);
 
     // 2. Get account profile details
-    const accountInfo = await this.threadsProvider.getAccountInfo(tokenData.accessToken);
+    const accountInfo = await this.threadsProvider.getAccountInfo(
+      tokenData.accessToken,
+    );
 
     // 3. Encrypt token
     const encryptedToken = CryptoUtil.encrypt(tokenData.accessToken);
@@ -353,17 +411,25 @@ export class IntegrationService {
     delete sanitized.accessToken;
     delete sanitized.refreshToken;
 
-    if (sanitized.provider === IntegrationProvider.PAKASIR && sanitized.config) {
-      const config = sanitized.config as any;
+    if (
+      sanitized.provider === IntegrationProvider.PAKASIR &&
+      sanitized.config
+    ) {
+      const config = sanitized.config;
       sanitized.config = {
         slug: config.slug,
         // Expose only masked API key
-        apiKey: config.apiKey ? `pk_****${CryptoUtil.decrypt(config.apiKey).slice(-4)}` : '',
+        apiKey: config.apiKey
+          ? `pk_****${CryptoUtil.decrypt(config.apiKey).slice(-4)}`
+          : '',
       };
     }
 
-    if (sanitized.provider === IntegrationProvider.GOOGLE_ANALYTICS && sanitized.config) {
-      const config = sanitized.config as any;
+    if (
+      sanitized.provider === IntegrationProvider.GOOGLE_ANALYTICS &&
+      sanitized.config
+    ) {
+      const config = sanitized.config;
       sanitized.config = {
         measurementId: config.measurementId,
         // Inform frontend if secret exists but do not expose it

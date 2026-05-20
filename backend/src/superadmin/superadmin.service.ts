@@ -6,12 +6,13 @@ export class SuperAdminService {
   constructor(private prisma: PrismaService) {}
 
   async getPlatformStats() {
-    const [totalUsers, totalBusinesses, totalProducts, totalOrders] = await Promise.all([
-      this.prisma.user.count(),
-      this.prisma.business.count(),
-      this.prisma.product.count(),
-      this.prisma.order.count(),
-    ]);
+    const [totalUsers, totalBusinesses, totalProducts, totalOrders] =
+      await Promise.all([
+        this.prisma.user.count(),
+        this.prisma.business.count(),
+        this.prisma.product.count(),
+        this.prisma.order.count(),
+      ]);
 
     // Calculate total GTV (Gross Transaction Value) from orders
     const completedOrders = await this.prisma.order.findMany({
@@ -23,7 +24,10 @@ export class SuperAdminService {
       },
     });
 
-    const totalRevenue = completedOrders.reduce((sum, order) => sum + order.subtotal, 0);
+    const totalRevenue = completedOrders.reduce(
+      (sum, order) => sum + order.subtotal,
+      0,
+    );
 
     // Fetch lists for quick overview cards
     const recentUsers = await this.prisma.user.findMany({
@@ -146,7 +150,8 @@ export class SuperAdminService {
     });
 
     return businesses.map((b) => {
-      const owner = b.BusinessUser.find((bu) => bu.role === 'OWNER')?.user || null;
+      const owner =
+        b.BusinessUser.find((bu) => bu.role === 'OWNER')?.user || null;
       return {
         id: b.id,
         name: b.name,
@@ -184,6 +189,9 @@ export class SuperAdminService {
       this.prisma.business.delete({ where: { id: businessId } }),
     ]);
 
-    return { success: true, message: 'Bisnis berhasil dihapus secara permanen' };
+    return {
+      success: true,
+      message: 'Bisnis berhasil dihapus secara permanen',
+    };
   }
 }

@@ -26,7 +26,12 @@ async function bootstrap() {
   // Enable CORS
   const frontendUrl = process.env.FRONTEND_URL;
   const allowedOrigins = frontendUrl
-    ? frontendUrl.split(',').map((url) => url.trim().replace(/^['"]|['"]$/g, '').replace(/\/$/, ''))
+    ? frontendUrl.split(',').map((url) =>
+        url
+          .trim()
+          .replace(/^['"]|['"]$/g, '')
+          .replace(/\/$/, ''),
+      )
     : [
         'http://localhost:3000',
         'http://127.0.0.1:3000',
@@ -53,7 +58,8 @@ async function bootstrap() {
     },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
-    allowedHeaders: 'Content-Type,Accept,Authorization,X-Requested-With,bypass-tunnel-reminder,Bypass-Tunnel-Reminder',
+    allowedHeaders:
+      'Content-Type,Accept,Authorization,X-Requested-With,bypass-tunnel-reminder,Bypass-Tunnel-Reminder',
   });
 
   // Validation

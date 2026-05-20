@@ -70,7 +70,10 @@ export class AuthController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update user password' })
   @ApiResponse({ status: 200, description: 'Password successfully updated' })
-  @ApiResponse({ status: 400, description: 'Invalid credentials or old password mismatch' })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid credentials or old password mismatch',
+  })
   updatePassword(
     @Request() req: { user: { id: string } },
     @Body() dto: UpdatePasswordDto,
@@ -80,7 +83,10 @@ export class AuthController {
 
   @Post('google')
   @ApiOperation({ summary: 'Login or register via Google' })
-  @ApiResponse({ status: 200, description: 'Successfully authenticated via Google' })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully authenticated via Google',
+  })
   @ApiResponse({ status: 400, description: 'Invalid Google access token' })
   googleLogin(@Body('accessToken') accessToken: string) {
     return this.authService.googleLogin(accessToken);

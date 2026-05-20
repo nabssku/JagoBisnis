@@ -8,7 +8,10 @@ export class UpdateOrderStatusDto {
   @IsOptional()
   orderStatus?: OrderStatus;
 
-  @ApiPropertyOptional({ description: 'Status pembayaran', enum: PaymentStatus })
+  @ApiPropertyOptional({
+    description: 'Status pembayaran',
+    enum: PaymentStatus,
+  })
   @IsEnum(PaymentStatus)
   @IsOptional()
   paymentStatus?: PaymentStatus;

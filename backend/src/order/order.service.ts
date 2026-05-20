@@ -25,7 +25,9 @@ export class OrderService {
    * Creates a public order from the published shop website
    */
   async createPublicOrder(siteSlug: string, dto: CreatePublicOrderDto) {
-    this.logger.log(`Creating public order for site: ${siteSlug}, product: ${dto.productId}`);
+    this.logger.log(
+      `Creating public order for site: ${siteSlug}, product: ${dto.productId}`,
+    );
 
     // 1. Find the published site
     const site = await this.prisma.site.findFirst({
@@ -39,7 +41,9 @@ export class OrderService {
     });
 
     if (!site) {
-      throw new NotFoundException(`Toko dengan alamat "${siteSlug}" tidak ditemukan atau belum dipublikasikan.`);
+      throw new NotFoundException(
+        `Toko dengan alamat "${siteSlug}" tidak ditemukan atau belum dipublikasikan.`,
+      );
     }
 
     const businessId = site.businessId;
@@ -54,7 +58,9 @@ export class OrderService {
     });
 
     if (!product) {
-      throw new BadRequestException('Produk tidak ditemukan atau sedang tidak aktif.');
+      throw new BadRequestException(
+        'Produk tidak ditemukan atau sedang tidak aktif.',
+      );
     }
 
     // 3. Calculate financial totals
@@ -64,9 +70,10 @@ export class OrderService {
     }
 
     const subtotal = product.price * quantity;
-    const orderId = 'JB-' + Date.now() + '-' + Math.floor(1000 + Math.random() * 9000);
+    const orderId =
+      'JB-' + Date.now() + '-' + Math.floor(1000 + Math.random() * 9000);
 
-    let orderStatus: OrderStatus = OrderStatus.PENDING;
+    const orderStatus: OrderStatus = OrderStatus.PENDING;
     let paymentStatus: PaymentStatus = PaymentStatus.UNPAID;
     let pakasirOrderId: string | null = null;
     let pakasirPaymentUrl: string | null = null;
@@ -84,7 +91,9 @@ export class OrderService {
       });
 
       if (!integration || !integration.config) {
-        throw new BadRequestException('Metode pembayaran online Pakasir saat ini belum aktif pada toko ini.');
+        throw new BadRequestException(
+          'Metode pembayaran online Pakasir saat ini belum aktif pada toko ini.',
+        );
       }
 
       const config = integration.config as { slug: string; apiKey: string };
@@ -95,8 +104,12 @@ export class OrderService {
       pakasirPaymentMethod = 'QRIS';
 
       // Generate Frontend redirect status page
-      const rawFrontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
-      const frontendUrl = rawFrontendUrl.split(',')[0].trim().replace(/^['"]|['"]$/g, '');
+      const rawFrontendUrl =
+        process.env.FRONTEND_URL || 'http://localhost:3000';
+      const frontendUrl = rawFrontendUrl
+        .split(',')[0]
+        .trim()
+        .replace(/^['"]|['"]$/g, '');
       const redirectUrl = `${frontendUrl}/jago/${siteSlug}/orders/${orderId}`;
 
       // Call Pakasir Checkout provider to construct redirect URL
@@ -199,7 +212,11 @@ export class OrderService {
   /**
    * Retrieves specific order detail for a business
    */
-  async getBusinessOrderDetail(businessId: string, orderId: string, userId: string) {
+  async getBusinessOrderDetail(
+    businessId: string,
+    orderId: string,
+    userId: string,
+  ) {
     await this.verifyUserAccess(businessId, userId);
 
     const order = await this.prisma.order.findFirst({
@@ -244,8 +261,12 @@ export class OrderService {
     const updated = await this.prisma.order.update({
       where: { id: orderId },
       data: {
-        orderStatus: dto.orderStatus !== undefined ? dto.orderStatus : order.orderStatus,
-        paymentStatus: dto.paymentStatus !== undefined ? dto.paymentStatus : order.paymentStatus,
+        orderStatus:
+          dto.orderStatus !== undefined ? dto.orderStatus : order.orderStatus,
+        paymentStatus:
+          dto.paymentStatus !== undefined
+            ? dto.paymentStatus
+            : order.paymentStatus,
       },
       include: {
         product: true,
@@ -274,7 +295,9 @@ export class OrderService {
     });
 
     if (!businessUser || !allowedRoles.includes(businessUser.role)) {
-      throw new ForbiddenException('Anda tidak memiliki akses ke data pesanan bisnis ini.');
+      throw new ForbiddenException(
+        'Anda tidak memiliki akses ke data pesanan bisnis ini.',
+      );
     }
   }
 }

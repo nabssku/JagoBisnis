@@ -8,7 +8,12 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { OrderService } from './order.service';
 import { CreatePublicOrderDto } from './dto/create-public-order.dto';
@@ -31,9 +36,14 @@ export class OrderController {
   // ==========================================
 
   @Post('public/sites/:slug/orders')
-  @ApiOperation({ summary: 'Create a new public order from a published shop site' })
+  @ApiOperation({
+    summary: 'Create a new public order from a published shop site',
+  })
   @ApiResponse({ status: 201, description: 'Order created successfully' })
-  @ApiResponse({ status: 400, description: 'Invalid data or inactive product/integration' })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid data or inactive product/integration',
+  })
   @ApiResponse({ status: 404, description: 'Site not found' })
   createPublicOrder(
     @Param('slug') slug: string,
@@ -77,7 +87,11 @@ export class OrderController {
     @Param('orderId') orderId: string,
     @Request() req: RequestWithUser,
   ) {
-    return this.orderService.getBusinessOrderDetail(businessId, orderId, req.user.id);
+    return this.orderService.getBusinessOrderDetail(
+      businessId,
+      orderId,
+      req.user.id,
+    );
   }
 
   @UseGuards(JwtAuthGuard)
@@ -85,7 +99,10 @@ export class OrderController {
   @Patch('businesses/:businessId/orders/:orderId/status')
   @ApiOperation({ summary: 'Update status/payment state of a business order' })
   @ApiResponse({ status: 200, description: 'Order updated successfully' })
-  @ApiResponse({ status: 403, description: 'Forbidden - only OWNER or ADMIN allowed' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - only OWNER or ADMIN allowed',
+  })
   @ApiResponse({ status: 404, description: 'Order not found' })
   updateBusinessOrderStatus(
     @Param('businessId') businessId: string,

@@ -19,7 +19,9 @@ export class BusinessService {
     });
 
     if (userBusinessesCount >= 1) {
-      throw new ConflictException('Maksimal 1 akun hanya boleh memiliki 1 profil bisnis.');
+      throw new ConflictException(
+        'Maksimal 1 akun hanya boleh memiliki 1 profil bisnis.',
+      );
     }
 
     const slug = dto.slug || this.generateSlug(dto.name);
@@ -139,7 +141,9 @@ export class BusinessService {
       throw new NotFoundException('Business not found or access denied');
     }
 
-    const allowedRoles: Role[] = strict ? [Role.OWNER] : [Role.OWNER, Role.ADMIN];
+    const allowedRoles: Role[] = strict
+      ? [Role.OWNER]
+      : [Role.OWNER, Role.ADMIN];
 
     if (!allowedRoles.includes(businessUser.role)) {
       throw new ForbiddenException(

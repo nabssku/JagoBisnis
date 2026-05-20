@@ -1,5 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNotEmpty, IsObject, IsOptional, IsString, Matches } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsObject,
+  IsOptional,
+  IsString,
+  Matches,
+} from 'class-validator';
 
 export class CreateSiteDto {
   @ApiProperty({ example: 'My Website' })
@@ -10,7 +16,9 @@ export class CreateSiteDto {
   @ApiProperty({ example: 'my-business' })
   @IsString()
   @IsNotEmpty()
-  @Matches(/^[a-z0-9-]+$/, { message: 'Slug hanya boleh huruf kecil, angka, dan dash' })
+  @Matches(/^[a-z0-9-]+$/, {
+    message: 'Slug hanya boleh huruf kecil, angka, dan dash',
+  })
   slug: string;
 
   @ApiPropertyOptional()

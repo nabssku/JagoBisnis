@@ -1,6 +1,7 @@
 import fs from 'fs';
 
-const filePath = 'd:\\portofolio\\JagoBisnis\\frontend\\src\\app\\dashboard\\business\\[id]\\website\\page.tsx';
+const filePath =
+  'd:\\portofolio\\JagoBisnis\\frontend\\src\\app\\dashboard\\business\\[id]\\website\\page.tsx';
 const content = fs.readFileSync(filePath, 'utf-8');
 const lines = content.split('\n');
 

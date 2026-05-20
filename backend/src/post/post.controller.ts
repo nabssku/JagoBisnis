@@ -9,7 +9,12 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -99,7 +104,9 @@ export class PostController {
   }
 
   @Get('public/sites/:businessSlug/posts/:postSlug')
-  @ApiOperation({ summary: 'Get public published post by slug (and increment views count)' })
+  @ApiOperation({
+    summary: 'Get public published post by slug (and increment views count)',
+  })
   getPublicPost(
     @Param('businessSlug') businessSlug: string,
     @Param('postSlug') postSlug: string,

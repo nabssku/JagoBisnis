@@ -161,7 +161,7 @@ export class SiteService {
 
   async updateSections(businessId: string, userId: string, sections: any[]) {
     await this.checkPermission(businessId, userId);
-    
+
     // Validation: ensure sections have id, type, order, content
     sections.forEach((section, index) => {
       if (!section.id || !section.type || !section.order || !section.content) {
@@ -211,7 +211,9 @@ export class SiteService {
     });
 
     if (!site || !site.isPublished) {
-      throw new NotFoundException('Website tidak ditemukan atau belum dipublikasikan');
+      throw new NotFoundException(
+        'Website tidak ditemukan atau belum dipublikasikan',
+      );
     }
 
     // Fetch active integrations for the business
@@ -230,9 +232,10 @@ export class SiteService {
       (integration) => integration.provider === 'GOOGLE_ANALYTICS',
     );
 
-    const measurementId = gaIntegration && gaIntegration.config
-      ? (gaIntegration.config as any).measurementId
-      : '';
+    const measurementId =
+      gaIntegration && gaIntegration.config
+        ? (gaIntegration.config as any).measurementId
+        : '';
 
     return {
       ...site,
@@ -264,7 +267,9 @@ export class SiteService {
     const membership = await this.checkMembership(businessId, userId);
 
     if (membership.role !== Role.OWNER && membership.role !== Role.ADMIN) {
-      throw new ForbiddenException('Hanya OWNER atau ADMIN yang dapat mengubah website');
+      throw new ForbiddenException(
+        'Hanya OWNER atau ADMIN yang dapat mengubah website',
+      );
     }
   }
 }

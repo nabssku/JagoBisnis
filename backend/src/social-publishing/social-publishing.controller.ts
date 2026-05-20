@@ -8,7 +8,12 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { SocialPublishingService } from './social-publishing.service';
 import { CreateSocialPostDto } from './dto/create-social-post.dto';
@@ -29,7 +34,10 @@ export class SocialPublishingController {
   @UseGuards(JwtAuthGuard)
   @Post()
   @ApiOperation({ summary: 'Create a new social post draft' })
-  @ApiResponse({ status: 201, description: 'Social post draft successfully created' })
+  @ApiResponse({
+    status: 201,
+    description: 'Social post draft successfully created',
+  })
   create(
     @Request() req: RequestWithUser,
     @Param('businessId') businessId: string,

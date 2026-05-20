@@ -7,7 +7,10 @@ export class ConnectPakasirDto {
   @IsNotEmpty()
   slug: string;
 
-  @ApiProperty({ description: 'API Key proyek Pakasir', example: 'pk_live_1234abcd' })
+  @ApiProperty({
+    description: 'API Key proyek Pakasir',
+    example: 'pk_live_1234abcd',
+  })
   @IsString()
   @IsNotEmpty()
   apiKey: string;

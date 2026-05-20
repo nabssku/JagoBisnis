@@ -85,7 +85,10 @@ let MediaService = MediaService_1 = class MediaService {
             }
             throw new common_1.BadRequestException('Batas maksimal penyimpanan media (500 file) telah tercapai. Silakan hapus media yang tidak terpakai.');
         }
-        const url = `http://localhost:3001/uploads/${file.filename}`;
+        const backendUrl = process.env.BACKEND_URL
+            ? process.env.BACKEND_URL.replace(/\/$/, '')
+            : 'http://localhost:3001';
+        const url = `${backendUrl}/uploads/${file.filename}`;
         return this.prisma.media.create({
             data: {
                 businessId,

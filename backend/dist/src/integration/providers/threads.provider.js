@@ -13,7 +13,10 @@ let ThreadsProvider = class ThreadsProvider {
     THREADS_API_URL = 'https://graph.threads.net/v1.0';
     getConnectUrl(businessId) {
         const appId = process.env.THREADS_APP_ID || 'mock_threads_app_id';
-        const redirectUri = process.env.THREADS_REDIRECT_URI || 'http://localhost:3001/api/v1/integrations/threads/callback';
+        const backendUrl = process.env.BACKEND_URL
+            ? process.env.BACKEND_URL.replace(/\/$/, '')
+            : 'http://localhost:3001';
+        const redirectUri = process.env.THREADS_REDIRECT_URI || `${backendUrl}/api/v1/integrations/threads/callback`;
         const scope = 'threads_basic,threads_content_publish';
         const stateObj = { businessId, timestamp: Date.now() };
         const state = Buffer.from(JSON.stringify(stateObj)).toString('base64');
@@ -22,7 +25,10 @@ let ThreadsProvider = class ThreadsProvider {
     async exchangeCodeForToken(code) {
         const appId = process.env.THREADS_APP_ID;
         const appSecret = process.env.THREADS_APP_SECRET;
-        const redirectUri = process.env.THREADS_REDIRECT_URI || 'http://localhost:3001/api/v1/integrations/threads/callback';
+        const backendUrl = process.env.BACKEND_URL
+            ? process.env.BACKEND_URL.replace(/\/$/, '')
+            : 'http://localhost:3001';
+        const redirectUri = process.env.THREADS_REDIRECT_URI || `${backendUrl}/api/v1/integrations/threads/callback`;
         if (!appId || !appSecret) {
             return {
                 accessToken: `th_access_token_mock_${Math.random().toString(36).substring(2, 15)}`,

@@ -7,7 +7,11 @@ export class ConnectGoogleAnalyticsDto {
   @IsNotEmpty()
   measurementId: string;
 
-  @ApiProperty({ description: 'GA4 Measurement Protocol API Secret (optional)', example: 'abc123xyz', required: false })
+  @ApiProperty({
+    description: 'GA4 Measurement Protocol API Secret (optional)',
+    example: 'abc123xyz',
+    required: false,
+  })
   @IsString()
   @IsOptional()
   apiSecret?: string;

@@ -46,7 +46,10 @@ export class CreateProductDto {
   @IsOptional()
   imageUrl?: string;
 
-  @ApiPropertyOptional({ type: [String], example: ['https://example.com/image1.png'] })
+  @ApiPropertyOptional({
+    type: [String],
+    example: ['https://example.com/image1.png'],
+  })
   @IsArray()
   @IsString({ each: true })
   @IsOptional()

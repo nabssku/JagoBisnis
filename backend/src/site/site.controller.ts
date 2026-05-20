@@ -8,7 +8,12 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { SiteService } from './site.service';
 import { CreateSiteDto } from './dto/create-site.dto';
@@ -84,7 +89,11 @@ export class SiteController {
     @Body() dto: UpdateSiteSectionsDto,
     @Request() req: RequestWithUser,
   ) {
-    return this.siteService.updateSections(businessId, req.user.id, dto.sections);
+    return this.siteService.updateSections(
+      businessId,
+      req.user.id,
+      dto.sections,
+    );
   }
 
   @ApiBearerAuth()
@@ -108,5 +117,4 @@ export class SiteController {
   ) {
     return this.siteService.unpublish(businessId, req.user.id);
   }
-
 }

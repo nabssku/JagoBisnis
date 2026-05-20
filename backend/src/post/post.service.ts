@@ -1,8 +1,8 @@
-import { 
-  ConflictException, 
-  ForbiddenException, 
-  Injectable, 
-  NotFoundException 
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -79,7 +79,9 @@ export class PostService {
         },
       });
       if (existingPost) {
-        throw new ConflictException('Post slug already exists in this business');
+        throw new ConflictException(
+          'Post slug already exists in this business',
+        );
       }
     }
 
@@ -113,10 +115,7 @@ export class PostService {
         businessId: business.id,
         status: 'Publik',
       },
-      orderBy: [
-        { isPinned: 'desc' },
-        { createdAt: 'desc' }
-      ],
+      orderBy: [{ isPinned: 'desc' }, { createdAt: 'desc' }],
     });
   }
 

@@ -66,7 +66,10 @@ let ProductController = class ProductController {
             throw new common_1.BadRequestException('File is required');
         }
         await this.productService.createMedia(req.user.id, businessId, file);
-        const url = `http://localhost:3001/uploads/${file.filename}`;
+        const backendUrl = process.env.BACKEND_URL
+            ? process.env.BACKEND_URL.replace(/\/$/, '')
+            : 'http://localhost:3001';
+        const url = `${backendUrl}/uploads/${file.filename}`;
         return { url };
     }
     getMedia() {
@@ -82,9 +85,12 @@ let ProductController = class ProductController {
             return stat.isFile() && file.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i);
         })
             .map((file) => {
+            const backendUrl = process.env.BACKEND_URL
+                ? process.env.BACKEND_URL.replace(/\/$/, '')
+                : 'http://localhost:3001';
             return {
                 name: file,
-                url: `http://localhost:3001/uploads/${file}`,
+                url: `${backendUrl}/uploads/${file}`,
             };
         });
         return mediaUrls;

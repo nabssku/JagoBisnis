@@ -105,7 +105,10 @@ let ProductService = class ProductService {
         if (mediaCount >= 500) {
             throw new common_1.ConflictException('Batas maksimal penyimpanan media (500 file) telah tercapai.');
         }
-        const url = `http://localhost:3001/uploads/${file.filename}`;
+        const backendUrl = process.env.BACKEND_URL
+            ? process.env.BACKEND_URL.replace(/\/$/, '')
+            : 'http://localhost:3001';
+        const url = `${backendUrl}/uploads/${file.filename}`;
         return this.prisma.media.create({
             data: {
                 businessId,

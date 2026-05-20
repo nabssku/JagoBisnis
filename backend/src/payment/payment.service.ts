@@ -29,7 +29,9 @@ export class PaymentService {
     payment_method: string;
     completed_at: string;
   }) {
-    this.logger.log(`Received Pakasir Webhook: order_id=${payload.order_id}, status=${payload.status}`);
+    this.logger.log(
+      `Received Pakasir Webhook: order_id=${payload.order_id}, status=${payload.status}`,
+    );
 
     const orderId = payload.order_id;
 
@@ -49,7 +51,9 @@ export class PaymentService {
 
     if (!order) {
       this.logger.warn(`Order not found for Pakasir Webhook: ${orderId}`);
-      throw new NotFoundException(`Order with Pakasir Order ID ${orderId} not found.`);
+      throw new NotFoundException(
+        `Order with Pakasir Order ID ${orderId} not found.`,
+      );
     }
 
     // 2. Match transaction amount
@@ -63,11 +67,16 @@ export class PaymentService {
     // 3. Match project slug
     const pakasirIntegration = order.business.Integration[0];
     if (!pakasirIntegration || !pakasirIntegration.config) {
-      this.logger.error(`Pakasir integration not configured for business: ${order.businessId}`);
+      this.logger.error(
+        `Pakasir integration not configured for business: ${order.businessId}`,
+      );
       throw new BadRequestException('Pakasir integration is not configured.');
     }
 
-    const config = pakasirIntegration.config as { slug: string; apiKey: string };
+    const config = pakasirIntegration.config as {
+      slug: string;
+      apiKey: string;
+    };
     if (config.slug !== payload.project) {
       this.logger.error(
         `Project slug mismatch. Webhook: ${payload.project}, Configured: ${config.slug}`,
@@ -77,7 +86,9 @@ export class PaymentService {
 
     // 4. Handle duplicates - if already paid, skip but log as info
     if (order.paymentStatus === PaymentStatus.PAID) {
-      this.logger.log(`Duplicate webhook received. Order ${order.id} is already paid.`);
+      this.logger.log(
+        `Duplicate webhook received. Order ${order.id} is already paid.`,
+      );
       return { success: true, message: 'Payment already processed and paid.' };
     }
 
@@ -94,11 +105,16 @@ export class PaymentService {
       this.logger.warn(
         `Out-of-band transaction detail verification failed for order ${order.id}. Proceeding with payload status.`,
       );
-    } else if (verifiedDetails.status !== 'completed' && payload.status === 'completed') {
+    } else if (
+      verifiedDetails.status !== 'completed' &&
+      payload.status === 'completed'
+    ) {
       this.logger.error(
         `Pakasir transaction details API reports status "${verifiedDetails.status}" instead of "completed". Rejecting webhook.`,
       );
-      throw new BadRequestException('Transaction verification reports incomplete status.');
+      throw new BadRequestException(
+        'Transaction verification reports incomplete status.',
+      );
     }
 
     // 6. Update order and payment state
@@ -108,7 +124,8 @@ export class PaymentService {
         data: {
           paymentStatus: PaymentStatus.PAID,
           orderStatus: OrderStatus.CONFIRMED,
-          pakasirPaymentMethod: payload.payment_method || order.pakasirPaymentMethod,
+          pakasirPaymentMethod:
+            payload.payment_method || order.pakasirPaymentMethod,
           metadata: {
             webhookPayload: payload,
             completedAt: payload.completed_at,
@@ -116,7 +133,9 @@ export class PaymentService {
         },
       });
 
-      this.logger.log(`Successfully completed order ${updated.id} payment from Pakasir Webhook.`);
+      this.logger.log(
+        `Successfully completed order ${updated.id} payment from Pakasir Webhook.`,
+      );
       return {
         success: true,
         message: 'Payment successfully processed.',

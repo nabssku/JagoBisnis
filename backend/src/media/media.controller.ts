@@ -11,7 +11,12 @@ import {
   Request,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -38,21 +43,25 @@ export class MediaController {
   }
 
   @Post()
-  @ApiOperation({ summary: 'Upload a new media library asset (max 50MB image/video)' })
+  @ApiOperation({
+    summary: 'Upload a new media library asset (max 50MB image/video)',
+  })
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
         destination: './uploads',
         filename: (req, file, callback) => {
-          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
           const ext = extname(file.originalname);
           callback(null, `media-${uniqueSuffix}${ext}`);
         },
       }),
       fileFilter: (req, file, callback) => {
         // Accept images and videos
-        const allowedTypes = /^(image\/(jpeg|png|gif|webp|svg\+xml)|video\/(mp4|webm|quicktime))$/i;
+        const allowedTypes =
+          /^(image\/(jpeg|png|gif|webp|svg\+xml)|video\/(mp4|webm|quicktime))$/i;
         if (!allowedTypes.test(file.mimetype)) {
           return callback(
             new BadRequestException(

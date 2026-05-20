@@ -13,7 +13,10 @@ let InstagramProvider = class InstagramProvider {
     GRAPH_API_URL = 'https://graph.facebook.com/v19.0';
     getConnectUrl(businessId) {
         const appId = process.env.META_APP_ID || 'mock_meta_app_id';
-        const redirectUri = process.env.META_REDIRECT_URI_INSTAGRAM || 'http://localhost:3001/api/v1/integrations/instagram/callback';
+        const backendUrl = process.env.BACKEND_URL
+            ? process.env.BACKEND_URL.replace(/\/$/, '')
+            : 'http://localhost:3001';
+        const redirectUri = process.env.META_REDIRECT_URI_INSTAGRAM || `${backendUrl}/api/v1/integrations/instagram/callback`;
         const scope = 'instagram_basic,instagram_content_publish,pages_read_engagement,pages_show_list';
         const stateObj = { businessId, timestamp: Date.now() };
         const state = Buffer.from(JSON.stringify(stateObj)).toString('base64');
@@ -22,7 +25,10 @@ let InstagramProvider = class InstagramProvider {
     async exchangeCodeForToken(code) {
         const appId = process.env.META_APP_ID;
         const appSecret = process.env.META_APP_SECRET;
-        const redirectUri = process.env.META_REDIRECT_URI_INSTAGRAM || 'http://localhost:3001/api/v1/integrations/instagram/callback';
+        const backendUrl = process.env.BACKEND_URL
+            ? process.env.BACKEND_URL.replace(/\/$/, '')
+            : 'http://localhost:3001';
+        const redirectUri = process.env.META_REDIRECT_URI_INSTAGRAM || `${backendUrl}/api/v1/integrations/instagram/callback`;
         if (!appId || !appSecret) {
             return {
                 accessToken: `ig_access_token_mock_${Math.random().toString(36).substring(2, 15)}`,

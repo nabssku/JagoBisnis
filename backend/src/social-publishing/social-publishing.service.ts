@@ -1,4 +1,9 @@
-import { Injectable, ForbiddenException, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  ForbiddenException,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateSocialPostDto } from './dto/create-social-post.dto';
 import { CryptoUtil } from '../utils/crypto';
@@ -99,10 +104,15 @@ export class SocialPublishingService {
 
   async remove(userId: string, businessId: string, id: string) {
     await this.checkPermission(userId, businessId);
-    
+
     const post = await this.findOne(userId, businessId, id);
-    if (post.status === SocialPostStatus.PUBLISHED || post.status === SocialPostStatus.PUBLISHING) {
-      throw new BadRequestException('Postingan yang sedang dipublikasikan tidak dapat dihapus');
+    if (
+      post.status === SocialPostStatus.PUBLISHED ||
+      post.status === SocialPostStatus.PUBLISHING
+    ) {
+      throw new BadRequestException(
+        'Postingan yang sedang dipublikasikan tidak dapat dihapus',
+      );
     }
 
     return this.prisma.socialPost.delete({
@@ -128,7 +138,11 @@ export class SocialPublishingService {
     }
 
     const integration = post.integration;
-    if (!integration || integration.status !== IntegrationStatus.CONNECTED || !integration.accessToken) {
+    if (
+      !integration ||
+      integration.status !== IntegrationStatus.CONNECTED ||
+      !integration.accessToken
+    ) {
       throw new BadRequestException(
         'Integrasi media sosial untuk postingan ini terputus atau tidak valid.',
       );
@@ -142,7 +156,9 @@ export class SocialPublishingService {
 
     // 2. Decrypt the access token
     const accessToken = CryptoUtil.decrypt(integration.accessToken);
-    const mediaUrlsList: string[] = JSON.parse((post.mediaUrls as string) || '[]');
+    const mediaUrlsList: string[] = JSON.parse(
+      (post.mediaUrls as string) || '[]',
+    );
 
     try {
       let providerPostId = '';
@@ -160,7 +176,8 @@ export class SocialPublishingService {
         );
       } else if (post.provider === SocialPostProvider.THREADS) {
         // Threads supports text-only or image publishing
-        const imageToPublish = mediaUrlsList.length > 0 ? mediaUrlsList[0] : undefined;
+        const imageToPublish =
+          mediaUrlsList.length > 0 ? mediaUrlsList[0] : undefined;
         providerPostId = await this.threadsProvider.publish(
           accessToken,
           integration.providerAccountId || '',
@@ -207,9 +224,13 @@ export class SocialPublishingService {
     }
   }
 
-  private mapToIntegrationProvider(provider: SocialPostProvider): IntegrationProvider {
-    if (provider === SocialPostProvider.INSTAGRAM) return IntegrationProvider.INSTAGRAM;
-    if (provider === SocialPostProvider.THREADS) return IntegrationProvider.THREADS;
+  private mapToIntegrationProvider(
+    provider: SocialPostProvider,
+  ): IntegrationProvider {
+    if (provider === SocialPostProvider.INSTAGRAM)
+      return IntegrationProvider.INSTAGRAM;
+    if (provider === SocialPostProvider.THREADS)
+      return IntegrationProvider.THREADS;
     throw new BadRequestException('Platform sosial tidak dikenali');
   }
 

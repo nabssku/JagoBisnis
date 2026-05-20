@@ -120,7 +120,10 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    const isPasswordValid = await bcrypt.compare(dto.oldPassword, user.password);
+    const isPasswordValid = await bcrypt.compare(
+      dto.oldPassword,
+      user.password,
+    );
     if (!isPasswordValid) {
       throw new BadRequestException('Password lama tidak sesuai');
     }
@@ -148,7 +151,8 @@ export class AuthService {
       googleUser = {
         email: 'demo-google-user@gmail.com',
         name: 'Demo Google User',
-        picture: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
+        picture:
+          'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
       };
     } else {
       try {
@@ -181,7 +185,8 @@ export class AuthService {
 
     if (!user) {
       // 2. Register new user with a secure random hashed password
-      const randomPassword = Math.random().toString(36) + Date.now().toString(36);
+      const randomPassword =
+        Math.random().toString(36) + Date.now().toString(36);
       const hashedPassword = await bcrypt.hash(randomPassword, 10);
 
       user = await this.prisma.user.create({

@@ -1,9 +1,18 @@
-import { IsNotEmpty, IsEnum, IsString, IsOptional, IsArray } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsEnum,
+  IsString,
+  IsOptional,
+  IsArray,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { SocialPostProvider, MediaType } from '@prisma/client';
 
 export class CreateSocialPostDto {
-  @ApiProperty({ description: 'Platform penerbitan (INSTAGRAM atau THREADS)', enum: SocialPostProvider })
+  @ApiProperty({
+    description: 'Platform penerbitan (INSTAGRAM atau THREADS)',
+    enum: SocialPostProvider,
+  })
   @IsEnum(SocialPostProvider)
   @IsNotEmpty()
   provider: SocialPostProvider;
@@ -13,12 +22,20 @@ export class CreateSocialPostDto {
   @IsNotEmpty()
   content: string;
 
-  @ApiProperty({ description: 'Jenis media (TEXT, IMAGE, VIDEO, CAROUSEL)', enum: MediaType, default: MediaType.TEXT })
+  @ApiProperty({
+    description: 'Jenis media (TEXT, IMAGE, VIDEO, CAROUSEL)',
+    enum: MediaType,
+    default: MediaType.TEXT,
+  })
   @IsEnum(MediaType)
   @IsOptional()
   mediaType?: MediaType;
 
-  @ApiProperty({ description: 'Daftar URL gambar/video dari pustaka', type: [String], required: false })
+  @ApiProperty({
+    description: 'Daftar URL gambar/video dari pustaka',
+    type: [String],
+    required: false,
+  })
   @IsArray()
   @IsString({ each: true })
   @IsOptional()

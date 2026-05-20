@@ -1,4 +1,9 @@
-import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+} from '@nestjs/common';
 
 @Injectable()
 export class SuperAdminGuard implements CanActivate {
@@ -9,7 +14,9 @@ export class SuperAdminGuard implements CanActivate {
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (!user || user.role !== 'SUPERADMIN') {
-      throw new ForbiddenException('Akses ditolak: Hanya SuperAdmin yang diizinkan');
+      throw new ForbiddenException(
+        'Akses ditolak: Hanya SuperAdmin yang diizinkan',
+      );
     }
 
     return true;

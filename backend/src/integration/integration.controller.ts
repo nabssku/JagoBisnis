@@ -11,7 +11,12 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import * as express from 'express';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { IntegrationService } from './integration.service';
@@ -47,7 +52,9 @@ export class IntegrationController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get('businesses/:businessId/integrations/:provider')
-  @ApiOperation({ summary: 'Get detailed integration configuration for a provider' })
+  @ApiOperation({
+    summary: 'Get detailed integration configuration for a provider',
+  })
   findOne(
     @Request() req: RequestWithUser,
     @Param('businessId') businessId: string,
@@ -65,7 +72,11 @@ export class IntegrationController {
     @Param('businessId') businessId: string,
     @Param('provider') provider: IntegrationProvider,
   ) {
-    return this.integrationService.disconnect(req.user.id, businessId, provider);
+    return this.integrationService.disconnect(
+      req.user.id,
+      businessId,
+      provider,
+    );
   }
 
   // --- Pakasir Configuration ---
@@ -117,7 +128,11 @@ export class IntegrationController {
     @Param('businessId') businessId: string,
     @Body() dto: ConnectGoogleAnalyticsDto,
   ) {
-    return this.integrationService.connectGoogleAnalytics(req.user.id, businessId, dto);
+    return this.integrationService.connectGoogleAnalytics(
+      req.user.id,
+      businessId,
+      dto,
+    );
   }
 
   @ApiBearerAuth()
@@ -129,7 +144,11 @@ export class IntegrationController {
     @Param('businessId') businessId: string,
     @Body() dto: ConnectGoogleAnalyticsDto,
   ) {
-    return this.integrationService.connectGoogleAnalytics(req.user.id, businessId, dto);
+    return this.integrationService.connectGoogleAnalytics(
+      req.user.id,
+      businessId,
+      dto,
+    );
   }
 
   @ApiBearerAuth()
@@ -141,7 +160,11 @@ export class IntegrationController {
     @Param('businessId') businessId: string,
     @Body() dto: ConnectGoogleAnalyticsDto,
   ) {
-    return this.integrationService.testGoogleAnalytics(req.user.id, businessId, dto);
+    return this.integrationService.testGoogleAnalytics(
+      req.user.id,
+      businessId,
+      dto,
+    );
   }
 
   // --- Instagram OAuth Flow ---
@@ -154,7 +177,10 @@ export class IntegrationController {
     @Request() req: RequestWithUser,
     @Param('businessId') businessId: string,
   ) {
-    return this.integrationService.getInstagramConnectUrl(req.user.id, businessId);
+    return this.integrationService.getInstagramConnectUrl(
+      req.user.id,
+      businessId,
+    );
   }
 
   @Get('integrations/instagram/callback')
@@ -165,9 +191,13 @@ export class IntegrationController {
     @Res() res: express.Response,
   ) {
     const rawFrontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
-    const frontendUrl = rawFrontendUrl.split(',')[0].trim().replace(/^['"]|['"]$/g, '');
+    const frontendUrl = rawFrontendUrl
+      .split(',')[0]
+      .trim()
+      .replace(/^['"]|['"]$/g, '');
     try {
-      const { businessId } = await this.integrationService.handleInstagramCallback(code, state);
+      const { businessId } =
+        await this.integrationService.handleInstagramCallback(code, state);
       return res.redirect(
         `${frontendUrl}/dashboard/business/${businessId}/integrations?provider=instagram&status=success`,
       );
@@ -188,7 +218,10 @@ export class IntegrationController {
     @Request() req: RequestWithUser,
     @Param('businessId') businessId: string,
   ) {
-    return this.integrationService.getThreadsConnectUrl(req.user.id, businessId);
+    return this.integrationService.getThreadsConnectUrl(
+      req.user.id,
+      businessId,
+    );
   }
 
   @Get('integrations/threads/callback')
@@ -199,9 +232,13 @@ export class IntegrationController {
     @Res() res: express.Response,
   ) {
     const rawFrontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
-    const frontendUrl = rawFrontendUrl.split(',')[0].trim().replace(/^['"]|['"]$/g, '');
+    const frontendUrl = rawFrontendUrl
+      .split(',')[0]
+      .trim()
+      .replace(/^['"]|['"]$/g, '');
     try {
-      const { businessId } = await this.integrationService.handleThreadsCallback(code, state);
+      const { businessId } =
+        await this.integrationService.handleThreadsCallback(code, state);
       return res.redirect(
         `${frontendUrl}/dashboard/business/${businessId}/integrations?provider=threads&status=success`,
       );

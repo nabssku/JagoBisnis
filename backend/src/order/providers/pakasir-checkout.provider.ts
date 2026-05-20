@@ -50,7 +50,9 @@ export class PakasirCheckoutProvider {
       );
 
       if (response.data) {
-        this.logger.log(`Verified Pakasir transaction ${orderId}: status=${response.data.status}`);
+        this.logger.log(
+          `Verified Pakasir transaction ${orderId}: status=${response.data.status}`,
+        );
         return {
           status: response.data.status, // e.g. 'completed', 'pending'
           method: response.data.payment_method,

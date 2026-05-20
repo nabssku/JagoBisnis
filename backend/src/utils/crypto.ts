@@ -3,9 +3,10 @@ import * as crypto from 'crypto';
 export class CryptoUtil {
   private static readonly ALGORITHM = 'aes-256-gcm';
   private static readonly KEY = crypto.scryptSync(
-    process.env.ENCRYPTION_KEY || 'jagobisnis-default-super-secret-key-32-chars!',
+    process.env.ENCRYPTION_KEY ||
+      'jagobisnis-default-super-secret-key-32-chars!',
     'salt-salt',
-    32
+    32,
   );
 
   static encrypt(text: string): string {

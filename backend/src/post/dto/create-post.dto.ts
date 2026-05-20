@@ -1,11 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { 
-  IsArray, 
-  IsBoolean, 
-  IsNotEmpty, 
-  IsOptional, 
-  IsString, 
-  MaxLength 
+import {
+  IsArray,
+  IsBoolean,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MaxLength,
 } from 'class-validator';
 
 export class CreatePostDto {
@@ -19,12 +19,19 @@ export class CreatePostDto {
   @IsNotEmpty()
   slug: string;
 
-  @ApiProperty({ description: 'Gambar Cover dari media pustaka', required: false })
+  @ApiProperty({
+    description: 'Gambar Cover dari media pustaka',
+    required: false,
+  })
   @IsString()
   @IsOptional()
   coverImage?: string;
 
-  @ApiProperty({ description: 'Gambar tambahan max 8', required: false, type: [String] })
+  @ApiProperty({
+    description: 'Gambar tambahan max 8',
+    required: false,
+    type: [String],
+  })
   @IsArray()
   @IsString({ each: true })
   @IsOptional()
@@ -41,7 +48,10 @@ export class CreatePostDto {
   @MaxLength(60)
   metaTitle?: string;
 
-  @ApiProperty({ description: 'Meta Description Google Search', required: false })
+  @ApiProperty({
+    description: 'Meta Description Google Search',
+    required: false,
+  })
   @IsString()
   @IsOptional()
   @MaxLength(160)
@@ -57,12 +67,19 @@ export class CreatePostDto {
   @IsOptional()
   summary?: string;
 
-  @ApiProperty({ description: 'Jenis tombol CTA', required: false, default: 'Tanpa Tombol' })
+  @ApiProperty({
+    description: 'Jenis tombol CTA',
+    required: false,
+    default: 'Tanpa Tombol',
+  })
   @IsString()
   @IsOptional()
   ctaType?: string;
 
-  @ApiProperty({ description: 'Nilai CTA (URL / Whatsapp No)', required: false })
+  @ApiProperty({
+    description: 'Nilai CTA (URL / Whatsapp No)',
+    required: false,
+  })
   @IsString()
   @IsOptional()
   ctaValue?: string;
@@ -72,28 +89,48 @@ export class CreatePostDto {
   @IsOptional()
   imageAlt?: string;
 
-  @ApiProperty({ description: 'Tipe Konten (Pembaruan, Artikel, Promo)', required: false, default: 'Artikel' })
+  @ApiProperty({
+    description: 'Tipe Konten (Pembaruan, Artikel, Promo)',
+    required: false,
+    default: 'Artikel',
+  })
   @IsString()
   @IsOptional()
   contentType?: string;
 
-  @ApiProperty({ description: 'Status Publikasi (Draft, Publik, Arsip)', required: false, default: 'Draft' })
+  @ApiProperty({
+    description: 'Status Publikasi (Draft, Publik, Arsip)',
+    required: false,
+    default: 'Draft',
+  })
   @IsString()
   @IsOptional()
   status?: string;
 
-  @ApiProperty({ description: 'Ceklis disematkan', required: false, default: false })
+  @ApiProperty({
+    description: 'Ceklis disematkan',
+    required: false,
+    default: false,
+  })
   @IsBoolean()
   @IsOptional()
   isPinned?: boolean;
 
-  @ApiProperty({ description: 'Tags konten max 6', required: false, type: [String] })
+  @ApiProperty({
+    description: 'Tags konten max 6',
+    required: false,
+    type: [String],
+  })
   @IsArray()
   @IsString({ each: true })
   @IsOptional()
   tags?: string[];
 
-  @ApiProperty({ description: 'Katalog terhubung IDs', required: false, type: [String] })
+  @ApiProperty({
+    description: 'Katalog terhubung IDs',
+    required: false,
+    type: [String],
+  })
   @IsArray()
   @IsString({ each: true })
   @IsOptional()
