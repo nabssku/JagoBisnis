@@ -43,9 +43,14 @@ let OrderController = class OrderController {
 exports.OrderController = OrderController;
 __decorate([
     (0, common_1.Post)('public/sites/:slug/orders'),
-    (0, swagger_1.ApiOperation)({ summary: 'Create a new public order from a published shop site' }),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Create a new public order from a published shop site',
+    }),
     (0, swagger_1.ApiResponse)({ status: 201, description: 'Order created successfully' }),
-    (0, swagger_1.ApiResponse)({ status: 400, description: 'Invalid data or inactive product/integration' }),
+    (0, swagger_1.ApiResponse)({
+        status: 400,
+        description: 'Invalid data or inactive product/integration',
+    }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'Site not found' }),
     __param(0, (0, common_1.Param)('slug')),
     __param(1, (0, common_1.Body)()),
@@ -95,7 +100,10 @@ __decorate([
     (0, common_1.Patch)('businesses/:businessId/orders/:orderId/status'),
     (0, swagger_1.ApiOperation)({ summary: 'Update status/payment state of a business order' }),
     (0, swagger_1.ApiResponse)({ status: 200, description: 'Order updated successfully' }),
-    (0, swagger_1.ApiResponse)({ status: 403, description: 'Forbidden - only OWNER or ADMIN allowed' }),
+    (0, swagger_1.ApiResponse)({
+        status: 403,
+        description: 'Forbidden - only OWNER or ADMIN allowed',
+    }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'Order not found' }),
     __param(0, (0, common_1.Param)('businessId')),
     __param(1, (0, common_1.Param)('orderId')),

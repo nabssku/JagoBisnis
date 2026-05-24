@@ -16,7 +16,8 @@ let InstagramProvider = class InstagramProvider {
         const backendUrl = process.env.BACKEND_URL
             ? process.env.BACKEND_URL.replace(/\/$/, '')
             : 'http://localhost:3001';
-        const redirectUri = process.env.META_REDIRECT_URI_INSTAGRAM || `${backendUrl}/api/v1/integrations/instagram/callback`;
+        const redirectUri = process.env.META_REDIRECT_URI_INSTAGRAM ||
+            `${backendUrl}/api/v1/integrations/instagram/callback`;
         const scope = 'instagram_basic,instagram_content_publish,pages_read_engagement,pages_show_list';
         const stateObj = { businessId, timestamp: Date.now() };
         const state = Buffer.from(JSON.stringify(stateObj)).toString('base64');
@@ -28,7 +29,8 @@ let InstagramProvider = class InstagramProvider {
         const backendUrl = process.env.BACKEND_URL
             ? process.env.BACKEND_URL.replace(/\/$/, '')
             : 'http://localhost:3001';
-        const redirectUri = process.env.META_REDIRECT_URI_INSTAGRAM || `${backendUrl}/api/v1/integrations/instagram/callback`;
+        const redirectUri = process.env.META_REDIRECT_URI_INSTAGRAM ||
+            `${backendUrl}/api/v1/integrations/instagram/callback`;
         if (!appId || !appSecret) {
             return {
                 accessToken: `ig_access_token_mock_${Math.random().toString(36).substring(2, 15)}`,

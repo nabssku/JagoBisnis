@@ -21,7 +21,10 @@ class CreateSocialPostDto {
 }
 exports.CreateSocialPostDto = CreateSocialPostDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Platform penerbitan (INSTAGRAM atau THREADS)', enum: client_1.SocialPostProvider }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Platform penerbitan (INSTAGRAM atau THREADS)',
+        enum: client_1.SocialPostProvider,
+    }),
     (0, class_validator_1.IsEnum)(client_1.SocialPostProvider),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
@@ -33,13 +36,21 @@ __decorate([
     __metadata("design:type", String)
 ], CreateSocialPostDto.prototype, "content", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Jenis media (TEXT, IMAGE, VIDEO, CAROUSEL)', enum: client_1.MediaType, default: client_1.MediaType.TEXT }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Jenis media (TEXT, IMAGE, VIDEO, CAROUSEL)',
+        enum: client_1.MediaType,
+        default: client_1.MediaType.TEXT,
+    }),
     (0, class_validator_1.IsEnum)(client_1.MediaType),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreateSocialPostDto.prototype, "mediaType", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Daftar URL gambar/video dari pustaka', type: [String], required: false }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Daftar URL gambar/video dari pustaka',
+        type: [String],
+        required: false,
+    }),
     (0, class_validator_1.IsArray)(),
     (0, class_validator_1.IsString)({ each: true }),
     (0, class_validator_1.IsOptional)(),

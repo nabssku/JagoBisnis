@@ -54,7 +54,7 @@ let OrderService = OrderService_1 = class OrderService {
         }
         const subtotal = product.price * quantity;
         const orderId = 'JB-' + Date.now() + '-' + Math.floor(1000 + Math.random() * 9000);
-        let orderStatus = client_1.OrderStatus.PENDING;
+        const orderStatus = client_1.OrderStatus.PENDING;
         let paymentStatus = client_1.PaymentStatus.UNPAID;
         let pakasirOrderId = null;
         let pakasirPaymentUrl = null;
@@ -76,7 +76,10 @@ let OrderService = OrderService_1 = class OrderService {
             pakasirOrderId = orderId;
             pakasirPaymentMethod = 'QRIS';
             const rawFrontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
-            const frontendUrl = rawFrontendUrl.split(',')[0].trim().replace(/^['"]|['"]$/g, '');
+            const frontendUrl = rawFrontendUrl
+                .split(',')[0]
+                .trim()
+                .replace(/^['"]|['"]$/g, '');
             const redirectUrl = `${frontendUrl}/jago/${siteSlug}/orders/${orderId}`;
             pakasirPaymentUrl = this.pakasirCheckout.generateCheckoutUrl(pakasirSlug, subtotal, orderId, redirectUrl);
         }
@@ -185,7 +188,9 @@ let OrderService = OrderService_1 = class OrderService {
             where: { id: orderId },
             data: {
                 orderStatus: dto.orderStatus !== undefined ? dto.orderStatus : order.orderStatus,
-                paymentStatus: dto.paymentStatus !== undefined ? dto.paymentStatus : order.paymentStatus,
+                paymentStatus: dto.paymentStatus !== undefined
+                    ? dto.paymentStatus
+                    : order.paymentStatus,
             },
             include: {
                 product: true,

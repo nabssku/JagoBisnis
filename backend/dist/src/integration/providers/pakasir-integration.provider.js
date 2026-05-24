@@ -14,7 +14,8 @@ let PakasirIntegrationProvider = class PakasirIntegrationProvider {
             throw new common_1.BadRequestException('Slug and API Key are required');
         }
         try {
-            if (apiKey.toLowerCase().includes('invalid') || apiKey.toLowerCase().includes('error')) {
+            if (apiKey.toLowerCase().includes('invalid') ||
+                apiKey.toLowerCase().includes('error')) {
                 throw new Error('Autentikasi gagal. Slug atau API Key salah.');
             }
             return true;

@@ -118,7 +118,9 @@ __decorate([
 ], PostController.prototype, "getPublicPosts", null);
 __decorate([
     (0, common_1.Get)('public/sites/:businessSlug/posts/:postSlug'),
-    (0, swagger_1.ApiOperation)({ summary: 'Get public published post by slug (and increment views count)' }),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Get public published post by slug (and increment views count)',
+    }),
     __param(0, (0, common_1.Param)('businessSlug')),
     __param(1, (0, common_1.Param)('postSlug')),
     __metadata("design:type", Function),

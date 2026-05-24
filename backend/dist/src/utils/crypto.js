@@ -37,7 +37,8 @@ exports.CryptoUtil = void 0;
 const crypto = __importStar(require("crypto"));
 class CryptoUtil {
     static ALGORITHM = 'aes-256-gcm';
-    static KEY = crypto.scryptSync(process.env.ENCRYPTION_KEY || 'jagobisnis-default-super-secret-key-32-chars!', 'salt-salt', 32);
+    static KEY = crypto.scryptSync(process.env.ENCRYPTION_KEY ||
+        'jagobisnis-default-super-secret-key-32-chars!', 'salt-salt', 32);
     static encrypt(text) {
         if (!text)
             return '';

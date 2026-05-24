@@ -43,7 +43,9 @@ let SuperAdminController = class SuperAdminController {
 exports.SuperAdminController = SuperAdminController;
 __decorate([
     (0, common_1.Get)('stats'),
-    (0, swagger_1.ApiOperation)({ summary: 'Dapatkan statistik performa & pertumbuhan seluruh platform' }),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Dapatkan statistik performa & pertumbuhan seluruh platform',
+    }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
@@ -57,7 +59,9 @@ __decorate([
 ], SuperAdminController.prototype, "getUsers", null);
 __decorate([
     (0, common_1.Put)('users/:id/role'),
-    (0, swagger_1.ApiOperation)({ summary: 'Perbarui tingkat otorisasi peran pengguna (User -> SuperAdmin)' }),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Perbarui tingkat otorisasi peran pengguna (User -> SuperAdmin)',
+    }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -66,14 +70,18 @@ __decorate([
 ], SuperAdminController.prototype, "updateUserRole", null);
 __decorate([
     (0, common_1.Get)('businesses'),
-    (0, swagger_1.ApiOperation)({ summary: 'Dapatkan direktori semua profil bisnis UMKM yang terdaftar' }),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Dapatkan direktori semua profil bisnis UMKM yang terdaftar',
+    }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], SuperAdminController.prototype, "getBusinesses", null);
 __decorate([
     (0, common_1.Delete)('businesses/:id'),
-    (0, swagger_1.ApiOperation)({ summary: 'Hapus bisnis & seluruh relasi datanya secara permanen (Moderasi)' }),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Hapus bisnis & seluruh relasi datanya secara permanen (Moderasi)',
+    }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

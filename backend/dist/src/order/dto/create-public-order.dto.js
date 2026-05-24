@@ -25,31 +25,46 @@ class CreatePublicOrderDto {
 }
 exports.CreatePublicOrderDto = CreatePublicOrderDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'ID produk yang ingin dibeli', example: 'd3b07384-d113-4ec5-a5df-18071e8b7ec3' }),
+    (0, swagger_1.ApiProperty)({
+        description: 'ID produk yang ingin dibeli',
+        example: 'd3b07384-d113-4ec5-a5df-18071e8b7ec3',
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreatePublicOrderDto.prototype, "productId", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Nama lengkap pelanggan', example: 'Budi Santoso' }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Nama lengkap pelanggan',
+        example: 'Budi Santoso',
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreatePublicOrderDto.prototype, "customerName", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Nomor telepon pelanggan', example: '081234567890' }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Nomor telepon pelanggan',
+        example: '081234567890',
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreatePublicOrderDto.prototype, "customerPhone", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ description: 'Email pelanggan', example: 'budi@example.com' }),
+    (0, swagger_1.ApiPropertyOptional)({
+        description: 'Email pelanggan',
+        example: 'budi@example.com',
+    }),
     (0, class_validator_1.IsEmail)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreatePublicOrderDto.prototype, "customerEmail", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ description: 'Alamat pengiriman lengkap', example: 'Jl. Merdeka No. 10, Jakarta' }),
+    (0, swagger_1.ApiPropertyOptional)({
+        description: 'Alamat pengiriman lengkap',
+        example: 'Jl. Merdeka No. 10, Jakarta',
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
@@ -61,7 +76,11 @@ __decorate([
     __metadata("design:type", Number)
 ], CreatePublicOrderDto.prototype, "quantity", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Metode pembayaran', example: 'MANUAL', enum: ['MANUAL', 'PAKASIR'] }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Metode pembayaran',
+        example: 'MANUAL',
+        enum: ['MANUAL', 'PAKASIR'],
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.Matches)(/^(MANUAL|PAKASIR)$/, {
@@ -70,13 +89,19 @@ __decorate([
     __metadata("design:type", String)
 ], CreatePublicOrderDto.prototype, "paymentMethod", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ description: 'Saluran pembayaran Pakasir', example: 'qris' }),
+    (0, swagger_1.ApiPropertyOptional)({
+        description: 'Saluran pembayaran Pakasir',
+        example: 'qris',
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreatePublicOrderDto.prototype, "paymentChannel", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ description: 'Catatan tambahan untuk pesanan', example: 'Kirim setelah jam 5 sore' }),
+    (0, swagger_1.ApiPropertyOptional)({
+        description: 'Catatan tambahan untuk pesanan',
+        example: 'Kirim setelah jam 5 sore',
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)

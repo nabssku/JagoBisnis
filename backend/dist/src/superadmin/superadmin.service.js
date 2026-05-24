@@ -177,7 +177,10 @@ let SuperAdminService = class SuperAdminService {
             this.prisma.site.deleteMany({ where: { businessId } }),
             this.prisma.business.delete({ where: { id: businessId } }),
         ]);
-        return { success: true, message: 'Bisnis berhasil dihapus secara permanen' };
+        return {
+            success: true,
+            message: 'Bisnis berhasil dihapus secara permanen',
+        };
     }
 };
 exports.SuperAdminService = SuperAdminService;

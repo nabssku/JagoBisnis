@@ -98,7 +98,10 @@ __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiOperation)({ summary: 'Update user password' }),
     (0, swagger_1.ApiResponse)({ status: 200, description: 'Password successfully updated' }),
-    (0, swagger_1.ApiResponse)({ status: 400, description: 'Invalid credentials or old password mismatch' }),
+    (0, swagger_1.ApiResponse)({
+        status: 400,
+        description: 'Invalid credentials or old password mismatch',
+    }),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -108,7 +111,10 @@ __decorate([
 __decorate([
     (0, common_1.Post)('google'),
     (0, swagger_1.ApiOperation)({ summary: 'Login or register via Google' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Successfully authenticated via Google' }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'Successfully authenticated via Google',
+    }),
     (0, swagger_1.ApiResponse)({ status: 400, description: 'Invalid Google access token' }),
     __param(0, (0, common_1.Body)('accessToken')),
     __metadata("design:type", Function),

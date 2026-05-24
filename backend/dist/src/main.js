@@ -52,7 +52,10 @@ async function bootstrap() {
     app.setGlobalPrefix('api/v1');
     const frontendUrl = process.env.FRONTEND_URL;
     const allowedOrigins = frontendUrl
-        ? frontendUrl.split(',').map((url) => url.trim().replace(/^['"]|['"]$/g, '').replace(/\/$/, ''))
+        ? frontendUrl.split(',').map((url) => url
+            .trim()
+            .replace(/^['"]|['"]$/g, '')
+            .replace(/\/$/, ''))
         : [
             'http://localhost:3000',
             'http://127.0.0.1:3000',

@@ -93,10 +93,7 @@ let PostService = class PostService {
                 businessId: business.id,
                 status: 'Publik',
             },
-            orderBy: [
-                { isPinned: 'desc' },
-                { createdAt: 'desc' }
-            ],
+            orderBy: [{ isPinned: 'desc' }, { createdAt: 'desc' }],
         });
     }
     async findPublicPostBySlug(businessSlug, postSlug) {

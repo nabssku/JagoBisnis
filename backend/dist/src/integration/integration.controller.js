@@ -91,7 +91,10 @@ let IntegrationController = class IntegrationController {
     }
     async instagramCallback(code, state, res) {
         const rawFrontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
-        const frontendUrl = rawFrontendUrl.split(',')[0].trim().replace(/^['"]|['"]$/g, '');
+        const frontendUrl = rawFrontendUrl
+            .split(',')[0]
+            .trim()
+            .replace(/^['"]|['"]$/g, '');
         try {
             const { businessId } = await this.integrationService.handleInstagramCallback(code, state);
             return res.redirect(`${frontendUrl}/dashboard/business/${businessId}/integrations?provider=instagram&status=success`);
@@ -105,7 +108,10 @@ let IntegrationController = class IntegrationController {
     }
     async threadsCallback(code, state, res) {
         const rawFrontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
-        const frontendUrl = rawFrontendUrl.split(',')[0].trim().replace(/^['"]|['"]$/g, '');
+        const frontendUrl = rawFrontendUrl
+            .split(',')[0]
+            .trim()
+            .replace(/^['"]|['"]$/g, '');
         try {
             const { businessId } = await this.integrationService.handleThreadsCallback(code, state);
             return res.redirect(`${frontendUrl}/dashboard/business/${businessId}/integrations?provider=threads&status=success`);
@@ -131,7 +137,9 @@ __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)('businesses/:businessId/integrations/:provider'),
-    (0, swagger_1.ApiOperation)({ summary: 'Get detailed integration configuration for a provider' }),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Get detailed integration configuration for a provider',
+    }),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Param)('businessId')),
     __param(2, (0, common_1.Param)('provider')),

@@ -88,7 +88,8 @@ let SocialPublishingService = class SocialPublishingService {
     async remove(userId, businessId, id) {
         await this.checkPermission(userId, businessId);
         const post = await this.findOne(userId, businessId, id);
-        if (post.status === client_1.SocialPostStatus.PUBLISHED || post.status === client_1.SocialPostStatus.PUBLISHING) {
+        if (post.status === client_1.SocialPostStatus.PUBLISHED ||
+            post.status === client_1.SocialPostStatus.PUBLISHING) {
             throw new common_1.BadRequestException('Postingan yang sedang dipublikasikan tidak dapat dihapus');
         }
         return this.prisma.socialPost.delete({
@@ -108,7 +109,9 @@ let SocialPublishingService = class SocialPublishingService {
             throw new common_1.BadRequestException('Postingan ini sudah sukses terpublikasi');
         }
         const integration = post.integration;
-        if (!integration || integration.status !== client_1.IntegrationStatus.CONNECTED || !integration.accessToken) {
+        if (!integration ||
+            integration.status !== client_1.IntegrationStatus.CONNECTED ||
+            !integration.accessToken) {
             throw new common_1.BadRequestException('Integrasi media sosial untuk postingan ini terputus atau tidak valid.');
         }
         await this.prisma.socialPost.update({

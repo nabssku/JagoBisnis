@@ -45,13 +45,20 @@ __decorate([
     __metadata("design:type", String)
 ], CreatePostDto.prototype, "slug", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Gambar Cover dari media pustaka', required: false }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Gambar Cover dari media pustaka',
+        required: false,
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreatePostDto.prototype, "coverImage", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Gambar tambahan max 8', required: false, type: [String] }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Gambar tambahan max 8',
+        required: false,
+        type: [String],
+    }),
     (0, class_validator_1.IsArray)(),
     (0, class_validator_1.IsString)({ each: true }),
     (0, class_validator_1.IsOptional)(),
@@ -71,7 +78,10 @@ __decorate([
     __metadata("design:type", String)
 ], CreatePostDto.prototype, "metaTitle", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Meta Description Google Search', required: false }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Meta Description Google Search',
+        required: false,
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.MaxLength)(160),
@@ -90,13 +100,20 @@ __decorate([
     __metadata("design:type", String)
 ], CreatePostDto.prototype, "summary", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Jenis tombol CTA', required: false, default: 'Tanpa Tombol' }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Jenis tombol CTA',
+        required: false,
+        default: 'Tanpa Tombol',
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreatePostDto.prototype, "ctaType", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Nilai CTA (URL / Whatsapp No)', required: false }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Nilai CTA (URL / Whatsapp No)',
+        required: false,
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
@@ -108,32 +125,52 @@ __decorate([
     __metadata("design:type", String)
 ], CreatePostDto.prototype, "imageAlt", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Tipe Konten (Pembaruan, Artikel, Promo)', required: false, default: 'Artikel' }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Tipe Konten (Pembaruan, Artikel, Promo)',
+        required: false,
+        default: 'Artikel',
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreatePostDto.prototype, "contentType", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Status Publikasi (Draft, Publik, Arsip)', required: false, default: 'Draft' }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Status Publikasi (Draft, Publik, Arsip)',
+        required: false,
+        default: 'Draft',
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreatePostDto.prototype, "status", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Ceklis disematkan', required: false, default: false }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Ceklis disematkan',
+        required: false,
+        default: false,
+    }),
     (0, class_validator_1.IsBoolean)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Boolean)
 ], CreatePostDto.prototype, "isPinned", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Tags konten max 6', required: false, type: [String] }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Tags konten max 6',
+        required: false,
+        type: [String],
+    }),
     (0, class_validator_1.IsArray)(),
     (0, class_validator_1.IsString)({ each: true }),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Array)
 ], CreatePostDto.prototype, "tags", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Katalog terhubung IDs', required: false, type: [String] }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Katalog terhubung IDs',
+        required: false,
+        type: [String],
+    }),
     (0, class_validator_1.IsArray)(),
     (0, class_validator_1.IsString)({ each: true }),
     (0, class_validator_1.IsOptional)(),

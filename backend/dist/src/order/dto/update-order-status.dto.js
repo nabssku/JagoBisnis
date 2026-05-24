@@ -25,7 +25,10 @@ __decorate([
     __metadata("design:type", String)
 ], UpdateOrderStatusDto.prototype, "orderStatus", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ description: 'Status pembayaran', enum: client_1.PaymentStatus }),
+    (0, swagger_1.ApiPropertyOptional)({
+        description: 'Status pembayaran',
+        enum: client_1.PaymentStatus,
+    }),
     (0, class_validator_1.IsEnum)(client_1.PaymentStatus),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)

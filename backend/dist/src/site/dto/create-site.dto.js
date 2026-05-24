@@ -29,7 +29,9 @@ __decorate([
     (0, swagger_1.ApiProperty)({ example: 'my-business' }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.Matches)(/^[a-z0-9-]+$/, { message: 'Slug hanya boleh huruf kecil, angka, dan dash' }),
+    (0, class_validator_1.Matches)(/^[a-z0-9-]+$/, {
+        message: 'Slug hanya boleh huruf kecil, angka, dan dash',
+    }),
     __metadata("design:type", String)
 ], CreateSiteDto.prototype, "slug", void 0);
 __decorate([

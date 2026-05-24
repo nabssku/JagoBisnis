@@ -18,7 +18,9 @@ let GoogleAnalyticsProvider = class GoogleAnalyticsProvider {
             throw new common_1.BadRequestException('Measurement ID tidak valid. Format yang benar: G-XXXXXXXXXX');
         }
         try {
-            if (apiSecret && (apiSecret.toLowerCase().includes('invalid') || apiSecret.toLowerCase().includes('error'))) {
+            if (apiSecret &&
+                (apiSecret.toLowerCase().includes('invalid') ||
+                    apiSecret.toLowerCase().includes('error'))) {
                 throw new Error('API Secret tidak valid.');
             }
             return true;

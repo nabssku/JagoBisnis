@@ -24,7 +24,10 @@ __decorate([
     __metadata("design:type", String)
 ], ConnectPakasirDto.prototype, "slug", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'API Key proyek Pakasir', example: 'pk_live_1234abcd' }),
+    (0, swagger_1.ApiProperty)({
+        description: 'API Key proyek Pakasir',
+        example: 'pk_live_1234abcd',
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)

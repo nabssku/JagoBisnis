@@ -65,7 +65,10 @@ __decorate([
     __metadata("design:type", String)
 ], CreateProductDto.prototype, "imageUrl", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ type: [String], example: ['https://example.com/image1.png'] }),
+    (0, swagger_1.ApiPropertyOptional)({
+        type: [String],
+        example: ['https://example.com/image1.png'],
+    }),
     (0, class_validator_1.IsArray)(),
     (0, class_validator_1.IsString)({ each: true }),
     (0, class_validator_1.IsOptional)(),

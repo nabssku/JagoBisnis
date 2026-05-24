@@ -49,7 +49,9 @@ __decorate([
 ], MediaController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Post)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Upload a new media library asset (max 50MB image/video)' }),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Upload a new media library asset (max 50MB image/video)',
+    }),
     (0, swagger_1.ApiConsumes)('multipart/form-data'),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', {
         storage: (0, multer_1.diskStorage)({

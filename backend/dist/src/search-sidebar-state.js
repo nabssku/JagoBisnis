@@ -9,7 +9,11 @@ const content = fs_1.default.readFileSync(filePath, 'utf-8');
 const lines = content.split('\n');
 console.log('Searching for panel/tab related code in page.tsx:');
 lines.forEach((line, idx) => {
-    if (line.includes('activeTab') || line.includes('tab') || line.includes('Tab') || line.includes('Right Sidebar') || line.includes('RightPanel')) {
+    if (line.includes('activeTab') ||
+        line.includes('tab') ||
+        line.includes('Tab') ||
+        line.includes('Right Sidebar') ||
+        line.includes('RightPanel')) {
         console.log(`Line ${idx + 1}: ${line.trim()}`);
     }
 });

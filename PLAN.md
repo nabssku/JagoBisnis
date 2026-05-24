@@ -300,6 +300,7 @@ Tasks:
 Status: In Planning
 
 Tasks:
+- [x] Migrated database to Neon PostgreSQL (Phase 17 Infrastructure Update)
 - [ ] CI/CD Deployment
 - [ ] Advanced Analytics
 - [ ] Custom Domain Support

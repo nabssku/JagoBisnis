@@ -16,7 +16,8 @@ let ThreadsProvider = class ThreadsProvider {
         const backendUrl = process.env.BACKEND_URL
             ? process.env.BACKEND_URL.replace(/\/$/, '')
             : 'http://localhost:3001';
-        const redirectUri = process.env.THREADS_REDIRECT_URI || `${backendUrl}/api/v1/integrations/threads/callback`;
+        const redirectUri = process.env.THREADS_REDIRECT_URI ||
+            `${backendUrl}/api/v1/integrations/threads/callback`;
         const scope = 'threads_basic,threads_content_publish';
         const stateObj = { businessId, timestamp: Date.now() };
         const state = Buffer.from(JSON.stringify(stateObj)).toString('base64');
@@ -28,7 +29,8 @@ let ThreadsProvider = class ThreadsProvider {
         const backendUrl = process.env.BACKEND_URL
             ? process.env.BACKEND_URL.replace(/\/$/, '')
             : 'http://localhost:3001';
-        const redirectUri = process.env.THREADS_REDIRECT_URI || `${backendUrl}/api/v1/integrations/threads/callback`;
+        const redirectUri = process.env.THREADS_REDIRECT_URI ||
+            `${backendUrl}/api/v1/integrations/threads/callback`;
         if (!appId || !appSecret) {
             return {
                 accessToken: `th_access_token_mock_${Math.random().toString(36).substring(2, 15)}`,

@@ -121,7 +121,9 @@ let BusinessService = class BusinessService {
         if (!businessUser) {
             throw new common_1.NotFoundException('Business not found or access denied');
         }
-        const allowedRoles = strict ? [client_1.Role.OWNER] : [client_1.Role.OWNER, client_1.Role.ADMIN];
+        const allowedRoles = strict
+            ? [client_1.Role.OWNER]
+            : [client_1.Role.OWNER, client_1.Role.ADMIN];
         if (!allowedRoles.includes(businessUser.role)) {
             throw new common_1.ForbiddenException('You do not have permission to perform this action');
         }

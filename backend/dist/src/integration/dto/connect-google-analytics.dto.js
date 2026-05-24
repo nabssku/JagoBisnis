@@ -24,7 +24,11 @@ __decorate([
     __metadata("design:type", String)
 ], ConnectGoogleAnalyticsDto.prototype, "measurementId", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'GA4 Measurement Protocol API Secret (optional)', example: 'abc123xyz', required: false }),
+    (0, swagger_1.ApiProperty)({
+        description: 'GA4 Measurement Protocol API Secret (optional)',
+        example: 'abc123xyz',
+        required: false,
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)

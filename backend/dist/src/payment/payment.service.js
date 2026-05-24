@@ -66,7 +66,8 @@ let PaymentService = PaymentService_1 = class PaymentService {
         if (!verifiedDetails) {
             this.logger.warn(`Out-of-band transaction detail verification failed for order ${order.id}. Proceeding with payload status.`);
         }
-        else if (verifiedDetails.status !== 'completed' && payload.status === 'completed') {
+        else if (verifiedDetails.status !== 'completed' &&
+            payload.status === 'completed') {
             this.logger.error(`Pakasir transaction details API reports status "${verifiedDetails.status}" instead of "completed". Rejecting webhook.`);
             throw new common_1.BadRequestException('Transaction verification reports incomplete status.');
         }

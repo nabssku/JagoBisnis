@@ -45,7 +45,10 @@ __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Post)(),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new social post draft' }),
-    (0, swagger_1.ApiResponse)({ status: 201, description: 'Social post draft successfully created' }),
+    (0, swagger_1.ApiResponse)({
+        status: 201,
+        description: 'Social post draft successfully created',
+    }),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Param)('businessId')),
     __param(2, (0, common_1.Body)()),

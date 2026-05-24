@@ -106,7 +106,9 @@ let IntegrationService = class IntegrationService {
     async connectGoogleAnalytics(userId, businessId, dto) {
         await this.checkPermission(userId, businessId);
         await this.gaProvider.testConnection(dto.measurementId, dto.apiSecret);
-        const encryptedApiSecret = dto.apiSecret ? crypto_1.CryptoUtil.encrypt(dto.apiSecret) : undefined;
+        const encryptedApiSecret = dto.apiSecret
+            ? crypto_1.CryptoUtil.encrypt(dto.apiSecret)
+            : undefined;
         const integration = await this.prisma.integration.upsert({
             where: {
                 businessId_provider: {
@@ -290,14 +292,18 @@ let IntegrationService = class IntegrationService {
         const sanitized = { ...integration };
         delete sanitized.accessToken;
         delete sanitized.refreshToken;
-        if (sanitized.provider === client_1.IntegrationProvider.PAKASIR && sanitized.config) {
+        if (sanitized.provider === client_1.IntegrationProvider.PAKASIR &&
+            sanitized.config) {
             const config = sanitized.config;
             sanitized.config = {
                 slug: config.slug,
-                apiKey: config.apiKey ? `pk_****${crypto_1.CryptoUtil.decrypt(config.apiKey).slice(-4)}` : '',
+                apiKey: config.apiKey
+                    ? `pk_****${crypto_1.CryptoUtil.decrypt(config.apiKey).slice(-4)}`
+                    : '',
             };
         }
-        if (sanitized.provider === client_1.IntegrationProvider.GOOGLE_ANALYTICS && sanitized.config) {
+        if (sanitized.provider === client_1.IntegrationProvider.GOOGLE_ANALYTICS &&
+            sanitized.config) {
             const config = sanitized.config;
             sanitized.config = {
                 measurementId: config.measurementId,
