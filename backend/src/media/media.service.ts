@@ -5,6 +5,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import * as fs from 'fs';
 import { join } from 'path';
 
@@ -12,7 +13,10 @@ import { join } from 'path';
 export class MediaService {
   private readonly logger = new Logger(MediaService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly cloudinaryService: CloudinaryService,
+  ) {}
 
   /**
    * Retrieves all media assets for a business
@@ -40,7 +44,7 @@ export class MediaService {
     businessId: string,
     userId: string,
     file: {
-      filename: string;
+      buffer: Buffer;
       originalname: string;
       mimetype: string;
       size: number;
@@ -52,35 +56,32 @@ export class MediaService {
     });
 
     if (mediaCount >= 500) {
-      // Delete the physically uploaded file since the limit is exceeded
-      const tempPath = join('./uploads', file.filename);
-      if (fs.existsSync(tempPath)) {
-        try {
-          fs.unlinkSync(tempPath);
-        } catch (err) {
-          this.logger.error(
-            `Failed to clean up file after limit exceeded: ${err.message}`,
-          );
-        }
-      }
       throw new BadRequestException(
         'Batas maksimal penyimpanan media (500 file) telah tercapai. Silakan hapus media yang tidak terpakai.',
       );
     }
 
-    // 2. Generate uploads URL dynamically using config
-    const backendUrl = process.env.BACKEND_URL
-      ? process.env.BACKEND_URL.replace(/\/$/, '')
-      : 'http://localhost:3001';
-    const url = `${backendUrl}/uploads/${file.filename}`;
+    // 2. Upload to Cloudinary
+    let uploadResult;
+    try {
+      uploadResult = await this.cloudinaryService.uploadFile(file);
+    } catch (err) {
+      this.logger.error(
+        `Failed to upload file to Cloudinary: ${err.message}`,
+        err.stack,
+      );
+      throw new BadRequestException(
+        'Gagal mengunggah file ke Cloudinary. Silakan coba lagi.',
+      );
+    }
 
     // 3. Create Media record in the database
     return this.prisma.media.create({
       data: {
         businessId,
         uploadedById: userId,
-        url,
-        filename: file.filename,
+        url: uploadResult.secure_url,
+        filename: uploadResult.public_id,
         name: file.originalname,
         mimeType: file.mimetype,
         size: file.size,
@@ -112,20 +113,33 @@ export class MediaService {
       throw new NotFoundException('Berkas media tidak ditemukan.');
     }
 
-    // 2. Delete the physical file from ./uploads
-    const filePath = join('./uploads', media.filename);
-    if (fs.existsSync(filePath)) {
-      try {
-        fs.unlinkSync(filePath);
-      } catch (err) {
+    // 2. Check if the file is local (backward compatibility)
+    const isLocal = !media.url.includes('res.cloudinary.com');
+    if (isLocal) {
+      const filePath = join('./uploads', media.filename);
+      if (fs.existsSync(filePath)) {
+        try {
+          fs.unlinkSync(filePath);
+        } catch (err) {
+          this.logger.warn(
+            `Could not delete physical file: ${filePath}. Error: ${err.message}`,
+          );
+        }
+      } else {
         this.logger.warn(
-          `Could not delete physical file: ${filePath}. Error: ${err.message}`,
+          `Physical file not found for media deletion: ${filePath}`,
         );
       }
     } else {
-      this.logger.warn(
-        `Physical file not found for media deletion: ${filePath}`,
-      );
+      // Delete from Cloudinary
+      try {
+        await this.cloudinaryService.deleteFile(media.filename);
+      } catch (err) {
+        this.logger.error(
+          `Failed to delete file from Cloudinary: ${media.filename}. Error: ${err.message}`,
+          err.stack,
+        );
+      }
     }
 
     // 3. Delete from database

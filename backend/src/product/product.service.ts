@@ -5,13 +5,17 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Role } from '@prisma/client';
 
 @Injectable()
 export class ProductService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private cloudinaryService: CloudinaryService,
+  ) {}
 
   async create(userId: string, businessId: string, dto: CreateProductDto) {
     await this.checkPermission(userId, businessId);
@@ -137,17 +141,22 @@ export class ProductService {
       );
     }
 
-    const backendUrl = process.env.BACKEND_URL
-      ? process.env.BACKEND_URL.replace(/\/$/, '')
-      : 'http://localhost:3001';
-    const url = `${backendUrl}/uploads/${file.filename}`;
+    // Upload to Cloudinary
+    let uploadResult;
+    try {
+      uploadResult = await this.cloudinaryService.uploadFile(file);
+    } catch (err) {
+      throw new ConflictException(
+        'Gagal mengunggah file ke Cloudinary. Silakan coba lagi.',
+      );
+    }
 
     return this.prisma.media.create({
       data: {
         businessId,
         uploadedById: userId,
-        url,
-        filename: file.filename,
+        url: uploadResult.secure_url,
+        filename: uploadResult.public_id,
         name: file.originalname,
         mimeType: file.mimetype,
         size: file.size,

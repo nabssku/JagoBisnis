@@ -23,8 +23,8 @@ import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname, join } from 'path';
+import { memoryStorage } from 'multer';
+import { join } from 'path';
 import * as fs from 'fs';
 
 interface RequestWithUser {
@@ -44,15 +44,7 @@ export class ProductController {
   @Post('upload')
   @UseInterceptors(
     FileInterceptor('file', {
-      storage: diskStorage({
-        destination: './uploads',
-        filename: (req, file, callback) => {
-          const uniqueSuffix =
-            Date.now() + '-' + Math.round(Math.random() * 1e9);
-          const ext = extname(file.originalname);
-          callback(null, `${uniqueSuffix}${ext}`);
-        },
-      }),
+      storage: memoryStorage(),
       fileFilter: (req, file, callback) => {
         if (!file.mimetype.match(/\/(jpg|jpeg|png|gif|webp)$/)) {
           return callback(new Error('Only image files are allowed!'), false);
@@ -75,13 +67,8 @@ export class ProductController {
     }
 
     // Also record this file in the Media library database for this business!
-    await this.productService.createMedia(req.user.id, businessId, file);
-
-    const backendUrl = process.env.BACKEND_URL
-      ? process.env.BACKEND_URL.replace(/\/$/, '')
-      : 'http://localhost:3001';
-    const url = `${backendUrl}/uploads/${file.filename}`;
-    return { url };
+    const media = await this.productService.createMedia(req.user.id, businessId, file);
+    return { url: media.url };
   }
 
   @Get('media')
