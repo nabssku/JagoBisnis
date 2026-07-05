@@ -306,6 +306,7 @@ Tasks:
 - [x] Fixed Vercel serverless bundling error (Prisma enums undefined in IsEnum decorator) by running prisma generate in postinstall scripts
 - [x] Fixed Vercel serverless logging initialization error by disabling pino-pretty in Vercel environments
 - [x] Fixed Vercel serverless read-only filesystem crash by checking uploads existence before serving and removing fs.mkdirSync
+- [x] Configured Swagger UI on Vercel to load static CSS and JS from cdnjs CDN to prevent broken UI styling
 - [ ] Advanced Analytics
 - [ ] Custom Domain Support
 - [ ] Payment Gateway Integration
