@@ -23,10 +23,9 @@ export const bootstrap = async (expressInstance: express.Express) => {
 
   // Serve static assets from uploads directory (fallback)
   const uploadsDir = join(process.cwd(), 'uploads');
-  if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir, { recursive: true });
+  if (fs.existsSync(uploadsDir)) {
+    app.use('/uploads', express.static(uploadsDir));
   }
-  app.use('/uploads', express.static(uploadsDir));
 
   // Prefix /api/v1
   app.setGlobalPrefix('api/v1');

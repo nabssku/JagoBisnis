@@ -305,6 +305,7 @@ Tasks:
 - [x] Configured NestJS backend for serverless deployment on Vercel (vercel.json, async api/index.ts handler, and build script)
 - [x] Fixed Vercel serverless bundling error (Prisma enums undefined in IsEnum decorator) by running prisma generate in postinstall scripts
 - [x] Fixed Vercel serverless logging initialization error by disabling pino-pretty in Vercel environments
+- [x] Fixed Vercel serverless read-only filesystem crash by checking uploads existence before serving and removing fs.mkdirSync
 - [ ] Advanced Analytics
 - [ ] Custom Domain Support
 - [ ] Payment Gateway Integration
