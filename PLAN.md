@@ -302,7 +302,7 @@ Status: In Progress
 Tasks:
 - [x] Migrated database to Neon PostgreSQL (Phase 17 Infrastructure Update) and verified connection with Prisma
 - [x] Migrated local file uploads to Cloudinary storage using memory buffer streams
-- [ ] CI/CD Deployment
+- [x] Configured NestJS backend for serverless deployment on Vercel (vercel.json, api/index.ts, and build script)
 - [ ] Advanced Analytics
 - [ ] Custom Domain Support
 - [ ] Payment Gateway Integration
