@@ -9,8 +9,9 @@ import * as fs from 'fs';
 import { join } from 'path';
 
 const server = express();
+let isAppInitialized = false;
 
-export const createNestServer = async (expressInstance: express.Express) => {
+export const bootstrap = async (expressInstance: express.Express) => {
   const app = await NestFactory.create(
     AppModule,
     new ExpressAdapter(expressInstance),
@@ -88,6 +89,10 @@ export const createNestServer = async (expressInstance: express.Express) => {
   await app.init();
 };
 
-createNestServer(server);
-
-export default server;
+export default async (req: any, res: any) => {
+  if (!isAppInitialized) {
+    await bootstrap(server);
+    isAppInitialized = true;
+  }
+  server(req, res);
+};

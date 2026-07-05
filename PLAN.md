@@ -302,7 +302,7 @@ Status: In Progress
 Tasks:
 - [x] Migrated database to Neon PostgreSQL (Phase 17 Infrastructure Update) and verified connection with Prisma
 - [x] Migrated local file uploads to Cloudinary storage using memory buffer streams
-- [x] Configured NestJS backend for serverless deployment on Vercel (vercel.json, api/index.ts, and build script)
+- [x] Configured NestJS backend for serverless deployment on Vercel (vercel.json, async api/index.ts handler, and build script)
 - [x] Fixed Vercel serverless bundling error (Prisma enums undefined in IsEnum decorator) by running prisma generate in postinstall scripts
 - [x] Fixed Vercel serverless logging initialization error by disabling pino-pretty in Vercel environments
 - [ ] Advanced Analytics
