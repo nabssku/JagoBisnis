@@ -303,6 +303,7 @@ Tasks:
 - [x] Migrated database to Neon PostgreSQL (Phase 17 Infrastructure Update) and verified connection with Prisma
 - [x] Migrated local file uploads to Cloudinary storage using memory buffer streams
 - [x] Configured NestJS backend for serverless deployment on Vercel (vercel.json, api/index.ts, and build script)
+- [x] Fixed Vercel serverless bundling error (Prisma enums undefined in IsEnum decorator) by running prisma generate in postinstall scripts
 - [ ] Advanced Analytics
 - [ ] Custom Domain Support
 - [ ] Payment Gateway Integration
