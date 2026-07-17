@@ -5,39 +5,32 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { authService } from '@/services/auth.service';
 import { businessService } from '@/services/business.service';
+import { analyticsService, AnalyticsStatsResponse } from '@/services/analytics.service';
 import { User } from '@/types/auth';
 import { Business } from '@/types/business';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { DashboardShell } from '@/components/dashboard-shell';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { 
   Store, 
-  Globe, 
-  Package, 
-  Plus, 
-  Sparkles, 
-  ArrowRight, 
   Eye, 
-  MessageCircle, 
-  MapPin, 
   ShoppingBag,
   PlusSquare,
-  FileText,
-  User as UserIcon,
-  MessageSquare,
-  QrCode,
-  Star,
+  Plus,
   Edit,
-  Share2
+  Star,
+  LineChart
 } from 'lucide-react';
+import { AnalyticsCharts } from '@/components/dashboard/analytics-charts';
 
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [statsData, setStatsData] = useState<AnalyticsStatsResponse | null>(null);
+  const [isStatsLoading, setIsStatsLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -76,6 +69,29 @@ export default function DashboardPage() {
     fetchData();
   }, [router]);
 
+  const mainBusiness = businesses[0];
+  const businessId = mainBusiness?.id;
+
+  // Fetch stats once business info is resolved
+  useEffect(() => {
+    const fetchStats = async () => {
+      if (!businessId) return;
+      setIsStatsLoading(true);
+      try {
+        const data = await analyticsService.getStats(businessId, 30);
+        setStatsData(data);
+      } catch (err) {
+        console.error('Failed to fetch analytics statistics', err);
+      } finally {
+        setIsStatsLoading(false);
+      }
+    };
+
+    if (businessId) {
+      fetchStats();
+    }
+  }, [businessId]);
+
   if (isLoading) {
     return (
       <DashboardShell user={null}>
@@ -94,14 +110,31 @@ export default function DashboardPage() {
     );
   }
 
-  const mainBusiness = businesses[0];
-  const businessId = mainBusiness?.id;
-
   const stats = [
-    { label: 'Kunjungan Profil', value: '0', icon: Eye, color: 'text-gray-400' },
-    { label: 'Klik WhatsApp', value: '0', icon: MessageCircle, color: 'text-green-500' },
-    { label: 'Klik Lokasi', value: '0', icon: MapPin, color: 'text-amber-500' },
-    { label: 'Produk Terjual', value: '0', icon: ShoppingBag, color: 'text-blue-500' },
+    { 
+      label: 'Kunjungan Profil', 
+      value: statsData ? statsData.summary.totalViews.toLocaleString('id-ID') : '0', 
+      icon: Eye, 
+      color: 'text-amber-500' 
+    },
+    { 
+      label: 'Pemesanan', 
+      value: statsData ? statsData.summary.totalOrdersCount.toLocaleString('id-ID') : '0', 
+      icon: ShoppingBag, 
+      color: 'text-blue-500' 
+    },
+    { 
+      label: 'Persentase Konversi', 
+      value: statsData ? `${statsData.summary.conversionRate}%` : '0%', 
+      icon: LineChart, 
+      color: 'text-purple-500' 
+    },
+    { 
+      label: 'Total Penjualan (GTV)', 
+      value: statsData ? `Rp${statsData.summary.totalGtv.toLocaleString('id-ID')}` : 'Rp0', 
+      icon: Store, 
+      color: 'text-emerald-500' 
+    },
   ];
 
   return (
@@ -162,33 +195,6 @@ export default function DashboardPage() {
             {/* Background Decorative Icon */}
             <Store className="absolute -right-16 -bottom-16 h-80 w-80 text-white/5 rotate-12" />
           </motion.div>
-
-          {/* Integration Card (Xendit) */}
-          {/* <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.1 }}
-            className="flex flex-col justify-between rounded-[2.5rem] bg-white dark:bg-zinc-900 p-10 border border-gray-100 dark:border-zinc-800 shadow-xl"
-          >
-            <div className="space-y-6">
-              <div className="flex items-center gap-3">
-                <div className="h-12 w-12 rounded-xl bg-blue-50 dark:bg-blue-950/30 flex items-center justify-center">
-                  <Share2 className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-                </div>
-                <span className="text-2xl font-black tracking-tighter text-blue-600 dark:text-blue-400 italic">xendit</span>
-              </div>
-              <div className="space-y-2">
-                <h3 className="text-xl font-black tracking-tight text-gray-900 dark:text-white">Mulai Berjualan Sekarang</h3>
-                <p className="text-sm font-medium text-gray-500 dark:text-zinc-400 leading-relaxed">
-                  Integrasi dengan Xendit agar dapat menerima pembayaran penjualan.
-                </p>
-              </div>
-            </div>
-            <Button className="w-full h-12 rounded-xl bg-[#0066FF] font-black text-white hover:bg-blue-700 shadow-lg shadow-blue-200 dark:shadow-none transition-all hover:scale-[1.02]">
-              Hubungkan Xendit
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </motion.div> */}
         </div>
 
         {/* Activity Summary Section */}
@@ -211,13 +217,34 @@ export default function DashboardPage() {
                   <stat.icon className={cn("h-5 w-5", stat.color)} />
                 </div>
                 <div className="space-y-1">
-                  <p className="text-4xl font-black tracking-tighter text-gray-900 dark:text-white">{stat.value}</p>
+                  <p className="text-4xl font-black tracking-tighter text-gray-900 dark:text-white">
+                    {isStatsLoading ? (
+                      <span className="text-2xl font-bold animate-pulse text-gray-300 dark:text-zinc-700">...</span>
+                    ) : (
+                      stat.value
+                    )}
+                  </p>
                   <p className="text-xs font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-widest">{stat.label}</p>
                 </div>
               </motion.div>
             ))}
           </div>
         </div>
+
+        {/* Analytics Charts & Details Section */}
+        {statsData && !isStatsLoading && (
+          <div className="space-y-6">
+            <div className="flex items-center gap-4">
+              <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 dark:text-zinc-500 whitespace-nowrap">Analitis Lanjutan</h2>
+              <div className="h-px w-full bg-gray-100 dark:bg-zinc-800" />
+            </div>
+            <AnalyticsCharts 
+              chartData={statsData.chartData} 
+              topReferrers={statsData.topReferrers} 
+              topProducts={statsData.topProducts} 
+            />
+          </div>
+        )}
 
         {/* Bottom Section */}
         <div className="grid gap-6 lg:grid-cols-3">
@@ -226,7 +253,7 @@ export default function DashboardPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="rounded-[2.5rem] bg-[#1F2937] p-10 text-white shadow-xl relative overflow-hidden group"
+            className="rounded-[2.5rem] bg-[#1F2937] p-10 text-white shadow-xl relative overflow-hidden group col-span-3"
           >
             <div className="relative z-10 space-y-10">
               <div className="space-y-2">
@@ -241,35 +268,8 @@ export default function DashboardPage() {
               <p className="text-sm font-medium text-gray-400 leading-relaxed">
                 Karena masih dalam tahap beta, kamu mendapatkan akses gratis selamanya.
               </p>
-              {/* <Button className="w-full h-12 rounded-xl bg-white/5 border border-white/10 font-black text-white hover:bg-white/10 transition-all">
-                Upgrade Sekarang
-              </Button> */}
             </div>
           </motion.div>
-
-          {/* Community Section */}
-          {/* <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7 }}
-            className="lg:col-span-2 rounded-[2.5rem] bg-white dark:bg-zinc-900 p-10 border border-gray-100 dark:border-zinc-800 shadow-xl flex items-center gap-10"
-          >
-            <div className="h-24 w-24 rounded-3xl bg-green-50 dark:bg-green-950/20 flex items-center justify-center shrink-0">
-              <MessageSquare className="h-12 w-12 text-green-600 dark:text-green-400" />
-            </div>
-            <div className="flex-1 space-y-6">
-              <div className="space-y-1">
-                <h3 className="text-2xl font-black tracking-tight text-gray-900 dark:text-white">Komunitas WhatsApp JagoBisnis</h3>
-                <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-zinc-500">Gabung Sekarang</p>
-              </div>
-              <p className="text-sm font-medium text-gray-500 dark:text-zinc-400 leading-relaxed max-w-md">
-                Terhubung dengan ribuan pelaku UMKM lain. Dapatkan tips, info promo, dan dukungan langsung.
-              </p>
-            </div>
-            <div className="h-24 w-24 rounded-2xl border-2 border-gray-100 dark:border-zinc-800 p-2 shrink-0 bg-white dark:bg-zinc-800">
-              <QrCode className="h-full w-full text-gray-300 dark:text-zinc-500" />
-            </div>
-          </motion.div> */}
         </div>
       </div>
     </DashboardShell>
