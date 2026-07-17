@@ -14,6 +14,7 @@ import { OrderModule } from './order/order.module';
 import { PaymentModule } from './payment/payment.module';
 import { MediaModule } from './media/media.module';
 import { SuperAdminModule } from './superadmin/superadmin.module';
+import { AnalyticsModule } from './analytics/analytics.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { SuperAdminModule } from './superadmin/superadmin.module';
     PaymentModule,
     MediaModule,
     SuperAdminModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
