@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { siteService } from '@/services/site.service';
+import { analyticsService } from '@/services/analytics.service';
 import { Site } from '@/types/site';
 import { Product } from '@/types/product';
 import { motion } from 'framer-motion';
@@ -68,6 +69,11 @@ export default function PublicProductDetailPage() {
           setProduct(found);
           setActiveImage(found.imageUrl || '');
           setOtherProducts(allProducts.filter(p => p.id !== productId && p.isActive).slice(0, 4));
+          // Log view product event
+          analyticsService.logEvent(data.businessId, 'VIEW_PRODUCT', window.location.pathname, {
+            productId: found.id,
+            productName: found.name,
+          });
         } else {
           setError('Produk tidak ditemukan.');
         }
@@ -364,7 +370,15 @@ export default function PublicProductDetailPage() {
 
             {/* Checkout Button */}
             <Button 
-              onClick={() => setIsOrderModalOpen(true)}
+              onClick={() => {
+                setIsOrderModalOpen(true);
+                if (site && product) {
+                  analyticsService.logEvent(site.businessId, 'CLICK_ORDER', window.location.pathname, {
+                    productId: product.id,
+                    productName: product.name,
+                  });
+                }
+              }}
               className="w-full h-10 rounded-xl font-bold text-xs shadow-md text-white transition-all hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 border-none"
             >
               <MessageSquare className="h-4 w-4 fill-current" />

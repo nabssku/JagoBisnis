@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { siteService } from '@/services/site.service';
+import { analyticsService } from '@/services/analytics.service';
 import { Site, Section, SiteTheme } from '@/types/site';
 import { Product } from '@/types/product';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
@@ -55,6 +56,8 @@ export default function PublicWebsitePage() {
         const data = await siteService.getPublicSite(slug);
         setSite(data);
         setProducts(data.business?.Product || []);
+        // Log view site event
+        analyticsService.logEvent(data.businessId, 'VIEW_SITE', window.location.pathname);
       } catch (err) {
         setError('Website tidak ditemukan atau belum dipublikasikan.');
       } finally {
@@ -212,6 +215,12 @@ export default function PublicWebsitePage() {
             onOrderProduct={(prod) => {
               setSelectedProduct(prod);
               setIsOrderModalOpen(true);
+              if (site) {
+                analyticsService.logEvent(site.businessId, 'CLICK_ORDER', window.location.pathname, {
+                  productId: prod.id,
+                  productName: prod.name,
+                });
+              }
             }}
           />
         ))}
