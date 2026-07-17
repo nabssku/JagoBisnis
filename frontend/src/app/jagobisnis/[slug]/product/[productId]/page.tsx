@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { siteService } from '@/services/site.service';
 import { analyticsService } from '@/services/analytics.service';
+import { RichTextRenderer } from '@/components/ui/RichTextRenderer';
 import { Site } from '@/types/site';
 import { Product } from '@/types/product';
 import { motion } from 'framer-motion';
@@ -427,9 +428,13 @@ export default function PublicProductDetailPage() {
                 </button>
               </div>
 
-              <div className="text-xs leading-relaxed text-gray-600 dark:text-zinc-300 font-medium whitespace-pre-line min-h-[80px]">
+              <div className="text-xs leading-relaxed text-gray-600 dark:text-zinc-300 font-medium min-h-[80px]">
                 {activeTab === 'deskripsi' ? (
-                  product.description || 'Tidak ada deskripsi untuk produk ini.'
+                  product.description ? (
+                    <RichTextRenderer content={product.description} />
+                  ) : (
+                    'Tidak ada deskripsi untuk produk ini.'
+                  )
                 ) : (
                   <div className="space-y-2 font-medium text-xs">
                     <div className="flex justify-between py-1 border-b border-gray-50 dark:border-zinc-900/50">

@@ -40,6 +40,18 @@ import { postService } from '@/services/post.service';
 import { Post } from '@/types/post';
 import { RichTextRenderer } from '@/components/ui/RichTextRenderer';
 
+const stripHtml = (html?: string) => {
+  if (!html) return '';
+  // Convert HTML entities briefly like &amp; to &
+  return html
+    .replace(/<[^>]*>/g, '')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
+};
+
 interface SectionRendererProps {
   section: Section;
   theme: SiteTheme;
@@ -321,7 +333,7 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
                         <div className="p-5 flex flex-col flex-1">
                           <div className="flex-1 space-y-2">
                             <h3 className="font-bold text-base tracking-tight text-gray-900 dark:text-white group-hover:text-primary transition-colors" style={{ '--primary': theme.primaryColor } as any}>{product.name}</h3>
-                            <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2 font-medium">{product.description}</p>
+                            <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2 font-medium">{stripHtml(product.description)}</p>
                           </div>
                           <div className="flex items-center justify-between mt-6 pt-4 border-t border-border/40">
                             <div className="flex flex-col">
