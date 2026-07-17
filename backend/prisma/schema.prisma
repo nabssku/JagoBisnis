@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -38,13 +33,14 @@ model Business {
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   BusinessUser BusinessUser[]
+  Integration  Integration[]
+  Media        Media[]
+  Order        Order[]
+  Post         Post[]
   Product      Product[]
   Site         Site?
-  Post         Post[]
-  Integration  Integration[]
   SocialPost   SocialPost[]
-  Order        Order[]
-  Media        Media[]
+  AnalyticsLog AnalyticsLog[]
 }
 
 model Site {
@@ -58,8 +54,7 @@ model Site {
   publishedAt DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-
-  business Business @relation(fields: [businessId], references: [id])
+  business    Business  @relation(fields: [businessId], references: [id])
 }
 
 model BusinessUser {
@@ -69,9 +64,8 @@ model BusinessUser {
   role       Role     @default(STAFF)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-
-  user     User     @relation(fields: [userId], references: [id])
-  business Business @relation(fields: [businessId], references: [id])
+  business   Business @relation(fields: [businessId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
 
   @@unique([userId, businessId])
 }
@@ -90,9 +84,8 @@ model Product {
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  business Business @relation(fields: [businessId], references: [id])
-  Order    Order[]
+  Order       Order[]
+  business    Business @relation(fields: [businessId], references: [id])
 
   @@unique([businessId, slug])
 }
@@ -120,29 +113,9 @@ model Post {
   relatedProductIds String[] @default([])
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
-
-  business Business @relation(fields: [businessId], references: [id])
+  business          Business @relation(fields: [businessId], references: [id])
 
   @@unique([businessId, slug])
-}
-
-enum Role {
-  OWNER
-  ADMIN
-  STAFF
-}
-
-enum IntegrationProvider {
-  INSTAGRAM
-  THREADS
-  PAKASIR
-  GOOGLE_ANALYTICS
-}
-
-enum IntegrationStatus {
-  CONNECTED
-  DISCONNECTED
-  ERROR
 }
 
 model Integration {
@@ -150,73 +123,37 @@ model Integration {
   businessId          String
   provider            IntegrationProvider
   status              IntegrationStatus   @default(DISCONNECTED)
-  accessToken         String?             // encrypted
-  refreshToken        String?             // encrypted
+  accessToken         String?
+  refreshToken        String?
   tokenExpiresAt      DateTime?
   providerAccountId   String?
   providerAccountName String?
-  config              Json?               // e.g. { slug: "...", apiKey: "..." } or { measurementId: "..." }
+  config              Json?
   lastSyncedAt        DateTime?
   createdAt           DateTime            @default(now())
   updatedAt           DateTime            @updatedAt
-
   business            Business            @relation(fields: [businessId], references: [id])
   SocialPost          SocialPost[]
 
   @@unique([businessId, provider])
 }
 
-enum SocialPostProvider {
-  INSTAGRAM
-  THREADS
-}
-
-enum SocialPostStatus {
-  DRAFT
-  PUBLISHING
-  PUBLISHED
-  FAILED
-}
-
-enum MediaType {
-  TEXT
-  IMAGE
-  VIDEO
-  CAROUSEL
-}
-
 model SocialPost {
-  id              String             @id @default(uuid())
-  businessId      String
-  provider        SocialPostProvider
-  integrationId   String
-  content         String
-  mediaUrls       Json?              // e.g. ["url1", "url2"]
-  mediaType       MediaType          @default(TEXT)
-  status          SocialPostStatus   @default(DRAFT)
-  providerPostId  String?
-  errorMessage    String?
-  publishedAt     DateTime?
-  createdAt       DateTime           @default(now())
-  updatedAt       DateTime           @updatedAt
-
-  business        Business           @relation(fields: [businessId], references: [id])
-  integration     Integration        @relation(fields: [integrationId], references: [id])
-}
-
-enum OrderStatus {
-  PENDING
-  CONFIRMED
-  CANCELLED
-  COMPLETED
-}
-
-enum PaymentStatus {
-  UNPAID
-  PENDING
-  PAID
-  EXPIRED
-  FAILED
+  id             String             @id @default(uuid())
+  businessId     String
+  provider       SocialPostProvider
+  integrationId  String
+  content        String
+  mediaUrls      Json?
+  mediaType      MediaType          @default(TEXT)
+  status         SocialPostStatus   @default(DRAFT)
+  providerPostId String?
+  errorMessage   String?
+  publishedAt    DateTime?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  business       Business           @relation(fields: [businessId], references: [id])
+  integration    Integration        @relation(fields: [integrationId], references: [id])
 }
 
 model Order {
@@ -241,9 +178,8 @@ model Order {
   metadata             Json?
   createdAt            DateTime      @default(now())
   updatedAt            DateTime      @updatedAt
-
-  business Business @relation(fields: [businessId], references: [id])
-  product  Product  @relation(fields: [productId], references: [id])
+  business             Business      @relation(fields: [businessId], references: [id])
+  product              Product       @relation(fields: [productId], references: [id])
 }
 
 model Media {
@@ -257,8 +193,76 @@ model Media {
   size         Int
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-
-  business   Business @relation(fields: [businessId], references: [id])
-  uploadedBy User     @relation(fields: [uploadedById], references: [id])
+  business     Business @relation(fields: [businessId], references: [id])
+  uploadedBy   User     @relation(fields: [uploadedById], references: [id])
 }
 
+model AnalyticsLog {
+  id         String   @id @default(uuid())
+  businessId String
+  event      String   // e.g. "VIEW_SITE", "VIEW_PRODUCT", "VIEW_BLOG", "CLICK_ORDER"
+  path       String
+  referrer   String?
+  userAgent  String?
+  ipHash     String?  // Anonymized unique identifier (SHA-256 of IP + salt)
+  metadata   Json?    // Optional extra data (e.g. { productId: "...", blogSlug: "..." })
+  createdAt  DateTime @default(now())
+
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@index([businessId, event, createdAt])
+}
+
+
+enum Role {
+  OWNER
+  ADMIN
+  STAFF
+}
+
+enum IntegrationProvider {
+  INSTAGRAM
+  THREADS
+  PAKASIR
+  GOOGLE_ANALYTICS
+}
+
+enum IntegrationStatus {
+  CONNECTED
+  DISCONNECTED
+  ERROR
+}
+
+enum SocialPostProvider {
+  INSTAGRAM
+  THREADS
+}
+
+enum SocialPostStatus {
+  DRAFT
+  PUBLISHING
+  PUBLISHED
+  FAILED
+}
+
+enum MediaType {
+  TEXT
+  IMAGE
+  VIDEO
+  CAROUSEL
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum PaymentStatus {
+  UNPAID
+  PENDING
+  PAID
+  EXPIRED
+  FAILED
+}
