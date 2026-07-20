@@ -24,7 +24,8 @@ export type SectionType =
   | 'faq'
   | 'contact'
   | 'footer'
-  | 'blog';
+  | 'blog'
+  | 'custom-html';
 
 export interface Section {
   id: string;
