@@ -1509,7 +1509,7 @@ export default function WebsiteBuilderPage() {
         <aside 
           className={cn(
             "bg-white dark:bg-zinc-900 border-r border-border dark:border-zinc-850 overflow-hidden flex flex-col shrink-0 transition-all duration-300 ease-in-out z-20 shadow-sm relative",
-            leftSidebarCollapsed ? "w-0 border-r-0" : "w-[300px]"
+            leftSidebarCollapsed || isLivePreviewOpen ? "w-0 border-r-0 hidden" : "w-[300px]"
           )}
         >
           {/* Header & Collapse Toggle */}
@@ -1636,7 +1636,7 @@ export default function WebsiteBuilderPage() {
         {/* COLUMN 2 (MIDDLE): The Canvas (visual high-fidelity mockups stack) */}
         <main className={cn(
           "flex-1 bg-[#F8F9FB] dark:bg-zinc-950 p-6 overflow-y-auto flex flex-col items-center gap-4 transition-all duration-300 relative",
-          isLivePreviewOpen ? "hidden lg:flex" : "flex"
+          isLivePreviewOpen ? "hidden" : "flex"
         )}>
           {/* Floating Expand Sidebar Handles if collapsed */}
           {leftSidebarCollapsed && (
@@ -1897,7 +1897,7 @@ export default function WebsiteBuilderPage() {
         <aside 
           className={cn(
             "bg-white dark:bg-zinc-900 border-l border-border dark:border-zinc-850 overflow-hidden flex flex-col shrink-0 transition-all duration-300 ease-in-out z-20 shadow-sm relative",
-            rightSidebarCollapsed ? "w-0 border-l-0" : "w-[360px]"
+            rightSidebarCollapsed || isLivePreviewOpen ? "w-0 border-l-0 hidden" : "w-[360px]"
           )}
         >
           <nav className="flex items-center justify-between border-b border-border dark:border-zinc-850 p-2 bg-muted/20 dark:bg-zinc-950/20 shrink-0">
