@@ -48,4 +48,9 @@ export const siteService = {
     const response = await apiClient.post(`/businesses/${businessId}/site/ai-refine-prompt`, { description });
     return response.data;
   },
+
+  async editAiSection(businessId: string, data: { html: string; instruction: string; primaryColor: string }): Promise<{ html: string }> {
+    const response = await apiClient.post(`/businesses/${businessId}/site/ai-edit-section`, data);
+    return response.data;
+  },
 };

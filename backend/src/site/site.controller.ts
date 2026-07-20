@@ -22,6 +22,7 @@ import { UpdateSiteThemeDto } from './dto/update-site-theme.dto';
 import { UpdateSiteSectionsDto } from './dto/update-site-sections.dto';
 import { GenerateAiSiteDto } from './dto/generate-ai-site.dto';
 import { RefinePromptDto } from './dto/refine-prompt.dto';
+import { EditAiSectionDto } from './dto/edit-ai-section.dto';
 
 interface RequestWithUser {
   user: {
@@ -80,6 +81,18 @@ export class SiteController {
     @Request() req: RequestWithUser,
   ) {
     return this.siteService.refineAiPrompt(businessId, req.user.id, dto.description);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Post('ai-edit-section')
+  @ApiOperation({ summary: 'Edit specific custom-html section via AI instructions' })
+  async editAiSection(
+    @Param('businessId') businessId: string,
+    @Body() dto: EditAiSectionDto,
+    @Request() req: RequestWithUser,
+  ) {
+    return this.siteService.editAiSection(businessId, req.user.id, dto);
   }
 
   @ApiBearerAuth()

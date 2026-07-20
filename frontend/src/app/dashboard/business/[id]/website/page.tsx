@@ -308,6 +308,8 @@ export default function WebsiteBuilderPage() {
   const [blockSubTab, setBlockSubTab] = useState<'content' | 'style' | 'layout'>('content');
   const [autosaveStatus, setAutosaveStatus] = useState<'saved' | 'saving' | 'dirty'>('saved');
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
+  const [aiEditInstruction, setAiEditInstruction] = useState('');
+  const [isEditingAiSection, setIsEditingAiSection] = useState(false);
   const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({
     hero: true,
     about: true,
@@ -3422,11 +3424,66 @@ export default function WebsiteBuilderPage() {
 
                         {/* CUSTOM HTML SECTION EDITOR */}
                         {activeSection.type === 'custom-html' && (
-                          <div className="space-y-4">
+                          <div className="space-y-5">
+                            {/* AI Prompt Revision Assistant Box */}
+                            <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 space-y-3">
+                              <div className="flex items-center gap-2 text-amber-500">
+                                <Sparkles className="h-4 w-4 fill-amber-500" />
+                                <span className="text-xs font-black uppercase tracking-wider">Bantuan Prompt AI</span>
+                              </div>
+                              <p className="text-[10px] text-muted-foreground leading-relaxed">
+                                Minta AI merubah layout, warna, menambah tombol, atau menulis ulang bagian ini sesuai keinginan Anda:
+                              </p>
+                              <div className="space-y-2">
+                                <textarea
+                                  value={aiEditInstruction}
+                                  onChange={(e) => setAiEditInstruction(e.target.value)}
+                                  placeholder="Contoh: Ubah background menjadi gelap, tambahkan tombol booking, buat layoutnya 2 kolom..."
+                                  className="w-full h-20 p-3 text-xs font-medium rounded-xl border border-amber-500/30 bg-white dark:bg-zinc-900 text-gray-900 dark:text-white placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-amber-500/20 resize-none"
+                                />
+                                <Button
+                                  disabled={isEditingAiSection || !aiEditInstruction.trim()}
+                                  onClick={async () => {
+                                    if (!site || !activeSectionId || !aiEditInstruction.trim()) return;
+                                    setIsEditingAiSection(true);
+                                    try {
+                                      const res = await siteService.editAiSection(businessId, {
+                                        html: activeSection.content.html || '',
+                                        instruction: aiEditInstruction,
+                                        primaryColor: site.theme.primaryColor
+                                      });
+                                      updateActiveSectionContent('html', res.html);
+                                      setAiEditInstruction('');
+                                      toast.success('Berhasil memperbarui komponen visual via AI!');
+                                    } catch (err) {
+                                      console.error('Error editing section via AI:', err);
+                                      toast.error('Gagal memperbarui komponen via AI');
+                                    } finally {
+                                      setIsEditingAiSection(false);
+                                    }
+                                  }}
+                                  className="w-full rounded-xl h-9 text-xs font-extrabold text-white bg-amber-500 hover:bg-amber-600 shadow-sm flex items-center justify-center gap-2 cursor-pointer"
+                                >
+                                  {isEditingAiSection ? (
+                                    <>
+                                      <Sparkles className="h-3.5 w-3.5 animate-spin" />
+                                      AI Sedang Mengedit...
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Sparkles className="h-3.5 w-3.5 fill-white" />
+                                      Edit / Buat Ulang via AI
+                                    </>
+                                  )}
+                                </Button>
+                              </div>
+                            </div>
+
+                            {/* Raw Code Editor */}
                             <div className="space-y-2">
-                              <label className="text-[10px] font-black text-gray-900 dark:text-white uppercase tracking-wider block">Edit Kode HTML & Tailwind</label>
+                              <label className="text-[10px] font-black text-gray-900 dark:text-white uppercase tracking-wider block">Edit Kode HTML & Tailwind Manual</label>
                               <textarea
-                                className="w-full min-h-[380px] font-mono p-3.5 text-[10px] leading-relaxed rounded-xl border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 text-gray-905 dark:text-zinc-100 placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none transition-all scrollbar-thin"
+                                className="w-full min-h-[280px] font-mono p-3.5 text-[10px] leading-relaxed rounded-xl border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 text-gray-905 dark:text-zinc-100 placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none transition-all scrollbar-thin"
                                 value={activeSection.content.html || ''}
                                 onChange={(e) => updateActiveSectionContent('html', e.target.value)}
                                 placeholder="Masukkan kode HTML kustom di sini..."

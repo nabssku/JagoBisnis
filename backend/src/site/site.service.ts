@@ -342,6 +342,66 @@ Kembalikan hasil perbaikan rencana dalam Bahasa Indonesia yang profesional, rapi
     }
   }
 
+  async editAiSection(businessId: string, userId: string, dto: { html: string; instruction: string; primaryColor: string }) {
+    await this.checkPermission(businessId, userId);
+
+    const apiKey = process.env.GROQ_API_KEY;
+    if (!apiKey) {
+      return { html: dto.html }; // fallback
+    }
+
+    try {
+      const response = await axios.post(
+        'https://api.groq.com/openai/v1/chat/completions',
+        {
+          model: 'llama-3.3-70b-versatile',
+          messages: [
+            {
+              role: 'system',
+              content: `Anda adalah AI HTML/Tailwind Editor profesional JagoBisnis.
+Tugas Anda adalah memodifikasi atau membuat ulang kode HTML kustom berikut berdasarkan instruksi revisi yang diberikan oleh pengguna.
+
+Aturan Penting:
+1. Pertahankan dan gunakan utility classes Tailwind CSS (seperti bg-*, text-*, flex, grid, rounded-xl, shadow-sm, dll) agar tampilan tetap konsisten dengan UI/UX modern JagoBisnis.
+2. Jika perlu menggunakan warna primer, gunakan variabel string '{primaryColor}' atau hex '${dto.primaryColor}'.
+3. Kembalikan HANYA kode HTML mentah hasil revisi tanpa pembungkus penjelasan teks ataupun tag markdown (\`\`\`html).`
+            },
+            {
+              role: 'user',
+              content: `Kode HTML Saat Ini:
+${dto.html}
+
+Instruksi Revisi Pengguna:
+${dto.instruction}`
+            }
+          ],
+          temperature: 0.7
+        },
+        {
+          headers: {
+            'Authorization': 'Bear' + 'er ' + apiKey,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      let updatedHtml = response.data.choices[0].message.content.trim();
+      if (updatedHtml.startsWith('```')) {
+        updatedHtml = updatedHtml
+          .replace(/^```(?:html)?\n?/i, '')
+          .replace(/\n?```$/i, '')
+          .trim();
+      }
+
+      updatedHtml = updatedHtml.replace(/{primaryColor}/g, dto.primaryColor);
+
+      return { html: updatedHtml };
+    } catch (error: any) {
+      console.error('Error calling Groq API for section edit:', error?.message || error);
+      throw new BadRequestException('Gagal mengubah kode HTML melalui AI');
+    }
+  }
+
   async generateAiSite(businessId: string, userId: string, dto: any) {
     await this.checkPermission(businessId, userId);
 
