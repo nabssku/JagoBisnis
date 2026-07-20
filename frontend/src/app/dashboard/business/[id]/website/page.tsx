@@ -91,8 +91,8 @@ const CATEGORIES = [
   {
     id: 'interaction',
     name: 'Interaksi & Bantuan',
-    description: 'FAQ, kontak, dan berita blog',
-    types: ['faq', 'contact', 'blog']
+    description: 'FAQ, kontak, berita blog, & kustom HTML',
+    types: ['faq', 'contact', 'blog', 'custom-html']
   },
   {
     id: 'footer',
@@ -248,6 +248,14 @@ const AVAILABLE_BLOCKS = [
       layout: 'grid',
       maxPosts: 3,
       postTypeFilter: 'Semua'
+    } 
+  },
+  { 
+    type: 'custom-html', 
+    name: 'Kustom HTML & Tailwind', 
+    description: 'Blok bebas kustom kode HTML dan utility classes Tailwind CSS', 
+    defaultContent: { 
+      html: '<div class="py-16 px-6 max-w-6xl mx-auto text-center border border-dashed border-amber-500/30 rounded-3xl bg-amber-500/5"><h2 className="text-2xl font-bold text-slate-800 dark:text-white">Elemen Kustom HTML Baru</h2><p className="text-xs text-slate-500 dark:text-zinc-400 mt-2">Edit kode HTML & Tailwind CSS melalui panel kanan atau minta bantuan AI.</p></div>' 
     } 
   }
 ];
