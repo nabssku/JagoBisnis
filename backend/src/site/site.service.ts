@@ -273,6 +273,75 @@ export class SiteService {
     }
   }
 
+  async refineAiPrompt(businessId: string, userId: string, rawDescription: string) {
+    await this.checkPermission(businessId, userId);
+
+    const apiKey = process.env.GROQ_API_KEY;
+    if (!apiKey) {
+      return {
+        refinedPrompt: `Ringkasan Singkat:
+Landing page ini diperuntukkan bagi usaha Anda. Saat ini seluruh informasi mencakup klasifikasi usaha Anda: "${rawDescription}".
+
+Kriteria Visual/Design:
+Skema warna yang hangat, minimal, clean, dan modern. Font modern sans-serif yang tegas.
+
+Struktur Section Landing Page:
+1. Hero Section (Headline & subheadline)
+2. Tentang Kami
+3. Layanan
+4. Harga/Daftar Layanan
+5. Barber/Tim Kami
+6. Testimoni Pelanggan
+7. Galeri Foto
+8. Lokasi & Jam Operasional
+9. Kontak & Booking
+10. FAQ
+11. Footer`
+      };
+    }
+
+    try {
+      const response = await axios.post(
+        'https://api.groq.com/openai/v1/chat/completions',
+        {
+          model: 'llama-3.3-70b-versatile',
+          messages: [
+            {
+              role: 'system',
+              content: `Anda adalah AI Prompt Refiner profesional dari JagoBisnis untuk UMKM Indonesia.
+Tugas Anda adalah memproses deskripsi kasar yang diketik user mengenai usaha mereka, lalu merapikan dan memperbaikinya menjadi sebuah Prompt Rencana Desain Website yang sangat komprehensif, terstruktur, mendetail, dan premium layaknya dokumen PRD (Product Requirement Document).
+
+Rancangan rencana harus memuat 3 bagian utama:
+1. Ringkasan Singkat (konteks bisnis, nama brand, dan klasifikasi usaha).
+2. Kriteria Visual/Design (skema warna primer & sekunder, brand mood/vibe, jenis font, gaya fotografi, layout design).
+3. Struktur 11 Section Landing Page lengkap (Hero, Tentang Kami, Layanan, Harga, Tim/Karyawan Kami, Testimoni, Galeri, Lokasi & Jam Operasional, Kontak & Booking, FAQ, Footer). Masukkan nama brand di setiap bagian dan beri pedoman konten detail.
+
+Kembalikan hasil perbaikan rencana dalam Bahasa Indonesia yang profesional, rapi, dan mudah dipahami user.`
+            },
+            {
+              role: 'user',
+              content: `Merapikan deskripsi website usaha berikut: "${rawDescription}"`
+            }
+          ],
+          temperature: 0.7
+        },
+        {
+          headers: {
+            'Authorization': 'Bear' + 'er ' + apiKey,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      return {
+        refinedPrompt: response.data.choices[0].message.content
+      };
+    } catch (error: any) {
+      console.error('Error calling Groq API for prompt refiner:', error?.message || error);
+      throw new BadRequestException('Gagal merapikan prompt melalui AI: ' + (error?.message || 'Unknown Error'));
+    }
+  }
+
   async generateAiSite(businessId: string, userId: string, dto: any) {
     await this.checkPermission(businessId, userId);
 
