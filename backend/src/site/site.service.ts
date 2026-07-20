@@ -8,7 +8,6 @@ import {
 import { PrismaService } from '../prisma.service';
 import { CreateSiteDto } from './dto/create-site.dto';
 import { UpdateSiteDto } from './dto/update-site.dto';
-import { Role } from '@prisma/client';
 import axios from 'axios';
 
 @Injectable()
@@ -267,7 +266,7 @@ export class SiteService {
   private async checkPermission(businessId: string, userId: string) {
     const membership = await this.checkMembership(businessId, userId);
 
-    if (membership.role !== Role.OWNER && membership.role !== Role.ADMIN) {
+    if (membership.role !== 'OWNER' && membership.role !== 'ADMIN') {
       throw new ForbiddenException(
         'Hanya OWNER atau ADMIN yang dapat mengubah website',
       );
