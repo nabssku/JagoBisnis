@@ -38,13 +38,14 @@ export const siteService = {
   },
 
   async generateAiSite(businessId: string, data: {
-    businessName: string;
-    category: string;
-    targetAudience: string;
-    keyService: string;
-    visualStyle: string;
+    refinedPrompt: string;
   }): Promise<{ sections: Section[]; theme: SiteTheme }> {
     const response = await apiClient.post(`/businesses/${businessId}/site/ai-generate`, data);
+    return response.data;
+  },
+
+  async refineAiPrompt(businessId: string, description: string): Promise<{ refinedPrompt: string }> {
+    const response = await apiClient.post(`/businesses/${businessId}/site/ai-refine-prompt`, { description });
     return response.data;
   },
 };

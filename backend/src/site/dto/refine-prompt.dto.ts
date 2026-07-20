@@ -1,9 +1,9 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class GenerateAiSiteDto {
-  @ApiProperty({ example: 'Daftar instruksi PRD kustom dari AI' })
+export class RefinePromptDto {
+  @ApiProperty({ example: 'barbershop dengan nama Barberutas' })
   @IsString()
   @IsNotEmpty()
-  refinedPrompt: string;
+  description: string;
 }

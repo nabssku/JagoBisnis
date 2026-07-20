@@ -384,11 +384,8 @@ Aturan Penting HTML & Tailwind:
             },
             {
               role: 'user',
-              content: `Nama Bisnis: ${dto.businessName}
-Kategori/Bidang: ${dto.category}
-Target Pelanggan Utama: ${dto.targetAudience}
-Layanan/Produk Unggulan: ${dto.keyService}
-Gaya Visual Pilihan: ${dto.visualStyle}`
+              content: `Instruksi PRD & Kriteria Visual Website:
+${dto.refinedPrompt}`
             }
           ],
           response_format: { type: 'json_object' },
@@ -420,7 +417,24 @@ Gaya Visual Pilihan: ${dto.visualStyle}`
   }
 
   private localCompile(dto: any) {
-    const { businessName, category, targetAudience, keyService, visualStyle } = dto;
+    const refinedPrompt = dto.refinedPrompt || '';
+    
+    const businessNameMatch = refinedPrompt.match(/nama brand \(([^)]+)\)/i) || refinedPrompt.match(/nama ([^\n]+)/i);
+    const businessName = businessNameMatch ? businessNameMatch[1].trim() : 'Bisnis Anda';
+    
+    const categoryMatch = refinedPrompt.match(/klasifikasi usaha \(([^)]+)\)/i) || refinedPrompt.match(/usaha ([^\n]+)/i);
+    const category = categoryMatch ? categoryMatch[1].trim() : 'UMKM';
+
+    const targetMatch = refinedPrompt.match(/target pelanggan ([^\n]+)/i) || refinedPrompt.match(/target pasar ([^\n]+)/i) || refinedPrompt.match(/pelanggan ([^\n]+)/i);
+    const targetAudience = targetMatch ? targetMatch[1].trim() : 'Pelanggan Setia';
+
+    const serviceMatch = refinedPrompt.match(/layanan unggulan ([^\n]+)/i) || refinedPrompt.match(/layanan ([^\n]+)/i);
+    const keyService = serviceMatch ? serviceMatch[1].trim() : 'Layanan Premium';
+
+    const visualStyle = refinedPrompt.toLowerCase().includes('mewah') ? 'Mewah' : 
+                          refinedPrompt.toLowerCase().includes('hangat') ? 'Hangat' : 
+                          refinedPrompt.toLowerCase().includes('bersih') ? 'Bersih' : 'Modern';
+
     let theme = {
       primaryColor: '#e8aa20',
       font: 'Outfit',

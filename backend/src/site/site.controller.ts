@@ -21,6 +21,7 @@ import { UpdateSiteDto } from './dto/update-site.dto';
 import { UpdateSiteThemeDto } from './dto/update-site-theme.dto';
 import { UpdateSiteSectionsDto } from './dto/update-site-sections.dto';
 import { GenerateAiSiteDto } from './dto/generate-ai-site.dto';
+import { RefinePromptDto } from './dto/refine-prompt.dto';
 
 interface RequestWithUser {
   user: {
@@ -67,6 +68,18 @@ export class SiteController {
     @Request() req: RequestWithUser,
   ) {
     return this.siteService.generateAiSite(businessId, req.user.id, dto);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Post('ai-refine-prompt')
+  @ApiOperation({ summary: 'Refine a raw website description using AI' })
+  async refineAiPrompt(
+    @Param('businessId') businessId: string,
+    @Body() dto: RefinePromptDto,
+    @Request() req: RequestWithUser,
+  ) {
+    return this.siteService.refineAiPrompt(businessId, req.user.id, dto.description);
   }
 
   @ApiBearerAuth()
