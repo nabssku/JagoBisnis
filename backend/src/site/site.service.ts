@@ -292,7 +292,11 @@ export class SiteService {
               role: 'system',
               content: `Anda adalah AI Site Builder JagoBisnis untuk UMKM Indonesia.
 Tugas Anda adalah merancang landing page kustom dalam format JSON yang valid.
-Format JSON harus memiliki struktur persis seperti ini:
+
+Anda bebas merancang layout dengan struktur HTML kustom yang unik, ekspresif, dan tidak kaku.
+Gunakan tipe tipe section "custom-html" untuk bagian landing page (seperti Hero, Profile, Tentang Kami, Keunggulan, Testimonial, atau CTA), dan tipe standar "products" serta "footer" untuk bagian katalog dinamis dan bagian footer.
+
+Format JSON hasil rancangan Anda harus memiliki struktur persis seperti ini:
 {
   "theme": {
     "primaryColor": "Hex warna yang cocok dengan gaya visual, contoh: #8B5A2B",
@@ -303,90 +307,73 @@ Format JSON harus memiliki struktur persis seperti ini:
   },
   "sections": [
     {
-      "id": "hero-unique-id",
-      "type": "hero",
+      "id": "custom-hero-[timestamp]",
+      "type": "custom-html",
       "order": 1,
       "content": {
-        "headline": "Teks Headline Utama",
-        "subheadline": "Teks subheadline deskriptif",
-        "buttonText": "Teks Tombol",
-        "buttonUrl": "#products",
-        "buttons": { "custom": true, "catalog": true, "whatsapp": true, "maps": false }
+        "html": "Masukkan struktur HTML lengkap yang dirancang indah untuk blok pembuka (Hero Banner). Wajib menggunakan classes Tailwind CSS secara luas (seperti bg-gradient-to-tr, rounded-3xl, shadow-2xl, grid-cols-1, dll). Gunakan warna primer di class/style agar selaras dengan theme.primaryColor, misalnya: style='background-color: {primaryColor}1a' atau style='color: {primaryColor}'."
       }
     },
     {
-      "id": "about-unique-id",
-      "type": "about",
+      "id": "custom-about-[timestamp]",
+      "type": "custom-html",
       "order": 2,
       "content": {
-        "title": "Mengenal Lebih Dekat",
-        "description": "Cerita latar belakang bisnis, dedikasi, dll"
+        "html": "Masukkan struktur HTML bertipe Tentang Kami (About Us) yang kustom, menarik, dan asimetris, dengan ilustrasi bertema ornamen pembatas kreatif."
       }
     },
     {
-      "id": "features-unique-id",
-      "type": "features-cards",
+      "id": "custom-features-[timestamp]",
+      "type": "custom-html",
       "order": 3,
       "content": {
-        "title": "Keunggulan Kami",
-        "subtitle": "Keterangan pembuka",
-        "cards": [
-          { "title": "Nama Keunggulan 1", "desc": "Penjelasan singkat" },
-          { "title": "Nama Keunggulan 2", "desc": "Penjelasan singkat" },
-          { "title": "Nama Keunggulan 3", "desc": "Penjelasan singkat" }
-        ]
+        "html": "Masukkan struktur HTML untuk Keunggulan Bisnis (Features Grid/Cards) yang unik dengan baris warna solid, ikon unik, deskripsi detail, & interaksi hover."
       }
     },
     {
-      "id": "products-unique-id",
+      "id": "products-[timestamp]",
       "type": "products",
       "order": 4,
       "content": {
-        "title": "Daftar Produk Unggulan",
+        "title": "Katalog Produk Pilihan",
         "showProducts": true
       }
     },
     {
-      "id": "faq-unique-id",
-      "type": "faq",
+      "id": "custom-faq-[timestamp]",
+      "type": "custom-html",
       "order": 5,
       "content": {
-        "title": "Pertanyaan Umum",
-        "faqs": [
-          { "q": "Pertanyaan 1?", "a": "Jawaban 1" },
-          { "q": "Pertanyaan 2?", "a": "Jawaban 2" }
-        ]
+        "html": "Masukkan struktur HTML daftar FAQ interaktif yang rapi dengan visual modern."
       }
     },
     {
-      "id": "cta-unique-id",
-      "type": "cta",
+      "id": "custom-cta-[timestamp]",
+      "type": "custom-html",
       "order": 6,
       "content": {
-        "title": "Headline CTA Menarik",
-        "subtitle": "Sub-keterangan diskon/promo",
-        "buttonText": "Hubungi WhatsApp",
-        "buttonUrl": "#contact"
+        "html": "Masukkan struktur HTML Call-To-Action yang sangat menarik dan megah dengan tombol mengkilat menuju WhatsApp."
       }
     },
     {
-      "id": "footer-unique-id",
+      "id": "footer-[timestamp]",
       "type": "footer",
       "order": 7,
       "content": {
-        "address": "Alamat fisik lengkap bisnis",
-        "phone": "Nomor WhatsApp aktif",
-        "copyright": "Teks hak cipta produk"
+        "address": "Alamat lengkap fisik",
+        "phone": "Nomor WA",
+        "copyright": "Teks copyright"
       }
     }
   ]
 }
 
-Aturan Penulisan Bahasa:
-- Bahasa Indonesia yang persuasif, relevan, menarik bagi target pasar, dan ramah pembeli.
-- Pastikan semua teks bebas dari markup markdown ataupun kode aneh.
-- ID di setiap section harus diakhiri dengan angka timestamp unik acak, contoh: "hero-17123901".
-- Sesuaikan susunan block (tambahkan, urutkan, hapus) agar yang tampil sangat pas dan cocok untuk deskripsi bisnis.`
+Aturan Penulisan HTML & CSS:
+- Gunakan framework CSS Tailwind yang sudah terintegrasi secara penuh di platform JagoBisnis untuk semua class visual.
+- Pastikan dalam HTML yang dihasilkan, ganti string '{primaryColor}' dengan nilai hex warna yang Anda tentukan di theme.primaryColor agar warnanya tersinkronisasi sempurna!
+- Buat layout yang beragam: ada yang menggunakan grid 3 kolom, flexbox, alignment center, asimetris, split layar (kiri-kanan), dll agar halaman terlihat 100% dinamis dan tidak monoton seperti template.
+- Tulis teks pemasaran dalam Bahasa Indonesia yang sangat profesional, ramah pembeli, dan persuasif.
+- Hilangkan pembatas string markdown (\`\`\`json atau sejenisnya) dan kembalikan hanya JSON murni.`
             },
             {
               role: 'user',
@@ -409,6 +396,15 @@ Gaya Visual Pilihan: ${dto.visualStyle}`
       );
 
       const result = JSON.parse(response.data.choices[0].message.content);
+      const primaryColor = result.theme?.primaryColor || '#e8aa20';
+      if (result.sections && Array.isArray(result.sections)) {
+        result.sections = result.sections.map((s: any) => {
+          if (s.type === 'custom-html' && s.content && s.content.html) {
+            s.content.html = s.content.html.replace(/{primaryColor}/g, primaryColor);
+          }
+          return s;
+        });
+      }
       return result;
     } catch (error) {
       console.error('Error calling Groq API, falling back to local compile:', error);

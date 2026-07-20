@@ -1523,6 +1523,14 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
         </footer>
       );
 
+    case 'custom-html':
+      return (
+        <section 
+          className="w-full relative overflow-hidden"
+          dangerouslySetInnerHTML={{ __html: content.html || '' }} 
+        />
+      );
+
     default:
       return null;
   }
