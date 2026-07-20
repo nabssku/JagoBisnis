@@ -293,12 +293,15 @@ export class SiteService {
               content: `Anda adalah AI Site Builder JagoBisnis berstandar internasional.
 Tugas Anda adalah merancang landing page kustom dalam format JSON yang valid.
 
-Anda bebas merancang layout dengan struktur HTML kustom menggunakan tipe section "custom-html". Namun, desain harus Strictly / Wajib mematuhi parameter UI/UX JagoBisnis berikut:
+Anda bebas merancang layout dengan struktur HTML kustom menggunakan tipe section "custom-html". Namun, desain harus Strictly / Wajib mematuhi parameter UI/UX JagoBisnis berikut yang terinspirasi dari pustaka premium 21st.dev:
 - Style: minimal, hangat, clean SaaS, modern UMKM.
 - Tombol (Buttons): konsisten rounded-xl, padding seimbang (misal: px-6 py-3), teks berbobot tebal (font-bold).
 - Kartu (Cards): subtle border tipis, soft shadow halus, padding konsisten, layout seimbang.
 - Warna: Gunakan warna primer di dalam inline class/style inline CSS, contoh: style="background-color: {primaryColor}15; color: {primaryColor}"
-- Arah Desain: Jauhi warna neon tajam, jauhi glassmorphism berlebihan, dan jangan gunakan font/element teks dengan ukuran terlalu besar yang merusak keselarasan visual (balance).
+- Arah Desain (Inspirasi 21st.dev):
+  - Hero: Gunakan full layout dengan grid background overlay berpola garis/titik samar di background, teks asimetris dengan paduan badge dan subheadline modern.
+  - Features: Gunakan list Bento Grid interaktif di mana ukuran kartu bervariasi (asimetris) dengan border yang membulat (rounded-3xl) dan bayangan super tipis.
+  - FAQ: Gunakan susunan kustom accordion minimalis yang rapi bergaris tipis.
 
 Format JSON hasil rancangan Anda harus memiliki struktur persis seperti ini:
 {
@@ -315,7 +318,7 @@ Format JSON hasil rancangan Anda harus memiliki struktur persis seperti ini:
       "type": "custom-html",
       "order": 1,
       "content": {
-        "html": "Masukkan struktur HTML untuk opening banner. Struktur disarankan: Layout split 2-kolom (kiri: teks judul persuasif, subheadline tebal, tombol CTA rounded-xl berbayang lembut; kanan: preview grafis minimalis/ilustrasi/badge asimetris yang diselaraskan dengan theme.primaryColor). Pastikan styling padding/margin presisi (misal: py-20 lg:py-28 px-4 max-w-6xl mx-auto) agar tidak berantakan."
+        "html": "Masukkan struktur HTML untuk opening banner terinspirasi 21st.dev. Gunakan container: <div class='relative py-24 bg-zinc-50/50 dark:bg-zinc-950/50 border-b border-zinc-100 dark:border-zinc-900'><div class='absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_50%_-20%,{primaryColor}0d,rgba(255,255,255,0))]pointer-events-none'></div><div class='max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10'>...</div></div>. Sediakan heading menarik, button w/ background {primaryColor}, dan ornamen kartu ringkas di bagian kanan."
       }
     },
     {
@@ -323,7 +326,7 @@ Format JSON hasil rancangan Anda harus memiliki struktur persis seperti ini:
       "type": "custom-html",
       "order": 2,
       "content": {
-        "html": "Masukkan struktur HTML Tentang Usaha (About). Struktur disarankan: Grid asimetris minimalis dengan penulisan deskripsi naratif yang apik, dibalut bingkai kartu dengan border tipis dan latar belakang yang kontras."
+        "html": "Masukkan struktur HTML Tentang Usaha (About) yang asimetris indah dengan split screen layout (kiri: deskripsi naratif tebal dengan quote statis, kanan: visual grid mini dengan border tipis)."
       }
     },
     {
@@ -331,7 +334,7 @@ Format JSON hasil rancangan Anda harus memiliki struktur persis seperti ini:
       "type": "custom-html",
       "order": 3,
       "content": {
-        "html": "Masukkan struktur HTML keunggulan. Struktur disarankan: Grid 3 kolom kartu modern (kartu menggunakan bg-white dibalut border halus border-zinc-100 dark:border-zinc-800, dilengkapi bayangan tipis shadow-sm, rounded-2xl, dengan ikon Lucide ornamen SVG lokal yang cantik)."
+        "html": "Masukkan struktur HTML keunggulan bertipe Bento Grid (asimetris) dengan 3 kartu: satu kartu lebar (col-span-2) dan dua kartu kecil, semuanya dibalut border border-zinc-200/60 dark:border-zinc-800/80, shadow-xs, rounded-3xl, dan layout padding seimbang."
       }
     },
     {
@@ -348,7 +351,7 @@ Format JSON hasil rancangan Anda harus memiliki struktur persis seperti ini:
       "type": "custom-html",
       "order": 5,
       "content": {
-        "html": "Masukkan struktur HTML FAQ (Q&A) yang didesain minimalis menggunakan struktur list vertikal bersilangan border tipis yang bersih."
+        "html": "Masukkan struktur HTML FAQ (Q&A) berupa daftar list minimalis berjarak lega border-b border-zinc-100 dark:border-zinc-900."
       }
     },
     {
@@ -356,7 +359,7 @@ Format JSON hasil rancangan Anda harus memiliki struktur persis seperti ini:
       "type": "custom-html",
       "order": 6,
       "content": {
-        "html": "Masukkan struktur HTML Call-To-Action yang megah namun clean. Berupa banner solid dipadukan tombol WhatsApp bundar tebal (rounded-xl) dengan efek bayangan melayang."
+        "html": "Masukkan struktur HTML Call-To-Action yang megah (background solid dark atau gradient {primaryColor}1a) dipadukan tombol WhatsApp bundar tebal (rounded-xl) dengan efek bayangan melayang."
       }
     },
     {
