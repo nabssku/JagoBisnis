@@ -361,20 +361,13 @@ Kembalikan hasil perbaikan rencana dalam Bahasa Indonesia yang profesional, rapi
               content: `Anda adalah AI Site Builder JagoBisnis berstandar internasional.
 Tugas Anda adalah merancang landing page kustom dalam format JSON yang valid.
 
-Anda bebas merancang layout dengan struktur HTML kustom menggunakan tipe section "custom-html". Namun, desain harus Strictly / Wajib mematuhi parameter UI/UX JagoBisnis berikut yang terinspirasi dari pustaka premium 21st.dev:
-- Style: minimal, hangat, clean SaaS, modern UMKM.
-- Tombol (Buttons): konsisten rounded-xl, padding seimbang (misal: px-6 py-3), teks berbobot tebal (font-bold).
-- Kartu (Cards): subtle border tipis, soft shadow halus, padding konsisten, layout seimbang.
-- Warna: Gunakan warna primer di dalam inline class/style inline CSS, contoh: style="background-color: {primaryColor}15; color: {primaryColor}"
-- Arah Desain (Inspirasi 21st.dev):
-  - Hero: Gunakan full layout dengan grid background overlay berpola garis/titik samar di background, teks asimetris dengan paduan badge dan subheadline modern.
-  - Features: Gunakan list Bento Grid interaktif di mana ukuran kartu bervariasi (asimetris) dengan border yang membulat (rounded-3xl) dan bayangan super tipis.
-  - FAQ: Gunakan susunan kustom accordion minimalis yang rapi bergaris tipis.
+Desain halaman yang dihasilkan harus sangat premium, bersih, modern, dan penuh detail estetika mirip dengan hasil generate Lovable.dev, Vercel, dan Claude Artifacts.
+Wajib menggunakan classes Tailwind CSS secara luas (seperti gradients, grid asimetris, cards, border tipis, bayangan sangat halus shadow-2xl/xl, serta inline styles untuk menyelaraskan visual dengan {primaryColor}).
 
 Format JSON hasil rancangan Anda harus memiliki struktur persis seperti ini:
 {
   "theme": {
-    "primaryColor": "Hex warna primer yang melambangkan identitas visual bisnis (warm & professional), contoh: #8D5B4C",
+    "primaryColor": "Hex warna utama kustom yang elegan sesuai kategori, contoh: #8D5B4C",
     "font": "Inter | Outfit | Playfair Display",
     "logoIcon": "coffee | sparkles | award | zap | globe | shopping-bag",
     "textColor": "#1e293b",
@@ -386,7 +379,7 @@ Format JSON hasil rancangan Anda harus memiliki struktur persis seperti ini:
       "type": "custom-html",
       "order": 1,
       "content": {
-        "html": "Masukkan struktur HTML untuk opening banner terinspirasi 21st.dev. Gunakan container: <div class='relative py-24 bg-zinc-50/50 dark:bg-zinc-950/50 border-b border-zinc-100 dark:border-zinc-900'><div class='absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_50%_-20%,{primaryColor}0d,rgba(255,255,255,0))]pointer-events-none'></div><div class='max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10'>...</div></div>. Sediakan heading menarik, button w/ background {primaryColor}, dan ornamen kartu ringkas di bagian kanan."
+        "html": "Masukkan kode HTML kustom untuk bagian Hero. Contoh struktur premium: <div class='relative py-20 lg:py-28 bg-slate-50/50 dark:bg-zinc-950/50 border-b border-zinc-100 dark:border-zinc-900 overflow-hidden font-sans'><div class='absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px] pointer-events-none'></div><div class='absolute top-0 left-1/2 -translate-x-1/2 w-[80vw] h-[300px] bg-[radial-gradient(circle_at_center,rgba(var(--primary-rgb),0.08)_0%,transparent_100%)] rounded-full blur-3xl pointer-events-none' style='background: radial-gradient(circle, {primaryColor}0d 0%, transparent 100%)'></div><div class='max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10'><div class='lg:col-span-7 flex flex-col justify-center items-start text-left space-y-6'><div class='inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest' style='background-color: {primaryColor}1a; color: {primaryColor}'>⚡ PREMIUM SERVICE</div><h1 class='text-4xl lg:text-[3.25rem] leading-[1.1] font-black text-slate-800 dark:text-white tracking-tight'>[Teks Judul Kustom]</h1><p class='text-sm text-slate-500 dark:text-zinc-400 font-semibold leading-relaxed max-w-xl'>[Sub text kustom]</p><div class='flex flex-wrap gap-4 pt-2'><a href='#products' class='px-7 py-3 rounded-xl text-white font-bold text-xs uppercase tracking-wider shadow-lg active:scale-95 transition-all text-center' style='background-color: {primaryColor}; shadow-color: {primaryColor}30'>[Booking button]</a><a href='#contact' class='px-7 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-slate-800 dark:text-zinc-100 font-bold text-xs uppercase tracking-wider hover:bg-zinc-50 dark:hover:bg-zinc-900 active:scale-95 transition-all text-center'>Hubungi Kami</a></div></div><div class='lg:col-span-5 flex justify-center relative'><div class='w-full max-w-sm bg-white dark:bg-zinc-900 p-6 rounded-3xl border border-zinc-100 dark:border-zinc-850 shadow-2xl relative overflow-hidden flex flex-col justify-between h-48'><div class='flex items-center justify-between'><div class='w-10 h-10 rounded-2xl bg-amber-400/10 flex items-center justify-center text-amber-500 font-black text-xl'>★</div><span class='text-[10px] font-extrabold uppercase tracking-widest text-[#primaryColor]' style='color: {primaryColor}'>AKTIF</span></div><div class='space-y-1.5'><div class='text-xs font-black text-slate-800 dark:text-white'>[Nama Bisnis]</div><div class='text-[10px] text-slate-400 font-bold leading-normal'>[Teks Pendek Slogan]</div></div></div></div></div></div>"
       }
     },
     {
@@ -394,7 +387,7 @@ Format JSON hasil rancangan Anda harus memiliki struktur persis seperti ini:
       "type": "custom-html",
       "order": 2,
       "content": {
-        "html": "Masukkan struktur HTML Tentang Usaha (About) yang asimetris indah dengan split screen layout (kiri: deskripsi naratif tebal dengan quote statis, kanan: visual grid mini dengan border tipis)."
+        "html": "Masukkan kode HTML kustom untuk Tentang Kami. Gunakan tata letak 2 kolom minimalis: kiri memuat bingkai visual (bisa menggunakan background berpola mesh atau box dengan rounded-3xl bergaris tipis), kanan berisikan teks dengan heading penanda angka kecil '02 / TENTANG KAMI', disusul paragraf penceritaan dengan quote tebal bergaya modern."
       }
     },
     {
@@ -402,7 +395,7 @@ Format JSON hasil rancangan Anda harus memiliki struktur persis seperti ini:
       "type": "custom-html",
       "order": 3,
       "content": {
-        "html": "Masukkan struktur HTML keunggulan bertipe Bento Grid (asimetris) dengan 3 kartu: satu kartu lebar (col-span-2) dan dua kartu kecil, semuanya dibalut border border-zinc-200/60 dark:border-zinc-800/80, shadow-xs, rounded-3xl, dan layout padding seimbang."
+        "html": "Masukkan kode HTML Bento Grid modern untuk fitur keunggulan. Struktur bento grid: Kontainer besar memiliki 3 kartu (Card 1 menggunakan col-span-2 untuk menonjolkan fitur paling esensial, Card 2 dan 3 untuk fitur tambahan kecil). Setiap kartu wajib memiliki background putih solid dark:bg-zinc-900, border-zinc-200/60 dark:border-zinc-800/80 shadow-xs, rounded-3xl, padding lega (p-7), judul tebal, serta deskripsi yang di-style dengan warna teks redup."
       }
     },
     {
@@ -410,7 +403,7 @@ Format JSON hasil rancangan Anda harus memiliki struktur persis seperti ini:
       "type": "products",
       "order": 4,
       "content": {
-        "title": "Produk & Layanan Unggulan",
+        "title": "Produk & Layanan Pilihan",
         "showProducts": true
       }
     },
@@ -419,7 +412,7 @@ Format JSON hasil rancangan Anda harus memiliki struktur persis seperti ini:
       "type": "custom-html",
       "order": 5,
       "content": {
-        "html": "Masukkan struktur HTML FAQ (Q&A) berupa daftar list minimalis berjarak lega border-b border-zinc-100 dark:border-zinc-900."
+        "html": "Masukkan kode HTML FAQ. Didesain bersih (Clean/Minimalis styling), dengan item interaktif yang memiliki border bawah saja border-b border-zinc-100 dark:border-zinc-900, memisahkan tanya-jawab secara renggang dan elegan."
       }
     },
     {
@@ -427,7 +420,7 @@ Format JSON hasil rancangan Anda harus memiliki struktur persis seperti ini:
       "type": "custom-html",
       "order": 6,
       "content": {
-        "html": "Masukkan struktur HTML Call-To-Action yang megah (background solid dark atau gradient {primaryColor}1a) dipadukan tombol WhatsApp bundar tebal (rounded-xl) dengan efek bayangan melayang."
+        "html": "Masukkan kode HTML Call-To-Action. Kerangka didesain luks: Container dengan background gelap arang bulat rounded-3xl p-12 text-center relative overflow-hidden, diselimuti gradasi warna primer tipis di latar, headline ajakan memikat, dan tombol WhatsApp dominan kencang yang memiliki bayangan melayang."
       }
     },
     {
@@ -435,22 +428,21 @@ Format JSON hasil rancangan Anda harus memiliki struktur persis seperti ini:
       "type": "footer",
       "order": 7,
       "content": {
-        "address": "Alamat fisik lengkap",
-        "phone": "Nomor WA",
-        "copyright": "Teks hak cipta"
+        "address": "Alamat lengkap fisik",
+        "phone": "Nomor WhatsApp aktif",
+        "copyright": "Teks hak cipta platform premium"
       }
     }
   ]
 }
 
-Aturan Penting HTML & Tailwind:
-1. Ganti string '{primaryColor}' dengan nilai hex warna yang Anda tentukan di theme.primaryColor pada HTML pengerjaan pemicu warna dinamis.
-2. Gunakan padding-x (\`px-4 sm:px-6 lg:px-8\`) dan batasan lebar kontainer (\`max-w-6xl mx-auto w-full\`) untuk seluruh section agar elemen tidak merapat ke ujung layar.
-3. Jaga ukuran font tetap seimbang (misal judul hero maksimal \`text-3xl sm:text-5xl font-extrabold tracking-tight\`).
-4. Semua copywriting teks harus menggunakan Bahasa Indonesia yang profesional dan persuasif untuk menarik prospek pembeli.
-5. Bagian KATALOG produk HARUS HANYA menggunakan tipe tipe standar "products" dengan isi content: { "title": "Produk & Layanan Unggulan", "showProducts": true } - JANGAN PERNAH dibuatkan custom-html untuk katalog!
-6. Bagian FOOTER produk HARUS HANYA menggunakan tipe tipe standar "footer" dengan isi content: { "address": "...", "phone": "...", "copyright": "..." } - JANGAN PERNAH dibuatkan custom-html untuk footer!
-7. Kembalikan HANYA JSON murni tanpa pembatas string markdown.`
+Aturan Penulisan HTML & CSS Premium:
+1. Wajib ganti string '{primaryColor}' dengan nilai HEX warna primer dinamis di seluruh markup HTML kustom!
+2. Jaga padding dan margin seimbang: Gunakan padding atas-bawah konsisten (py-12 sm:py-20) untuk memisahkan section.
+3. Selalu bungkus elemen baris dalam wrapper kontainer lebar maksimal (max-w-6xl mx-auto w-full px-6) agar layout tidak melebar kaku dan berantakan.
+4. Bagian KATALOG produk HARUS HANYA menggunakan tipe tipe standar "products" dengan isi content: { "title": "...", "showProducts": true } - JANGAN PERNAH dibuatkan custom-html untuk katalog!
+5. Bagian FOOTER produk HARUS HANYA menggunakan tipe tipe standar "footer" dengan isi content: { "address": "...", "phone": "...", "copyright": "..." } - JANGAN PERNAH dibuatkan custom-html untuk footer!
+6. Hilangkan pembatas string markdown (\`\`\`json) dan kembalikan hanya JSON murni.`
             },
             {
               role: 'user',
