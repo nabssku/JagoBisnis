@@ -3419,6 +3419,24 @@ export default function WebsiteBuilderPage() {
                             }} 
                           />
                         )}
+
+                        {/* CUSTOM HTML SECTION EDITOR */}
+                        {activeSection.type === 'custom-html' && (
+                          <div className="space-y-4">
+                            <div className="space-y-2">
+                              <label className="text-[10px] font-black text-gray-900 dark:text-white uppercase tracking-wider block">Edit Kode HTML & Tailwind</label>
+                              <textarea
+                                className="w-full min-h-[380px] font-mono p-3.5 text-[10px] leading-relaxed rounded-xl border border-border dark:border-zinc-800 bg-white dark:bg-zinc-900 text-gray-905 dark:text-zinc-100 placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none transition-all scrollbar-thin"
+                                value={activeSection.content.html || ''}
+                                onChange={(e) => updateActiveSectionContent('html', e.target.value)}
+                                placeholder="Masukkan kode HTML kustom di sini..."
+                              />
+                            </div>
+                            <p className="text-[9px] text-muted-foreground leading-normal">
+                              * Anda bisa mengedit kode kustom HTML dan menggunakan seluruh utility classes Tailwind CSS. Kanvas tengah akan ter-update secara real-time.
+                            </p>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
