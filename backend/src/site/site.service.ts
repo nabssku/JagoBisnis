@@ -467,7 +467,17 @@ ${dto.refinedPrompt}`
         }
       );
 
-      const result = JSON.parse(response.data.choices[0].message.content);
+      let contentString = response.data.choices[0].message.content.trim();
+      
+      // Clean markdown code block wraps safely
+      if (contentString.startsWith('```')) {
+        contentString = contentString
+          .replace(/^```(?:json)?\n?/i, '')
+          .replace(/\n?```$/i, '')
+          .trim();
+      }
+
+      const result = JSON.parse(contentString);
       const primaryColor = result.theme?.primaryColor || '#e8aa20';
       if (result.sections && Array.isArray(result.sections)) {
         result.sections = result.sections.map((s: any) => {
