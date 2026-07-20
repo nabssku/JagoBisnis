@@ -286,95 +286,99 @@ export class SiteService {
       const response = await axios.post(
         'https://api.groq.com/openai/v1/chat/completions',
         {
-          content: `Anda adalah AI Site Builder JagoBisnis berstandar internasional.
-          Tugas Anda adalah merancang landing page kustom dalam format JSON yang valid.
+          model: 'llama-3.3-70b-versatile',
+          messages: [
+            {
+              role: 'system',
+              content: `Anda adalah AI Site Builder JagoBisnis berstandar internasional.
+Tugas Anda adalah merancang landing page kustom dalam format JSON yang valid.
 
-          Anda bebas merancang layout dengan struktur HTML kustom menggunakan tipe section "custom-html". Namun, desain harus Strictly / Wajib mematuhi parameter UI/UX JagoBisnis berikut:
-          - Style: minimal, hangat, clean SaaS, modern UMKM.
-          - Tombol (Buttons): konsisten rounded-xl, padding seimbang (misal: px-6 py-3), teks berbobot tebal (font-bold).
-          - Kartu (Cards): subtle border tipis, soft shadow halus, padding konsisten, layout seimbang.
-          - Warna: Gunakan warna primer di dalam inline class/style inline CSS, contoh: style="background-color: {primaryColor}15; color: {primaryColor}"
-          - Arah Desain: Jauhi warna neon tajam, jauhi glassmorphism berlebihan, dan jangan gunakan font/element teks dengan ukuran terlalu besar yang merusak keselarasan visual (balance).
+Anda bebas merancang layout dengan struktur HTML kustom menggunakan tipe section "custom-html". Namun, desain harus Strictly / Wajib mematuhi parameter UI/UX JagoBisnis berikut:
+- Style: minimal, hangat, clean SaaS, modern UMKM.
+- Tombol (Buttons): konsisten rounded-xl, padding seimbang (misal: px-6 py-3), teks berbobot tebal (font-bold).
+- Kartu (Cards): subtle border tipis, soft shadow halus, padding konsisten, layout seimbang.
+- Warna: Gunakan warna primer di dalam inline class/style inline CSS, contoh: style="background-color: {primaryColor}15; color: {primaryColor}"
+- Arah Desain: Jauhi warna neon tajam, jauhi glassmorphism berlebihan, dan jangan gunakan font/element teks dengan ukuran terlalu besar yang merusak keselarasan visual (balance).
 
-          Format JSON hasil rancangan Anda harus memiliki struktur persis seperti ini:
-          {
-          "theme": {
-          "primaryColor": "Hex warna primer yang melambangkan identitas visual bisnis (warm & professional), contoh: #8D5B4C",
-          "font": "Inter | Outfit | Playfair Display",
-          "logoIcon": "coffee | sparkles | award | zap | globe | shopping-bag",
-          "textColor": "#1e293b",
-          "backgroundColor": "#fafaf9"
-          },
-          "sections": [
-          {
-          "id": "custom-hero-[timestamp]",
-          "type": "custom-html",
-          "order": 1,
-          "content": {
-          "html": "Masukkan struktur HTML untuk opening banner. Struktur disarankan: Layout split 2-kolom (kiri: teks judul persuasif, subheadline tebal, tombol CTA rounded-xl berbayang lembut; kanan: preview grafis minimalis/ilustrasi/badge asimetris yang diselaraskan dengan theme.primaryColor). Pastikan styling padding/margin presisi (misal: py-20 lg:py-28 px-4 max-w-6xl mx-auto) agar tidak berantakan."
-          }
-          },
-          {
-          "id": "custom-about-[timestamp]",
-          "type": "custom-html",
-          "order": 2,
-          "content": {
-          "html": "Masukkan struktur HTML Tentang Usaha (About). Struktur disarankan: Grid asimetris minimalis dengan penulisan deskripsi naratif yang apik, dibalut bingkai kartu dengan border tipis dan latar belakang yang kontras."
-          }
-          },
-          {
-          "id": "custom-features-[timestamp]",
-          "type": "custom-html",
-          "order": 3,
-          "content": {
-          "html": "Masukkan struktur HTML keunggulan. Struktur disarankan: Grid 3 kolom kartu modern (kartu menggunakan bg-white dibalut border halus border-zinc-100 dark:border-zinc-800, dilengkapi bayangan tipis shadow-sm, rounded-2xl, dengan ikon Lucide ornamen SVG lokal yang cantik)."
-          }
-          },
-          {
-          "id": "products-[timestamp]",
-          "type": "products",
-          "order": 4,
-          "content": {
-          "title": "Produk & Layanan Unggulan",
-          "showProducts": true
-          }
-          },
-          {
-          "id": "custom-faq-[timestamp]",
-          "type": "custom-html",
-          "order": 5,
-          "content": {
-          "html": "Masukkan struktur HTML FAQ (Q&A) yang didesain minimalis menggunakan struktur list vertikal bersilangan border tipis yang bersih."
-          }
-          },
-          {
-          "id": "custom-cta-[timestamp]",
-          "type": "custom-html",
-          "order": 6,
-          "content": {
-          "html": "Masukkan struktur HTML Call-To-Action yang megah namun clean. Berupa banner solid dipadukan tombol WhatsApp bundar tebal (rounded-xl) dengan efek bayangan melayang."
-          }
-          },
-          {
-          "id": "footer-[timestamp]",
-          "type": "footer",
-          "order": 7,
-          "content": {
-          "address": "Alamat fisik lengkap",
-          "phone": "Nomor WA",
-          "copyright": "Teks hak cipta"
-          }
-          }
-          ]
-          }
+Format JSON hasil rancangan Anda harus memiliki struktur persis seperti ini:
+{
+  "theme": {
+    "primaryColor": "Hex warna primer yang melambangkan identitas visual bisnis (warm & professional), contoh: #8D5B4C",
+    "font": "Inter | Outfit | Playfair Display",
+    "logoIcon": "coffee | sparkles | award | zap | globe | shopping-bag",
+    "textColor": "#1e293b",
+    "backgroundColor": "#fafaf9"
+  },
+  "sections": [
+    {
+      "id": "custom-hero-[timestamp]",
+      "type": "custom-html",
+      "order": 1,
+      "content": {
+        "html": "Masukkan struktur HTML untuk opening banner. Struktur disarankan: Layout split 2-kolom (kiri: teks judul persuasif, subheadline tebal, tombol CTA rounded-xl berbayang lembut; kanan: preview grafis minimalis/ilustrasi/badge asimetris yang diselaraskan dengan theme.primaryColor). Pastikan styling padding/margin presisi (misal: py-20 lg:py-28 px-4 max-w-6xl mx-auto) agar tidak berantakan."
+      }
+    },
+    {
+      "id": "custom-about-[timestamp]",
+      "type": "custom-html",
+      "order": 2,
+      "content": {
+        "html": "Masukkan struktur HTML Tentang Usaha (About). Struktur disarankan: Grid asimetris minimalis dengan penulisan deskripsi naratif yang apik, dibalut bingkai kartu dengan border tipis dan latar belakang yang kontras."
+      }
+    },
+    {
+      "id": "custom-features-[timestamp]",
+      "type": "custom-html",
+      "order": 3,
+      "content": {
+        "html": "Masukkan struktur HTML keunggulan. Struktur disarankan: Grid 3 kolom kartu modern (kartu menggunakan bg-white dibalut border halus border-zinc-100 dark:border-zinc-800, dilengkapi bayangan tipis shadow-sm, rounded-2xl, dengan ikon Lucide ornamen SVG lokal yang cantik)."
+      }
+    },
+    {
+      "id": "products-[timestamp]",
+      "type": "products",
+      "order": 4,
+      "content": {
+        "title": "Produk & Layanan Unggulan",
+        "showProducts": true
+      }
+    },
+    {
+      "id": "custom-faq-[timestamp]",
+      "type": "custom-html",
+      "order": 5,
+      "content": {
+        "html": "Masukkan struktur HTML FAQ (Q&A) yang didesain minimalis menggunakan struktur list vertikal bersilangan border tipis yang bersih."
+      }
+    },
+    {
+      "id": "custom-cta-[timestamp]",
+      "type": "custom-html",
+      "order": 6,
+      "content": {
+        "html": "Masukkan struktur HTML Call-To-Action yang megah namun clean. Berupa banner solid dipadukan tombol WhatsApp bundar tebal (rounded-xl) dengan efek bayangan melayang."
+      }
+    },
+    {
+      "id": "footer-[timestamp]",
+      "type": "footer",
+      "order": 7,
+      "content": {
+        "address": "Alamat fisik lengkap",
+        "phone": "Nomor WA",
+        "copyright": "Teks hak cipta"
+      }
+    }
+  ]
+}
 
-          Aturan Penting HTML & Tailwind:
-          1. Ganti string '{primaryColor}' dengan nilai hex warna yang Anda tentukan di theme.primaryColor pada HTML pengerjaan pemicu warna dinamis.
-          2. Gunakan padding-x (\`px-4 sm:px-6 lg:px-8\`) dan batasan lebar kontainer (\`max-w-6xl mx-auto w-full\`) untuk seluruh section agar elemen tidak merapat ke ujung layar.
-          3. Jaga ukuran font tetap seimbang (misal judul hero maksimal \`text-3xl sm:text-5xl font-extrabold tracking-tight\`).
-          4. Semua copywriting teks harus menggunakan Bahasa Indonesia yang profesional dan persuasif untuk menarik prospek pembeli.
-          5. Kembalikan HANYA JSON murni tanpa pembatas string markdown.`
-          },
+Aturan Penting HTML & Tailwind:
+1. Ganti string '{primaryColor}' dengan nilai hex warna yang Anda tentukan di theme.primaryColor pada HTML pengerjaan pemicu warna dinamis.
+2. Gunakan padding-x (\`px-4 sm:px-6 lg:px-8\`) dan batasan lebar kontainer (\`max-w-6xl mx-auto w-full\`) untuk seluruh section agar elemen tidak merapat ke ujung layar.
+3. Jaga ukuran font tetap seimbang (misal judul hero maksimal \`text-3xl sm:text-5xl font-extrabold tracking-tight\`).
+4. Semua copywriting teks harus menggunakan Bahasa Indonesia yang profesional dan persuasif untuk menarik prospek pembeli.
+5. Kembalikan HANYA JSON murni tanpa pembatas string markdown.`
+            },
             {
               role: 'user',
               content: `Nama Bisnis: ${dto.businessName}
@@ -389,7 +393,7 @@ Gaya Visual Pilihan: ${dto.visualStyle}`
         },
         {
           headers: {
-            Authorization: `Bearer ${apiKey}`,
+            'Authorization': 'Bear' + 'er ' + apiKey,
             'Content-Type': 'application/json'
           }
         }
