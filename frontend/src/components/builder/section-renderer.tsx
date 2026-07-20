@@ -123,14 +123,36 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
   useEffect(() => {
     if (section.type === 'custom-html') {
       const existingScript = document.getElementById('tailwind-cdn');
+      
+      const applyConfig = () => {
+        if ((window as any).tailwind) {
+          (window as any).tailwind.config = {
+            darkMode: 'class',
+            theme: {
+              extend: {
+                colors: {
+                  primary: theme.primaryColor,
+                  accent: theme.primaryColor,
+                  brand: theme.primaryColor
+                }
+              }
+            }
+          };
+        }
+      };
+
       if (!existingScript) {
         const script = document.createElement('script');
         script.id = 'tailwind-cdn';
         script.src = 'https://cdn.tailwindcss.com';
+        script.onload = applyConfig;
         document.head.appendChild(script);
+      } else {
+        // Apply configuration if script is already loaded
+        applyConfig();
       }
     }
-  }, [section.type]);
+  }, [section.type, theme.primaryColor]);
 
   const containerVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
