@@ -167,7 +167,15 @@ export default function PublicWebsitePage() {
         
         <div className="hidden md:flex gap-6 text-xs font-bold tracking-wider uppercase">
           {[...sections].sort((a, b) => a.order - b.order).filter(s => s.type !== 'footer').map(s => {
-            const getSectionLabel = (type: string) => {
+            const getSectionLabel = (type: string, id: string) => {
+              const lowerId = id.toLowerCase();
+              if (lowerId.includes('hero')) return 'Beranda';
+              if (lowerId.includes('about')) return 'Tentang Kami';
+              if (lowerId.includes('feature')) return 'Keunggulan';
+              if (lowerId.includes('faq')) return 'FAQ';
+              if (lowerId.includes('contact')) return 'Kontak';
+              if (lowerId.includes('cta')) return 'Promo';
+
               switch (type) {
                 case 'hero': return 'Beranda';
                 case 'about': return 'Tentang Kami';
@@ -180,7 +188,7 @@ export default function PublicWebsitePage() {
             };
             return (
               <a key={s.id} href={`#${s.id}`} className="hover:opacity-75 transition-all relative group" style={{ color: theme.textColor }}>
-                {getSectionLabel(s.type)}
+                {getSectionLabel(s.type, s.id)}
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 transition-all group-hover:w-full" style={{ backgroundColor: theme.primaryColor }} />
               </a>
             );
