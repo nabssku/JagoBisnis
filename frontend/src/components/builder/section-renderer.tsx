@@ -119,6 +119,19 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
     }
   }, [section.type, params?.id, params?.slug]);
 
+  // Load Tailwind Play CDN dynamically for rendering dynamic custom-html classes
+  useEffect(() => {
+    if (section.type === 'custom-html') {
+      const existingScript = document.getElementById('tailwind-cdn');
+      if (!existingScript) {
+        const script = document.createElement('script');
+        script.id = 'tailwind-cdn';
+        script.src = 'https://cdn.tailwindcss.com';
+        document.head.appendChild(script);
+      }
+    }
+  }, [section.type]);
+
   const containerVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: { 

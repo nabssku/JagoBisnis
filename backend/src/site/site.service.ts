@@ -448,7 +448,9 @@ Aturan Penting HTML & Tailwind:
 2. Gunakan padding-x (\`px-4 sm:px-6 lg:px-8\`) dan batasan lebar kontainer (\`max-w-6xl mx-auto w-full\`) untuk seluruh section agar elemen tidak merapat ke ujung layar.
 3. Jaga ukuran font tetap seimbang (misal judul hero maksimal \`text-3xl sm:text-5xl font-extrabold tracking-tight\`).
 4. Semua copywriting teks harus menggunakan Bahasa Indonesia yang profesional dan persuasif untuk menarik prospek pembeli.
-5. Kembalikan HANYA JSON murni tanpa pembatas string markdown.`
+5. Bagian KATALOG produk HARUS HANYA menggunakan tipe tipe standar "products" dengan isi content: { "title": "Produk & Layanan Unggulan", "showProducts": true } - JANGAN PERNAH dibuatkan custom-html untuk katalog!
+6. Bagian FOOTER produk HARUS HANYA menggunakan tipe tipe standar "footer" dengan isi content: { "address": "...", "phone": "...", "copyright": "..." } - JANGAN PERNAH dibuatkan custom-html untuk footer!
+7. Kembalikan HANYA JSON murni tanpa pembatas string markdown.`
             },
             {
               role: 'user',
