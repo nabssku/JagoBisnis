@@ -9,6 +9,7 @@ import { PrismaService } from '../prisma.service';
 import { CreateSiteDto } from './dto/create-site.dto';
 import { UpdateSiteDto } from './dto/update-site.dto';
 import { Role } from '@prisma/client';
+import axios from 'axios';
 
 @Injectable()
 export class SiteService {
@@ -271,5 +272,297 @@ export class SiteService {
         'Hanya OWNER atau ADMIN yang dapat mengubah website',
       );
     }
+  }
+
+  async generateAiSite(businessId: string, userId: string, dto: any) {
+    await this.checkPermission(businessId, userId);
+
+    const apiKey = process.env.GROQ_API_KEY;
+    if (!apiKey) {
+      return this.localCompile(dto);
+    }
+
+    try {
+      const response = await axios.post(
+        'https://api.groq.com/openai/v1/chat/completions',
+        {
+          model: 'llama-3.3-70b-versatile',
+          messages: [
+            {
+              role: 'system',
+              content: `Anda adalah AI Site Builder JagoBisnis untuk UMKM Indonesia.
+Tugas Anda adalah merancang landing page kustom dalam format JSON yang valid.
+Format JSON harus memiliki struktur persis seperti ini:
+{
+  "theme": {
+    "primaryColor": "Hex warna yang cocok dengan gaya visual, contoh: #8B5A2B",
+    "font": "Inter | Outfit | Playfair Display",
+    "logoIcon": "coffee | sparkles | award | zap | globe | shopping-bag",
+    "textColor": "#1e293b",
+    "backgroundColor": "#fafaf9"
+  },
+  "sections": [
+    {
+      "id": "hero-unique-id",
+      "type": "hero",
+      "order": 1,
+      "content": {
+        "headline": "Teks Headline Utama",
+        "subheadline": "Teks subheadline deskriptif",
+        "buttonText": "Teks Tombol",
+        "buttonUrl": "#products",
+        "buttons": { "custom": true, "catalog": true, "whatsapp": true, "maps": false }
+      }
+    },
+    {
+      "id": "about-unique-id",
+      "type": "about",
+      "order": 2,
+      "content": {
+        "title": "Mengenal Lebih Dekat",
+        "description": "Cerita latar belakang bisnis, dedikasi, dll"
+      }
+    },
+    {
+      "id": "features-unique-id",
+      "type": "features-cards",
+      "order": 3,
+      "content": {
+        "title": "Keunggulan Kami",
+        "subtitle": "Keterangan pembuka",
+        "cards": [
+          { "title": "Nama Keunggulan 1", "desc": "Penjelasan singkat" },
+          { "title": "Nama Keunggulan 2", "desc": "Penjelasan singkat" },
+          { "title": "Nama Keunggulan 3", "desc": "Penjelasan singkat" }
+        ]
+      }
+    },
+    {
+      "id": "products-unique-id",
+      "type": "products",
+      "order": 4,
+      "content": {
+        "title": "Daftar Produk Unggulan",
+        "showProducts": true
+      }
+    },
+    {
+      "id": "faq-unique-id",
+      "type": "faq",
+      "order": 5,
+      "content": {
+        "title": "Pertanyaan Umum",
+        "faqs": [
+          { "q": "Pertanyaan 1?", "a": "Jawaban 1" },
+          { "q": "Pertanyaan 2?", "a": "Jawaban 2" }
+        ]
+      }
+    },
+    {
+      "id": "cta-unique-id",
+      "type": "cta",
+      "order": 6,
+      "content": {
+        "title": "Headline CTA Menarik",
+        "subtitle": "Sub-keterangan diskon/promo",
+        "buttonText": "Hubungi WhatsApp",
+        "buttonUrl": "#contact"
+      }
+    },
+    {
+      "id": "footer-unique-id",
+      "type": "footer",
+      "order": 7,
+      "content": {
+        "address": "Alamat fisik lengkap bisnis",
+        "phone": "Nomor WhatsApp aktif",
+        "copyright": "Teks hak cipta produk"
+      }
+    }
+  ]
+}
+
+Aturan Penulisan Bahasa:
+- Bahasa Indonesia yang persuasif, relevan, menarik bagi target pasar, dan ramah pembeli.
+- Pastikan semua teks bebas dari markup markdown ataupun kode aneh.
+- ID di setiap section harus diakhiri dengan angka timestamp unik acak, contoh: "hero-17123901".
+- Sesuaikan susunan block (tambahkan, urutkan, hapus) agar yang tampil sangat pas dan cocok untuk deskripsi bisnis.`
+            },
+            {
+              role: 'user',
+              content: `Nama Bisnis: ${dto.businessName}
+Kategori/Bidang: ${dto.category}
+Target Pelanggan Utama: ${dto.targetAudience}
+Layanan/Produk Unggulan: ${dto.keyService}
+Gaya Visual Pilihan: ${dto.visualStyle}`
+            }
+          ],
+          response_format: { type: 'json_object' },
+          temperature: 0.7
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      const result = JSON.parse(response.data.choices[0].message.content);
+      return result;
+    } catch (error) {
+      console.error('Error calling Groq API, falling back to local compile:', error);
+      return this.localCompile(dto);
+    }
+  }
+
+  private localCompile(dto: any) {
+    const { businessName, category, targetAudience, keyService, visualStyle } = dto;
+    let theme = {
+      primaryColor: '#e8aa20',
+      font: 'Outfit',
+      logoIcon: 'globe',
+      textColor: '#1f2937',
+      backgroundColor: '#ffffff'
+    };
+
+    const styleKey = visualStyle.toLowerCase();
+    
+    if (styleKey.includes('hangat') || styleKey.includes('cozy')) {
+      theme = {
+        primaryColor: '#7c2d12',
+        font: 'Outfit',
+        logoIcon: 'coffee',
+        textColor: '#1e293b',
+        backgroundColor: '#fafaf9'
+      };
+    } else if (styleKey.includes('mewah') || styleKey.includes('elegan')) {
+      theme = {
+        primaryColor: '#b45309',
+        font: 'Playfair Display',
+        logoIcon: 'award',
+        textColor: '#0f172a',
+        backgroundColor: '#ffffff'
+      };
+    } else if (styleKey.includes('bersih') || styleKey.includes('segar')) {
+      theme = {
+        primaryColor: '#0284c7',
+        font: 'Inter',
+        logoIcon: 'sparkles',
+        textColor: '#1f2937',
+        backgroundColor: '#f8fafc'
+      };
+    } else if (styleKey.includes('modern') || styleKey.includes('cepat')) {
+      theme = {
+        primaryColor: '#6366f1',
+        font: 'Outfit',
+        logoIcon: 'zap',
+        textColor: '#0f172a',
+        backgroundColor: '#f8fafc'
+      };
+    }
+
+    const isKateringOrFood = category.toLowerCase().search(/(makanan|kuliner|cafe|kopi|warkop|resto|katering)/i) !== -1;
+    const isLaundryOrService = category.toLowerCase().search(/(laundry|cuci|servis|ac|laptop|bersih)/i) !== -1;
+
+    const heroHeadline = isKateringOrFood 
+      ? `Nikmati Menu Lezat & Kenikmatan Autentik dari ${businessName}`
+      : isLaundryOrService 
+        ? `Layanan ${category} Cepat & Bersih Eksklusif di Kota Anda`
+        : `Solusi ${category} Profesional & Terpercaya di ${businessName}`;
+
+    const heroSubheadline = `Dibuat khusus untuk memenuhi kepuasan ${targetAudience}. Kami menghadirkan kualitas terbaik pada layanan unggulan kami: ${keyService} dengan garansi kepuasan penuh.`;
+
+    const sections = [
+      {
+        id: `hero-${Date.now()}`,
+        type: 'hero',
+        order: 1,
+        content: {
+          headline: heroHeadline,
+          subheadline: heroSubheadline,
+          buttonText: isKateringOrFood ? 'Lihat Daftar Menu' : 'Hubungi Kami Sekarang',
+          buttonUrl: '#products',
+          buttons: { custom: true, catalog: true, whatsapp: true, maps: false }
+        }
+      },
+      {
+        id: `about-${Date.now()}`,
+        type: 'about',
+        order: 2,
+        content: {
+          title: `Tentang ${businessName} — Komitmen Kualitas Terbaik`,
+          description: `Didirikan atas landasan dedikasi kami untuk menyajikan layanan ${category} terbaik di kelasnya. Kami berfokus penuh untuk membantu ${targetAudience} mendapatkan kemudahan, kualitas, dan efisiensi melalui andalan kami, yaitu ${keyService}.`
+        }
+      },
+      {
+        id: `features-cards-${Date.now()}`,
+        type: 'features-cards',
+        order: 3,
+        content: {
+          title: `Kenapa Memilih ${businessName}?`,
+          subtitle: `Kami bangga mempersembahkan standar pelayanan terbaik bagi ${targetAudience}.`,
+          cards: [
+            { title: 'Kualitas Premium', desc: `Diproses dengan bahan berkualitas tinggi serta presisi optimal.` },
+            { title: 'Tepat & Cepat', desc: `Menghargai waktu berharga Anda dengan sistem selesainya pengerjaan terjadwal.` },
+            { title: 'Layanan Personal', desc: `Menyesuaikan detail pengerjaan khusus mengikuti keinginan Anda: ${keyService}.` }
+          ]
+        }
+      },
+      {
+        id: `products-${Date.now()}`,
+        type: 'products',
+        order: 4,
+        content: {
+          title: isKateringOrFood ? 'Daftar Menu & Katalog' : 'Pilihan Paket Layanan',
+          showProducts: true
+        }
+      },
+      {
+        id: `faq-${Date.now()}`,
+        type: 'faq',
+        order: 5,
+        content: {
+          title: 'Pertanyaan yang Sering Ditanyakan',
+          faqs: [
+            { 
+              q: `Apakah ${businessName} melayani pemesanan kustom?`, 
+              a: `Tentu saja! Kami sangat fleksibel menyesuaikan layanan dengan permintaan spesial Anda terkait ${keyService}.` 
+            },
+            { 
+              q: `Siapa saja yang biasanya menggunakan layanan ini?`, 
+              a: `Layanan kami dirancang khusus memenuhi kenyamanan ${targetAudience}.` 
+            },
+            { 
+              q: 'Bagaimana cara berkonsultasi atau melakukan pemesanan?', 
+              a: 'Anda bisa langsung menekan tombol WhatsApp atau menu kontak di bawah ini. Tim admin responsif kami aktif membantu Anda.' 
+            }
+          ]
+        }
+      },
+      {
+        id: `cta-${Date.now()}`,
+        type: 'cta',
+        order: 6,
+        content: {
+          title: 'Siap Merasakan Kemudahan Bersama Kami?',
+          subtitle: `Dapatkan konsultasi gratis dan potongan harga khusus pemesanan perdana minggu ini!`,
+          buttonText: 'Mulai Chat WhatsApp',
+          buttonUrl: '#contact'
+        }
+      },
+      {
+        id: `footer-${Date.now()}`,
+        type: 'footer',
+        order: 7,
+        content: {
+          address: 'Pusat Kawasan Niaga Utama, Blok A No. 10, Kota JagoBisnis',
+          phone: '0812-9988-7766',
+          copyright: `© 2026 ${businessName}. Seluruh Hak Cipta Dilindungi. Powered by JagoBisnis.`
+        }
+      }
+    ];
+
+    return { sections, theme };
   }
 }

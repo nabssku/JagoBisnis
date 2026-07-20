@@ -36,4 +36,15 @@ export const siteService = {
     const response = await apiClient.get(`/public/sites/${slug}`);
     return response.data;
   },
+
+  async generateAiSite(businessId: string, data: {
+    businessName: string;
+    category: string;
+    targetAudience: string;
+    keyService: string;
+    visualStyle: string;
+  }): Promise<{ sections: Section[]; theme: SiteTheme }> {
+    const response = await apiClient.post(`/businesses/${businessId}/site/ai-generate`, data);
+    return response.data;
+  },
 };

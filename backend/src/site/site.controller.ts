@@ -20,6 +20,7 @@ import { CreateSiteDto } from './dto/create-site.dto';
 import { UpdateSiteDto } from './dto/update-site.dto';
 import { UpdateSiteThemeDto } from './dto/update-site-theme.dto';
 import { UpdateSiteSectionsDto } from './dto/update-site-sections.dto';
+import { GenerateAiSiteDto } from './dto/generate-ai-site.dto';
 
 interface RequestWithUser {
   user: {
@@ -54,6 +55,18 @@ export class SiteController {
     @Request() req: RequestWithUser,
   ) {
     return this.siteService.create(businessId, req.user.id, dto);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Post('ai-generate')
+  @ApiOperation({ summary: 'Generate a dynamic AI website using Groq LLM' })
+  async generateAiSite(
+    @Param('businessId') businessId: string,
+    @Body() dto: GenerateAiSiteDto,
+    @Request() req: RequestWithUser,
+  ) {
+    return this.siteService.generateAiSite(businessId, req.user.id, dto);
   }
 
   @ApiBearerAuth()
