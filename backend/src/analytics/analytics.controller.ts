@@ -51,4 +51,23 @@ export class AnalyticsController {
     const rangeDays = range ? parseInt(range, 10) : 30;
     return this.analyticsService.getStats(businessId, rangeDays);
   }
+
+  @Get('businesses/:businessId/analytics/referrer-detail')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Get detailed traffic breakdown for a specific referrer',
+  })
+  getReferrerDetail(
+    @Param('businessId') businessId: string,
+    @Query('referrer') referrer: string,
+    @Query('range') range?: string,
+  ) {
+    const rangeDays = range ? parseInt(range, 10) : 30;
+    return this.analyticsService.getReferrerDetail(
+      businessId,
+      referrer ?? 'direct',
+      rangeDays,
+    );
+  }
 }

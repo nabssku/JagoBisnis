@@ -44,6 +44,97 @@ export class AnalyticsService {
     });
   }
 
+  async getReferrerDetail(
+    businessId: string,
+    referrer: string,
+    rangeDays = 30,
+  ) {
+    const business = await this.prisma.business.findUnique({
+      where: { id: businessId },
+    });
+    if (!business) {
+      throw new NotFoundException('Business not found');
+    }
+
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - rangeDays);
+    startDate.setHours(0, 0, 0, 0);
+
+    // Normalise referrer filter: empty string / 'direct' → null (direct traffic)
+    const isDirect =
+      referrer === 'direct' || referrer === '' || referrer === '(direct)';
+
+    const logs = await this.prisma.analyticsLog.findMany({
+      where: {
+        businessId,
+        createdAt: { gte: startDate },
+        referrer: isDirect ? null : referrer,
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 500,
+    });
+
+    // --- summary ---
+    const uniqueVisitors = new Set(logs.map((l) => l.ipHash)).size;
+
+    // --- chart: group by day ---
+    const byDay: Record<string, { views: number; visitors: Set<string> }> = {};
+    for (const log of logs) {
+      const day = log.createdAt.toISOString().slice(0, 10);
+      if (!byDay[day]) byDay[day] = { views: 0, visitors: new Set() };
+      byDay[day].views++;
+      byDay[day].visitors.add(log.ipHash);
+    }
+    const chartData = Object.entries(byDay)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([date, d]) => ({
+        date,
+        views: d.views,
+        visitors: d.visitors.size,
+      }));
+
+    // --- top pages visited from this referrer ---
+    const byPath: Record<string, number> = {};
+    for (const log of logs) {
+      byPath[log.path] = (byPath[log.path] || 0) + 1;
+    }
+    const topPages = Object.entries(byPath)
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, 10)
+      .map(([path, count]) => ({ path, count }));
+
+    // --- event breakdown ---
+    const byEvent: Record<string, number> = {};
+    for (const log of logs) {
+      byEvent[log.event] = (byEvent[log.event] || 0) + 1;
+    }
+    const eventBreakdown = Object.entries(byEvent)
+      .sort(([, a], [, b]) => b - a)
+      .map(([event, count]) => ({ event, count }));
+
+    // --- recent sessions (last 50 hits) ---
+    const recentHits = logs.slice(0, 50).map((l) => ({
+      id: l.id,
+      event: l.event,
+      path: l.path,
+      createdAt: l.createdAt,
+      userAgent: l.userAgent,
+    }));
+
+    return {
+      referrer: isDirect ? '(direct)' : referrer,
+      rangeDays,
+      summary: {
+        totalViews: logs.length,
+        uniqueVisitors,
+      },
+      chartData,
+      topPages,
+      eventBreakdown,
+      recentHits,
+    };
+  }
+
   async getStats(businessId: string, rangeDays = 30) {
     const business = await this.prisma.business.findUnique({
       where: { id: businessId },

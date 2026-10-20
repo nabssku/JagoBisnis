@@ -34,6 +34,47 @@ export interface AnalyticsStatsResponse {
   topProducts: ProductViewInfo[];
 }
 
+// --- Referrer Detail ---
+
+export interface ReferrerDetailSummary {
+  totalViews: number;
+  uniqueVisitors: number;
+}
+
+export interface ReferrerDayPoint {
+  date: string;
+  views: number;
+  visitors: number;
+}
+
+export interface TopPage {
+  path: string;
+  count: number;
+}
+
+export interface EventBreakdown {
+  event: string;
+  count: number;
+}
+
+export interface RecentHit {
+  id: string;
+  event: string;
+  path: string;
+  createdAt: string;
+  userAgent: string | null;
+}
+
+export interface ReferrerDetailResponse {
+  referrer: string;
+  rangeDays: number;
+  summary: ReferrerDetailSummary;
+  chartData: ReferrerDayPoint[];
+  topPages: TopPage[];
+  eventBreakdown: EventBreakdown[];
+  recentHits: RecentHit[];
+}
+
 export const analyticsService = {
   logEvent: async (
     businessId: string,
@@ -61,6 +102,20 @@ export const analyticsService = {
       `/businesses/${businessId}/analytics/stats`,
       {
         params: { range: rangeDays },
+      },
+    );
+    return response.data;
+  },
+
+  getReferrerDetail: async (
+    businessId: string,
+    referrer: string,
+    rangeDays = 30,
+  ): Promise<ReferrerDetailResponse> => {
+    const response = await apiClient.get<ReferrerDetailResponse>(
+      `/businesses/${businessId}/analytics/referrer-detail`,
+      {
+        params: { referrer, range: rangeDays },
       },
     );
     return response.data;

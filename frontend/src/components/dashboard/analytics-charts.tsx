@@ -1,14 +1,18 @@
+'use client';
+
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { ChartDataPoint, ReferrerInfo, ProductViewInfo } from '@/services/analytics.service';
-import { Globe, ArrowUpRight, TrendingUp } from 'lucide-react';
+import { Globe, ArrowUpRight, TrendingUp, ExternalLink } from 'lucide-react';
 
 interface ChartsProps {
+  businessId: string;
   chartData: ChartDataPoint[];
   topReferrers: ReferrerInfo[];
   topProducts: ProductViewInfo[];
 }
 
-export function AnalyticsCharts({ chartData, topReferrers, topProducts }: ChartsProps) {
+export function AnalyticsCharts({ businessId, chartData, topReferrers, topProducts }: ChartsProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   // SVG Chart configurations
@@ -75,6 +79,12 @@ export function AnalyticsCharts({ chartData, topReferrers, topProducts }: Charts
     const parts = dateStr.split('-');
     if (parts.length < 3) return dateStr;
     return `${parts[2]}/${parts[1]}`;
+  };
+
+  // Build referrer detail URL
+  const referrerDetailUrl = (referrer: string) => {
+    const encoded = encodeURIComponent(referrer || 'direct');
+    return `/dashboard/business/${businessId}/analytics/referrer?referrer=${encoded}`;
   };
 
   return (
@@ -227,19 +237,28 @@ export function AnalyticsCharts({ chartData, topReferrers, topProducts }: Charts
               Sumber Rujukan
             </h3>
             <p className="text-[10px] font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-widest">
-              Asal trafik pengunjung toko online kamu
+              Klik untuk lihat detail traffic per sumber
             </p>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-2">
             {topReferrers.length === 0 ? (
               <p className="text-xs font-semibold text-muted-foreground italic">Belum ada data rujukan.</p>
             ) : (
               topReferrers.map((ref, idx) => (
-                <div key={idx} className="flex justify-between items-center py-2 border-b border-gray-50 dark:border-zinc-900 last:border-0">
-                  <span className="text-xs font-semibold truncate text-gray-800 dark:text-zinc-300 max-w-[160px]">{ref.referrer}</span>
-                  <span className="text-[10px] font-extrabold px-3 py-1 bg-gray-50 dark:bg-zinc-800 border border-gray-100 dark:border-zinc-750 text-gray-600 dark:text-zinc-350 rounded-lg">{ref.count} view</span>
-                </div>
+                <Link
+                  key={idx}
+                  href={referrerDetailUrl(ref.referrer)}
+                  className="group flex justify-between items-center py-2 px-2 -mx-2 rounded-xl border border-transparent hover:border-amber-100 dark:hover:border-amber-900/40 hover:bg-amber-50/60 dark:hover:bg-amber-950/10 transition-all duration-150 cursor-pointer"
+                >
+                  <span className="flex items-center gap-1.5 text-xs font-semibold truncate text-gray-800 dark:text-zinc-300 max-w-[148px] group-hover:text-amber-700 dark:group-hover:text-amber-400 transition-colors">
+                    <ExternalLink className="h-3 w-3 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity text-amber-500" />
+                    {ref.referrer || '(direct)'}
+                  </span>
+                  <span className="text-[10px] font-extrabold px-3 py-1 bg-gray-50 dark:bg-zinc-800 border border-gray-100 dark:border-zinc-750 text-gray-600 dark:text-zinc-350 rounded-lg group-hover:bg-amber-100 dark:group-hover:bg-amber-900/30 group-hover:text-amber-700 dark:group-hover:text-amber-400 group-hover:border-amber-200 dark:group-hover:border-amber-800/40 transition-all">
+                    {ref.count} view
+                  </span>
+                </Link>
               ))
             )}
           </div>

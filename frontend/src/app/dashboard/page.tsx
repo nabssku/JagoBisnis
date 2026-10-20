@@ -239,6 +239,7 @@ export default function DashboardPage() {
               <div className="h-px w-full bg-gray-100 dark:bg-zinc-800" />
             </div>
             <AnalyticsCharts 
+              businessId={businessId ?? ''}
               chartData={statsData.chartData} 
               topReferrers={statsData.topReferrers} 
               topProducts={statsData.topProducts} 
