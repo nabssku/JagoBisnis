@@ -12,4 +12,10 @@ export class PublicSiteController {
   async getPublicSite(@Param('slug') slug: string) {
     return this.siteService.getPublicSite(slug);
   }
+
+  @Get('published-sites-list')
+  @ApiOperation({ summary: 'Get list of all published sites for sitemap' })
+  async getPublishedSites() {
+    return this.siteService.getPublishedSites();
+  }
 }

@@ -714,4 +714,17 @@ ${dto.refinedPrompt}`
 
     return { sections, theme };
   }
+
+  async getPublishedSites() {
+    const sites = await this.prisma.site.findMany({
+      where: { isPublished: true },
+      select: {
+        slug: true,
+        updatedAt: true,
+      },
+      orderBy: { updatedAt: 'desc' },
+      take: 1000,
+    });
+    return sites;
+  }
 }
